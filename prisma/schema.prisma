@@ -10,6 +10,42 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Organizations {
+    name         String
+    id           Int        @id @default(autoincrement())
+    emailAddress String     @unique
+    expense      Expenses[]
+    sales        Sales[]
+    invoices     Invoices[]
+}
+
+model Expenses {
+    id              String        @id @default(cuid())
+    rackRateAmount  Int
+    stockRateAmount Int
+    expenseType     String
+    expenseName     String
+    date            DateTime
+    description     String?
+    paid            Boolean       @default(false)
+    // for every expense recorded we also store the receipt, below is the link to the receipt
+    receiptLink     String?
+    organizationsId Int
+    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+}
+
+model Sales {
+    id              String         @id @default(cuid())
+    amount          Int
+    salesType       String
+    salesName       String
+    date            DateTime
+    description     String?
+    receiptLink     String?
+    organizationsId Int?
+    Organizations   Organizations? @relation(fields: [organizationsId], references: [id])
+}
+
 model Post {
     id        Int      @id @default(autoincrement())
     name      String
@@ -17,4 +53,30 @@ model Post {
     updatedAt DateTime @updatedAt
 
     @@index([name])
+}
+
+model Invoices {
+    id               String         @id @default(cuid())
+    invoiceName      String
+    tinNumber        String
+    Date             DateTime
+    companyAdress    String
+    billingAdress    String
+    clientName       String
+    bankName         String
+    bankCustomerName String
+    accNo            String
+    status           Boolean        @default(false)
+    invoiceItems     InvoiceItems[]
+    Organizations    Organizations  @relation(fields: [organizationsId], references: [id])
+    organizationsId  Int
+}
+
+model InvoiceItems {
+    id         String   @id @default(cuid())
+    desc       String
+    quantity   Int
+    amount     Int
+    Invoices   Invoices @relation(fields: [invoicesId], references: [id])
+    invoicesId String
 }
