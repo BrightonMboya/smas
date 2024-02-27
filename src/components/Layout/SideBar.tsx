@@ -71,10 +71,6 @@ export default function SideBar() {
           </AccordionItem>
         </Accordion>
 
-       
-
-       
-
         <Link href="/accounting">
           <div
             className={`flex items-center justify-center space-x-2
@@ -91,7 +87,6 @@ export default function SideBar() {
           </div>
         </Link>
 
-
         <Link href="/contacts" className="mt-5">
           <div
             className={`flex items-center justify-center space-x-2
@@ -105,6 +100,22 @@ export default function SideBar() {
             <PersonIcon width={20} height={20} />
 
             <h3>Contacts</h3>
+          </div>
+        </Link>
+
+        <Link href="/products" className="mt-5">
+          <div
+            className={`flex items-center justify-center space-x-2
+              ${
+                router.pathname.startsWith("/products")
+                  ? "text-dark"
+                  : "text-gray-500"
+              }
+          `}
+          >
+            <Send width={20} height={20} />
+
+            <h3>Products</h3>
           </div>
         </Link>
 

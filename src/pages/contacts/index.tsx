@@ -6,7 +6,7 @@ export default function Page() {
   return (
      <Layout>
     <main className="pl-5">
-      <Header />
+      <Header title="Contacts" />
       <NoAsset
         bigTitle="You haven't added your contacts yet"
         smallTitle="It's easier to manage, and contact your guests. Go ahead and them now"
