@@ -9,7 +9,7 @@ export default function Page() {
       <Header title="Contacts" />
       <NoAsset
         bigTitle="You haven't added your contacts yet"
-        smallTitle="It's easier to manage, and contact your guests. Go ahead and them now"
+        smallTitle="It's easier to manage, and contact your contact. Go ahead and them now"
         c2a="Add Contacts"
         c2aUrl="/contacts/new"
       />

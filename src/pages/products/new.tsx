@@ -31,43 +31,36 @@ export default function Page() {
   return (
     <Layout>
       <main className="mt-[40px] pl-[30px]">
-        <h3 className="text-2xl font-medium ">New Contact</h3>
+        <h3 className="text-2xl font-medium ">New Product</h3>
         <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
           <ItemLayout>
-            <AssetLabel label="First Name" />
-            <Input placeholder="John" />
+            <AssetLabel label="Product Name" />
+            <Input placeholder="Cement bags" />
           </ItemLayout>
           <ItemLayout>
-            <AssetLabel label="Last Name" />
-            <Input placeholder="Doe" />
+            <AssetLabel label="Supplier" />
+            <Input placeholder="Sina Gerald" />
           </ItemLayout>
 
           <ItemLayout>
-            <AssetLabel label="Primary Email" />
-            <Input placeholder="doe@gmail.com" />
+            <AssetLabel label="Quantity" />
+            <Input placeholder="20" />
           </ItemLayout>
 
           <ItemLayout>
-            <AssetLabel label="Phone Number" />
-            <Input placeholder="+91 780348912" />
+            <AssetLabel label="Price" />
+            <Input placeholder="200,000" />
           </ItemLayout>
 
-          <ItemLayout>
-            <AssetLabel
-              label="Gender"
-              caption="Gender of the guest as it appears in passport"
-            />
-            <GenderDropDown />
-          </ItemLayout>
-
+        
 
           <ItemLayout>
             <AssetLabel
               label="Notes"
-              caption="Enter additional details about this contact"
+              caption="Enter additional details about this product"
             />
 
-            <Textarea placeholder="Add short notes about this contact" />
+            <Textarea placeholder="Add short notes about this product" />
           </ItemLayout>
         </section>
         <Button className="mt-[50px] w-[100px]">Save</Button>
