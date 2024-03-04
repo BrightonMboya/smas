@@ -10,13 +10,13 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <>
-      <section>
+      {/* <section>
         <div className="font- flex space-x-[300px] ">
           <SideBar />
           <main className="">{children}</main>
         </div>
-      </section>
-      {/* <SignedIn>
+      </section> */}
+      <SignedIn>
         <section>
           <div className="font- flex space-x-[300px] ">
             <SideBar />
@@ -28,7 +28,7 @@ export default function Layout({ children }: Props) {
       <SignedOut>
         <LoginForm />
         
-      </SignedOut> */}
+      </SignedOut>
     </>
   );
 }

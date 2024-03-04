@@ -1,7 +1,10 @@
 "use client";
 import { SignIn } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 
 export function LoginForm() {
+  const clerk = useClerk()
+  console.log(clerk.mountSignIn)
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="grid gap-6">
@@ -13,7 +16,7 @@ export function LoginForm() {
             Enter your email to login
           </p>
         </div>
-        <SignIn afterSignInUrl="/trips" />
+        <SignIn afterSignInUrl="/accounting" />
       </div>
     </div>
   );
