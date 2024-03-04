@@ -37,22 +37,21 @@ export default function Page() {
             <AssetLabel label="Product Name" />
             <Input placeholder="Cement bags" />
           </ItemLayout>
-          <ItemLayout>
-            <AssetLabel label="Supplier" />
-            <Input placeholder="Sina Gerald" />
-          </ItemLayout>
 
           <ItemLayout>
-            <AssetLabel label="Quantity" />
+            <AssetLabel label="Stock Available" />
             <Input placeholder="20" />
           </ItemLayout>
 
           <ItemLayout>
-            <AssetLabel label="Price" />
+            <AssetLabel label="Buying Price" />
             <Input placeholder="200,000" />
           </ItemLayout>
 
-        
+          <ItemLayout>
+            <AssetLabel label="Selling Price" />
+            <Input placeholder="300,000" />
+          </ItemLayout>
 
           <ItemLayout>
             <AssetLabel
