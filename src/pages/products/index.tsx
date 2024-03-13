@@ -4,12 +4,14 @@ import Header from "~/components/contacts/Header";
 import { api } from "~/utils/api";
 import ProudctList from "~/components/products/ProductsList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
+import { Toaster } from "~/components/ui/toaster";
 
 export default function Page() {
   const { data, isLoading } = api.products.all.useQuery();
   return (
     <Layout>
       <main className="pl-5">
+        <Toaster />
         <Header title="Products" />
         {data?.length === 0 && (
           <NoAsset

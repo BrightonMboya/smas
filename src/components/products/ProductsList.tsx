@@ -35,19 +35,19 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import Link from "next/link";
-import { format } from "date-fns";
+import { api } from "~/utils/api";
+import { useToast } from "~/utils/hooks/useToast";
 
-export type Trips = {
+export type Products = {
   id: number;
-  guestName: string;
-  tripType: string;
-  dateBooked: string;
-  arrivalDate: string;
-  departureDate: string;
-  noOfDays: number;
+  name: string;
+  buyingPrice: string;
+  sellingPrice: string;
+  stockAvailable: number;
+  description: string;
 };
 
-export const columns: ColumnDef<Trips>[] = [
+export const columns: ColumnDef<Products>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -104,6 +104,17 @@ export const columns: ColumnDef<Trips>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const product = row.original;
+      const utils = api.useUtils();
+
+      const { mutateAsync, isLoading } = api.products.delete.useMutation({
+        onSuccess: () => {
+          toast({
+            description: "Product Deleted Succesfully",
+          });
+          utils.products.all.invalidate();
+        },
+      });
+      const { toast } = useToast();
 
       return (
         <DropdownMenu>
@@ -128,7 +139,16 @@ export const columns: ColumnDef<Trips>[] = [
             </DropdownMenuItem>
 
             <DropdownMenuItem className="cursor-pointer">
-              <Button variant="destructive">Delete Product</Button>
+              <Button
+                variant="destructive"
+                type="button"
+                disabled={isLoading}
+                onClick={() =>
+                  mutateAsync({ productId: product.id as unknown as string })
+                }
+              >
+                Delete Product
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

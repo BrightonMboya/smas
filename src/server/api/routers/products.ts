@@ -17,4 +17,22 @@ export const products = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.products.findMany();
   }),
+
+  delete: publicProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.db.products.delete({
+          where: {
+            id: input.productId,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+      }
+    }),
 });

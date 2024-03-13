@@ -9,7 +9,7 @@ export default function Header({title}: {title: string}) {
         <Link href="/contacts/guests">
           <Button variant="ghost">{`View ${title}`}</Button>
         </Link>
-        <Link href="/contacts/new">
+        <Link href="/products/new">
           <Button>{`New ${title}`}</Button>
         </Link>
       </div>
