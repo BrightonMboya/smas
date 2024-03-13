@@ -72,52 +72,30 @@ export const columns: ColumnDef<Trips>[] = [
   },
 
   {
-    accessorKey: "guestName",
-    header: "Guest Name",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("guestName")}</div>
-    ),
+    accessorKey: "name",
+    header: "Product Name",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "citizenship",
-    header: "Citizenship",
+    accessorKey: "buyingPrice",
+    header: "Buying Price",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("citizenship")}</div>
+      <div className="capitalize">{row.getValue("buyingPrice")}</div>
     ),
   },
 
   {
-    accessorKey: "noOfDays",
-    header: "Duration",
+    accessorKey: "sellingPrice",
+    header: "Selling Price",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("noOfDays")}</div>
+      <div className="capitalize">{row.getValue("sellingPrice")}</div>
     ),
   },
   {
-    accessorKey: "bookedOn",
-    header: "Date Booked",
+    accessorKey: "stockAvailable",
+    header: "Stock Available",
     cell: ({ row }) => (
-      <div className="capitalize">
-        {format(row.getValue("bookedOn"), "PPP")}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "dateOfArrival",
-    header: "Arrival Date",
-    cell: ({ row }) => (
-      <div className="capitalize">
-        {format(row.getValue("dateOfArrival"), "PPP")}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "departureDate",
-    header: "Date of Departure",
-    cell: ({ row }) => (
-      <div className="capitalize">
-        {format(row.getValue("departureDate"), "PPP")}
-      </div>
+      <div className="capitalize">{row.getValue("stockAvailable")}</div>
     ),
   },
 
@@ -125,7 +103,7 @@ export const columns: ColumnDef<Trips>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const trip = row.original;
+      const product = row.original;
 
       return (
         <DropdownMenu>
@@ -141,45 +119,16 @@ export const columns: ColumnDef<Trips>[] = [
             <DropdownMenuItem className="cursor-pointer">
               <Link
                 href={{
-                  pathname: "/trips/operations",
-                  query: { tripId: trip.id },
+                  pathname: "/products/Edit",
+                  query: { productId: product.id },
                 }}
               >
-                View Operations
+                Edit Product
               </Link>
             </DropdownMenuItem>
+
             <DropdownMenuItem className="cursor-pointer">
-              <Link
-                href={{
-                  pathname: "/trips/reservations",
-                  query: { tripId: trip.id },
-                }}
-              >
-                View Reservations
-              </Link>
-            </DropdownMenuItem>
-            {/* <DropdownMenuItem className="cursor-pointer">
-              View Customer Experience
-            </DropdownMenuItem> */}
-            <DropdownMenuItem className="cursor-pointer">
-              <Link
-                href={{
-                  pathname: "/trips/shopping",
-                  query: { tripId: trip.id },
-                }}
-              >
-                View Trip Shopping
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <Link
-                href={{
-                  pathname: "/trips/accounting",
-                  query: { tripId: trip.id },
-                }}
-              >
-                View Accounting
-              </Link>
+              <Button variant="destructive">Delete Product</Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -188,7 +137,7 @@ export const columns: ColumnDef<Trips>[] = [
   },
 ];
 
-export function TripsList({ trips }: any) {
+export default function ProudctList({ products }: any) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -198,7 +147,7 @@ export function TripsList({ trips }: any) {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: trips,
+    data: products,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -220,12 +169,10 @@ export function TripsList({ trips }: any) {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Trips..."
-          value={
-            (table.getColumn("guestName")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Filter Products..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("guestName")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
