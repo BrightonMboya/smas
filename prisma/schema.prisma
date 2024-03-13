@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model Organizations {
@@ -34,6 +35,15 @@ model Expenses {
     Organizations   Organizations @relation(fields: [organizationsId], references: [id])
 }
 
+model Products {
+    id           String @id @default(cuid())
+    name         String
+    buyingPrice  String
+    sellingPrice String
+    stockAvailable  Int
+    description  String?
+}
+
 model Sales {
     id              String         @id @default(cuid())
     amount          Int
@@ -44,15 +54,6 @@ model Sales {
     receiptLink     String?
     organizationsId Int?
     Organizations   Organizations? @relation(fields: [organizationsId], references: [id])
-}
-
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
 }
 
 model Invoices {
