@@ -22,7 +22,7 @@ export const productSchema = z.object({
   description: z.string().optional(),
 });
 
-type ProductSchema = z.infer<typeof productSchema>;
+export type ProductSchema = z.infer<typeof productSchema>;
 
 export default function Page() {
   const {

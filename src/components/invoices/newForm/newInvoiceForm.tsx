@@ -75,6 +75,7 @@ export default function NewInvoiceForm() {
     ?.emailAddress as unknown as string;
 
   const { toast } = useToast();
+
   const { mutateAsync, isLoading } = api.invoices.create.useMutation({
     onSuccess: () => {
       toast({
@@ -83,7 +84,7 @@ export default function NewInvoiceForm() {
       router.push("/invoices");
     },
 
-    onError: (error) => {
+    onError: (error: { message: any; }) => {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -95,7 +96,7 @@ export default function NewInvoiceForm() {
   });
 
   const onSubmit: SubmitHandler<InvoiceSchema> = (data) => {
-    type Input = inferProcedureInput<AppRouter["invoices"][""]>;
+    type Input = inferProcedureInput<AppRouter["invoices"]["create"]>;
     const input: Input = {
       ...data,
       organizationEmail: organizationEmail,

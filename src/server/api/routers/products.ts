@@ -35,4 +35,22 @@ export const products = createTRPCRouter({
         console.log(cause);
       }
     }),
+
+  fetchById: publicProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        return await ctx.db.products.findUnique({
+          where: {
+            id: input.productId,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+      }
+    }),
 });
