@@ -62,7 +62,7 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.0",
     "uuid": "^9.0.1",
-    "zod": "link:@hookform/resolvers/zod"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.3",

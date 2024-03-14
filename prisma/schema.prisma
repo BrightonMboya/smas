@@ -13,47 +13,39 @@ datasource db {
 
 model Organizations {
     name         String
-    id           Int        @id @default(autoincrement())
-    emailAddress String     @unique
-    expense      Expenses[]
-    sales        Sales[]
-    invoices     Invoices[]
+    id           Int    @id @default(autoincrement())
+    emailAddress String @unique
+
+    invoices Invoices[]
 }
 
 model Expenses {
-    id              String        @id @default(cuid())
-    rackRateAmount  Int
-    stockRateAmount Int
-    expenseType     String
-    expenseName     String
-    date            DateTime
-    description     String?
-    paid            Boolean       @default(false)
-    // for every expense recorded we also store the receipt, below is the link to the receipt
-    receiptLink     String?
-    organizationsId Int
-    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+    id          String   @id @default(cuid())
+    name        String
+    date        DateTime
+    amount      Int
+    description String?
 }
 
 model Products {
-    id           String @id @default(cuid())
-    name         String
-    buyingPrice  String
-    sellingPrice String
-    stockAvailable  Int
-    description  String?
+    id             String  @id @default(cuid())
+    name           String
+    buyingPrice    String
+    sellingPrice   String
+    stockAvailable Int
+    description    String?
+    sales          Sales[]
 }
 
 model Sales {
-    id              String         @id @default(cuid())
-    amount          Int
-    salesType       String
-    salesName       String
-    date            DateTime
-    description     String?
-    receiptLink     String?
-    organizationsId Int?
-    Organizations   Organizations? @relation(fields: [organizationsId], references: [id])
+    id           String   @id @default(cuid())
+    customerName String
+    amount       Int
+    quantity     Int
+    status       String
+    Products     Products @relation(fields: [productsId], references: [id])
+    productsId   String
+    date         DateTime
 }
 
 model Invoices {
