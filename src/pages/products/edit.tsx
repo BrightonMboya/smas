@@ -8,6 +8,9 @@ import { ItemLayout, AssetLabel } from "../contacts/new";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { productSchema, type ProductSchema } from "./new";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useToast } from "~/utils/hooks/useToast";
+import { Toaster } from "~/components/ui/toaster";
 
 export default function Page() {
   const { query } = useRouter();
@@ -15,7 +18,7 @@ export default function Page() {
     productId: query.productId as unknown as string,
   });
 
-  const { register, handleSubmit } = useForm<ProductSchema>({
+  const { register, handleSubmit, setValue } = useForm<ProductSchema>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: data?.name,
@@ -26,11 +29,38 @@ export default function Page() {
     },
   });
 
-  const onSubmit: SubmitHandler<ProductSchema> = (data) => {};
+  useEffect(() => {
+    if (data) {
+      setValue("buyingPrice", data?.buyingPrice);
+      setValue("description", data?.description!);
+      setValue("name", data?.name);
+      setValue("sellingPrice", data?.sellingPrice);
+      setValue("stockAvailable", data?.stockAvailable);
+    }
+  }, [data, setValue]);
+  const { toast } = useToast();
+
+  const productsRouter = api.products.edit.useMutation({
+    onSuccess: () => {
+      toast({ description: "Product Edited Succesfully" });
+    },
+  });
+
+  const onSubmit: SubmitHandler<ProductSchema> = (data) => {
+    try {
+      productsRouter.mutateAsync({
+        ...data,
+        productsId: query.productId as unknown as string,
+      });
+    } catch (cause) {
+      console.log(cause);
+    }
+  };
   return (
     <Layout>
+      <Toaster />
       {isError || (!data && <h3>This product doesnt exist</h3>)}
-      {!isLoading && data && (
+      {data && (
         <form className="mt-[40px] pl-[30px]" onSubmit={handleSubmit(onSubmit)}>
           <h3 className="text-2xl font-medium ">Editing Product</h3>
           <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
@@ -73,7 +103,7 @@ export default function Page() {
           <Button
             className="mt-[50px] w-[100px]"
             type="submit"
-            disabled={isLoading}
+            disabled={productsRouter.isLoading}
           >
             Save
           </Button>

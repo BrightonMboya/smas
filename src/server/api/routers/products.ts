@@ -53,4 +53,32 @@ export const products = createTRPCRouter({
         console.log(cause);
       }
     }),
+
+  edit: publicProcedure
+    .input(
+      productSchema.merge(
+        z.object({
+          productsId: z.string(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const editedProduct = await ctx.db.products.update({
+          where: {
+            id: input.productsId,
+          },
+          data: {
+            description: input.description,
+            buyingPrice: input.buyingPrice,
+            stockAvailable: input.stockAvailable,
+            sellingPrice: input.sellingPrice,
+            name: input.name
+          }
+        });
+        return editedProduct;
+      } catch (cause) {
+        console.log(cause);
+      }
+    }),
 });
