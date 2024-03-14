@@ -4,7 +4,7 @@ import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
-import { ItemLayout, AssetLabel } from "../contacts/new";
+import { ItemLayout, AssetLabel } from "../suppliers/new";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { productSchema, type ProductSchema } from "./new";
 import { zodResolver } from "@hookform/resolvers/zod";

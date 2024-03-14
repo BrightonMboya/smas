@@ -87,11 +87,11 @@ export default function SideBar() {
           </div>
         </Link>
 
-        <Link href="/contacts" className="mt-5">
+        <Link href="/suppliers" className="mt-5">
           <div
             className={`flex items-center justify-center space-x-2
               ${
-                router.pathname.startsWith("/contacts")
+                router.pathname.startsWith("/suppliers")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -99,7 +99,7 @@ export default function SideBar() {
           >
             <PersonIcon width={20} height={20} />
 
-            <h3>Contacts</h3>
+            <h3>Suppliers</h3>
           </div>
         </Link>
 

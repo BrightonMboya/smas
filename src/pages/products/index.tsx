@@ -1,6 +1,6 @@
 import { NoAsset } from "~/components/Assets";
 import Layout from "~/components/Layout/Layout";
-import Header from "~/components/contacts/Header";
+import Header from "~/components/suppliers/Header";
 import { api } from "~/utils/api";
 import ProudctList from "~/components/products/ProductsList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
