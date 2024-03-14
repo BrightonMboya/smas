@@ -28,4 +28,17 @@ export const accounting = createTRPCRouter({
         console.log(cause);
       }
     }),
+
+  recentSales: publicProcedure.query(async ({ ctx }) => {
+    try {
+      return await ctx.db.sales.findMany({
+        take: 5,
+        // orderBy: {
+        //   date: "desc",
+        // },
+      });
+    } catch (cause) {
+      console.log(cause);
+    }
+  }),
 });

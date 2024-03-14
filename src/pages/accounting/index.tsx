@@ -17,10 +17,6 @@ import Reports from "~/components/accounting/reports";
 import Layout from "~/components/Layout/Layout";
 import { Toaster } from "~/components/ui/toaster";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app built using the components.",
-};
 
 export default function DashboardPage() {
   return (
