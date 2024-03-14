@@ -1,9 +1,10 @@
 import { NoAsset } from "~/components/Assets";
 import Layout from "~/components/Layout/Layout";
-import Header from "~/components/suppliers/Header";
 import SupplierList from "~/components/suppliers/SupplierList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
+import Button from "~/components/ui/Button";
+import Link from "next/link";
 
 export default function Page() {
   const { isLoading, data } = api.supplier.all.useQuery();
@@ -11,7 +12,17 @@ export default function Page() {
   return (
     <Layout>
       <main className="pl-5">
-        <Header title="Suppliers" />
+        <div className="flex w-[1000px] items-center justify-between pt-[40px] ">
+          <h3 className="text-3xl font-medium ">Your Company </h3>
+          <div className="flex items-center gap-2">
+            <Link href="/suppliers/new">
+              <Button variant="ghost">View Suppliers</Button>
+            </Link>
+            <Link href="/suppliers/new">
+              <Button>New Suppliers</Button>
+            </Link>
+          </div>
+        </div>
         {data?.length === 0 && (
           <NoAsset
             bigTitle="You haven't added your suppliers yet"

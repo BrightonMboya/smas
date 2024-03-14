@@ -108,7 +108,7 @@ export const columns: ColumnDef<Suppliers>[] = [
       const product = row.original;
       const utils = api.useUtils();
 
-      const { mutateAsync, isLoading } = api.products.delete.useMutation({
+      const { mutateAsync, isLoading } = api.supplier.delete.useMutation({
         onSuccess: () => {
           toast({
             description: "Supplier Deleted Succesfully",
@@ -130,16 +130,6 @@ export const columns: ColumnDef<Suppliers>[] = [
           <DropdownMenuContent align="end" className="bg-white font-montserrat">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-            <DropdownMenuItem className="cursor-pointer">
-              <Link
-                href={{
-                  pathname: "/products/edit",
-                  query: { productId: product.id },
-                }}
-              >
-                Edit Product
-              </Link>
-            </DropdownMenuItem>
 
             <DropdownMenuItem className="cursor-pointer">
               <Button
@@ -150,7 +140,7 @@ export const columns: ColumnDef<Suppliers>[] = [
                   mutateAsync({ productId: product.id as unknown as string })
                 }
               >
-                Delete Product
+                Delete Supplier
               </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
