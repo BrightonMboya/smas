@@ -42,7 +42,7 @@ export default function Sales() {
     mutateAsync(data);
   };
   return (
-    <Card>
+    <Card id="#sales">
       <CardHeader>
         <CardTitle>Record Sales</CardTitle>
         <CardDescription>Input your sales details here</CardDescription>
