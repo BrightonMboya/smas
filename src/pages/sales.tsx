@@ -1,14 +1,15 @@
 import { NoAsset } from "~/components/Assets";
 import Layout from "~/components/Layout/Layout";
 import { api } from "~/utils/api";
-import ProudctList from "~/components/products/ProductsList";
+import SalesList from "~/components/accounting/SalesList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
 import Button from "~/components/ui/Button";
 
 export default function Page() {
-  const { data, isLoading } = api.products.all.useQuery();
+  const { isLoading, data } = api.accounting.allSales.useQuery();
+  console.log(data);
   return (
     <Layout>
       <main className="pl-5">
@@ -32,7 +33,7 @@ export default function Page() {
             c2aUrl="/products/new"
           />
         )}
-        {data?.length !== 0 && !isLoading && <ProudctList products={data} />}
+        {data?.length !== 0 && !isLoading && <SalesList sales={data} />}
         {isLoading && <LoadingSkeleton />}
       </main>
     </Layout>

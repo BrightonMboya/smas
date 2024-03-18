@@ -23,6 +23,7 @@ import {
   Receipt,
   BadgePercent,
   LogOutIcon,
+  Activity,
 } from "lucide-react";
 
 export default function SideBar() {
@@ -30,8 +31,8 @@ export default function SideBar() {
   const { signOut } = useClerk();
 
   return (
-    <section className="bg-lightest fixed min-h-screen">
-      <div className="spac flex w-full flex-col items-center justify-center px-5 pt-5 ">
+    <section className="fixed min-h-screen bg-lightest">
+      <div className="spac flex w-full flex-col  justify-start px-5 pt-5 ">
         <UserButton
           appearance={{
             variables: {},
@@ -73,7 +74,7 @@ export default function SideBar() {
 
         <Link href="/accounting">
           <div
-            className={`flex items-center justify-center space-x-2
+            className={`flex space-x-2
               ${
                 router.pathname.startsWith("/accounting")
                   ? "text-dark"
@@ -89,7 +90,7 @@ export default function SideBar() {
 
         <Link href="/suppliers" className="mt-5">
           <div
-            className={`flex items-center justify-center space-x-2
+            className={`flex space-x-2
               ${
                 router.pathname.startsWith("/suppliers")
                   ? "text-dark"
@@ -105,7 +106,7 @@ export default function SideBar() {
 
         <Link href="/products" className="mt-5">
           <div
-            className={`flex items-center justify-center space-x-2
+            className={`flex space-x-2
               ${
                 router.pathname.startsWith("/products")
                   ? "text-dark"
@@ -116,6 +117,21 @@ export default function SideBar() {
             <Send width={20} height={20} />
 
             <h3>Products</h3>
+          </div>
+        </Link>
+
+        <Link href="/sales" className="mt-5">
+          <div
+            className={`flex space-x-2
+              ${
+                router.pathname.startsWith("/sales")
+                  ? "text-dark"
+                  : "text-gray-500"
+              }
+          `}
+          >
+            <Activity width={20} height={20} />
+            <h3>Sales</h3>
           </div>
         </Link>
 
