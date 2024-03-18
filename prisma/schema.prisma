@@ -15,8 +15,6 @@ model Organizations {
     name         String
     id           Int    @id @default(autoincrement())
     emailAddress String @unique
-
-    invoices Invoices[]
 }
 
 model Expenses {
@@ -49,34 +47,30 @@ model Sales {
 }
 
 model Invoices {
-    id               String         @id @default(cuid())
-    invoiceName      String
-    tinNumber        String
-    Date             DateTime
-    companyAdress    String
-    billingAdress    String
-    clientName       String
-    bankName         String
-    bankCustomerName String
-    accNo            String
-    status           Boolean        @default(false)
-    invoiceItems     InvoiceItems[]
-    Organizations    Organizations  @relation(fields: [organizationsId], references: [id])
-    organizationsId  Int
+    id             String         @id @default(cuid())
+    invoiceName    String
+    invoiceDate    DateTime
+    invoiceDueDate DateTime
+    companyAdress  String
+    clientAdress   String
+    clientName     String
+    companyName    String
+    invoiceItems   InvoiceItems[]
 }
 
 model InvoiceItems {
     id         String   @id @default(cuid())
-    desc       String
+    itemName   String
     quantity   Int
     amount     Int
+    rate       Int
     Invoices   Invoices @relation(fields: [invoicesId], references: [id])
     invoicesId String
 }
 
 model Suppliers {
-    id          String @id @default(cuid())
-    fullName   String
+    id          String  @id @default(cuid())
+    fullName    String
     phoneNumber String
     product     String
     company     String

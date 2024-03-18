@@ -1,9 +1,7 @@
-import Button from "~/components/ui/Button";
-import {AssetLabel, ItemLayout} from "~/components/Assets/NoAsset"
+import { AssetLabel, ItemLayout } from "~/components/Assets/NoAsset";
 import Input from "~/components/ui/Input";
 import { UseFormRegister } from "react-hook-form";
 import { type InvoiceSchema } from "../newForm/newInvoiceForm";
-import BankSelector from "./BankSelector";
 
 interface Props {
   register: UseFormRegister<InvoiceSchema>;
@@ -15,10 +13,7 @@ export default function InvoiceDetalsForm({ register }: Props) {
       <div className="w-[500px] space-y-5">
         <ItemLayout>
           <AssetLabel label="Invoice Number" />
-          <Input
-            {...register("invoiceNumber", { valueAsNumber: true })}
-            type="number"
-          />
+          <Input {...register("invoiceName")} />
         </ItemLayout>
         <ItemLayout>
           <AssetLabel label="Invoice Date" />
@@ -33,11 +28,6 @@ export default function InvoiceDetalsForm({ register }: Props) {
             {...register("invoiceDueDate", { valueAsDate: true })}
             type="date"
           />
-        </ItemLayout>
-
-        <ItemLayout>
-          <AssetLabel label="Bank Details"/>
-          <BankSelector/>
         </ItemLayout>
       </div>
 

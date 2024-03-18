@@ -16,18 +16,13 @@ import { CardTitle, CardHeader, CardContent, Card } from "~/components/ui/Card";
 import Total from "./TotalAmount";
 
 export const invoiceSchema = z.object({
-  companyName: z.string(),
   invoiceName: z.string(),
-  tinNumber: z.string(),
   invoiceDate: z.date(),
   invoiceDueDate: z.date(),
-  invoiceNumber: z.number(),
   companyAdress: z.string(),
   clientAdress: z.string(),
   clientName: z.string(),
-  bankName: z.string(),
-  bankCustomerName: z.string(),
-  accNo: z.string(),
+  companyName: z.string(),
   invoiceItems: z.array(
     z.object({
       itemName: z.string(),
@@ -70,10 +65,6 @@ export default function NewInvoiceForm() {
 
   const router = useRouter();
 
-  const user = useUser();
-  const organizationEmail = user.user?.primaryEmailAddress
-    ?.emailAddress as unknown as string;
-
   const { toast } = useToast();
 
   const { mutateAsync, isLoading } = api.invoices.create.useMutation({
@@ -84,7 +75,7 @@ export default function NewInvoiceForm() {
       router.push("/invoices");
     },
 
-    onError: (error: { message: any; }) => {
+    onError: (error: { message: any }) => {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -99,7 +90,6 @@ export default function NewInvoiceForm() {
     type Input = inferProcedureInput<AppRouter["invoices"]["create"]>;
     const input: Input = {
       ...data,
-      organizationEmail: organizationEmail,
     };
     try {
       mutateAsync(input);
@@ -107,7 +97,7 @@ export default function NewInvoiceForm() {
       console.log(cause);
     }
   };
-
+  console.log(errors);
   return (
     <section className="mt-5 flex items-center justify-center">
       <Card className="">
