@@ -1,9 +1,5 @@
 import Link from "next/link";
-import {
-  CubeIcon,
-  PersonIcon,
-  EnvelopeClosedIcon,
-} from "@radix-ui/react-icons";
+import { PersonIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/router";
 import Button from "../ui/Button";
 import { UserButton, useClerk } from "@clerk/nextjs";
@@ -15,15 +11,12 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import {
-  PlusCircle,
-  Luggage,
   Send,
-  Plane,
-  Home,
   Receipt,
   BadgePercent,
   LogOutIcon,
   Activity,
+  Banknote,
 } from "lucide-react";
 
 export default function SideBar() {
@@ -132,6 +125,21 @@ export default function SideBar() {
           >
             <Activity width={20} height={20} />
             <h3>Sales</h3>
+          </div>
+        </Link>
+
+        <Link href="/expenses" className="mt-5">
+          <div
+            className={`flex space-x-2
+              ${
+                router.pathname.startsWith("/expenses")
+                  ? "text-dark"
+                  : "text-gray-500"
+              }
+          `}
+          >
+            <Banknote width={20} height={20} />
+            <h3>Expenses</h3>
           </div>
         </Link>
 

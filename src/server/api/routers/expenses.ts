@@ -86,6 +86,10 @@ export const accounting = createTRPCRouter({
     });
   }),
 
+  allExpenses: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.expenses.findMany();
+  }),
+
   deleteSale: publicProcedure
     .input(z.object({ saleId: z.string() }))
     .mutation(async ({ input, ctx }) => {
@@ -93,6 +97,20 @@ export const accounting = createTRPCRouter({
         return await ctx.db.sales.delete({
           where: {
             id: input.saleId,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+      }
+    }),
+
+  deleteExpense: publicProcedure
+    .input(z.object({ expenseId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        return await ctx.db.expenses.delete({
+          where: {
+            id: input.expenseId,
           },
         });
       } catch (cause) {
