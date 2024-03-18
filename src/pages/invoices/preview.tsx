@@ -1,7 +1,13 @@
 import { CardTitle, CardHeader, CardContent, Card } from "~/components/ui/Card";
 import Button from "~/components/ui/Button";
 import { Separator } from "~/components/ui/seperator";
-import { TableCell, TableRow, TableBody, Table } from "~/components/ui/table";
+import {
+  TableCell,
+  TableRow,
+  TableBody,
+  Table,
+  TableHead,
+} from "~/components/ui/table";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { format } from "date-fns";
@@ -31,29 +37,27 @@ export default function Component() {
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <div className="font-semibold">{`Invoice #${invoiceId}`}</div>
-                  <div>Due date: June 30, 2022</div>
+                  <div>{`Due date: ${format(data?.invoiceDueDate!, "PPP")}`}</div>
                 </div>
               </div>
               <Separator />
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-1">
                   <p className="font-semibold">{data?.clientName}</p>
-                  <p>{data?.billingAdress}</p>
+                  <p>{data?.clientAdress}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <div className="font-semibold">Payment method</div>
-                  <p>{data?.bankName}</p>
-                  <p>{data?.bankCustomerName}</p>
-                  <p>{data?.accNo}</p>
+                  {/* <div className="font-semibold">Payment method</div> */}
+
                   {/* <div>Visa ending in 4242</div> */}
                 </div>
               </div>
               <Separator />
-              <Table className="mt-10">
+              <Table className="mt-10 w-[300px]">
                 <TableBody>
                   {data?.invoiceItems!.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell>{item.desc}</TableCell>
+                      <TableCell>{item.itemName}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{item.amount}</TableCell>
                     </TableRow>
@@ -62,7 +66,7 @@ export default function Component() {
               </Table>
               <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {`Invoice was created on ${format(data?.Date!, "PPP")} `}
+                  {`Invoice was created on ${format(data?.invoiceDate!, "PPP")} `}
                 </p>
                 <div className="flex flex-col gap-1 md:gap-0">
                   <p className="text-lg font-semibold md:text-xl">

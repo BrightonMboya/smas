@@ -59,10 +59,10 @@ model Invoices {
 }
 
 model InvoiceItems {
-    id         String   @id @default(cuid())
-    itemName   String
-    quantity   Int
-    amount     Int
+    id       String @id @default(cuid())
+    itemName String
+    quantity Int
+
     rate       Int
     Invoices   Invoices @relation(fields: [invoicesId], references: [id])
     invoicesId String
