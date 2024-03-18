@@ -62,13 +62,13 @@ export const columns: ColumnDef<Invoices>[] = [
       <div className="capitalize">{row.getValue("clientName")}</div>
     ),
   },
-  {
-    accessorKey: "Date",
-    header: "Date",
-    cell: ({ row }) => (
-      <div className="capitalize">{format(row.getValue("Date"), "PPP")}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "Date",
+  //   header: "Date",
+  //   cell: ({ row }) => (
+  //     <div className="capitalize">{format(row.getValue("Date"), "PPP")}</div>
+  //   ),
+  // },
   {
     accessorKey: "totalAmount",
     header: "Total Amount",
@@ -103,14 +103,14 @@ export const columns: ColumnDef<Invoices>[] = [
       const router = useRouter();
       const user = useUser();
       const organizationEmail = user?.user?.primaryEmailAddress?.emailAddress;
-      const { mutateAsync, isLoading } = api.invoices.markAsPaid.useMutation({
-        onSuccess: () => {
-          toast({
-            description: "Invoice Succesfully Marked as Paid",
-          });
-        },
-      });
-      const utils = api.useUtils();
+      // const { mutateAsync, isLoading } = api.invoices.markAsPaid.useMutation({
+      //   onSuccess: () => {
+      //     toast({
+      //       description: "Invoice Succesfully Marked as Paid",
+      //     });
+      //   },
+      // });
+      // const utils = api.useUtils();
 
       return (
         <DropdownMenu>
@@ -136,14 +136,14 @@ export const columns: ColumnDef<Invoices>[] = [
 
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => {
-                mutateAsync({ invoiceId: invoice.id });
-                utils.invoices.byOrganization.invalidate({
-                  organizationEmail: organizationEmail,
-                });
-              }}
+              // onClick={() => {
+              //   mutateAsync({ invoiceId: invoice.id });
+              //   utils.invoices.byOrganization.invalidate({
+              //     organizationEmail: organizationEmail,
+              //   });
+              // }}
             >
-              {isLoading ? <Spinner /> : " Mark as Paid"}
+              {/* {isLoading ? <Spinner /> : " Mark as Paid"} */}
             </DropdownMenuItem>
 
             <DropdownMenuItem

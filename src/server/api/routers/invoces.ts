@@ -27,4 +27,8 @@ export const invoices = createTRPCRouter({
         console.log(cause);
       }
     }),
+
+  all: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.invoices.findMany();
+  }),
 });
