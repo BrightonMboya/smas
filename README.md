@@ -5,4 +5,5 @@ This software is intended to help small businesses record and manage their expen
 It Includes:-
 - Invoice Management
 - Accounting
+- Supplier Management
 - Stock Management and more
