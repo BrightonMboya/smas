@@ -1,7 +1,8 @@
 import { expensesSchema } from "~/components/accounting/Expenses";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
-import { salesSchema } from "~/components/accounting/Sales";
+
+import { TRPCError } from "@trpc/server";
 
 export const accounting = createTRPCRouter({
   addExpense: publicProcedure
@@ -16,50 +17,7 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  addSales: publicProcedure
-    .input(salesSchema)
-    .mutation(async ({ input, ctx }) => {
-      try {
-        // Calculate total amount
-        const totalAmount = input.amount * input.quantity;
-
-        // Update product quantity
-        const product = await ctx.db.products.findUnique({
-          where: {
-            id: input.productsId,
-          },
-        });
-        if (!product) {
-          throw new Error("Product not found");
-        }
-
-        if (product.stockAvailable < input.quantity) {
-          throw new Error("Insufficient stock");
-        }
-
-        await ctx.db.products.update({
-          where: {
-            id: input.productsId,
-          },
-          data: {
-            stockAvailable: {
-              decrement: input.quantity,
-            },
-          },
-        });
-
-        const newSales = await ctx.db.sales.create({
-          data: {
-            ...input,
-            amount: totalAmount,
-          },
-        });
-
-        return newSales;
-      } catch (cause) {
-        console.log(cause);
-      }
-    }),
+ 
 
   recentSales: publicProcedure.query(async ({ ctx }) => {
     try {
@@ -134,4 +92,6 @@ export const accounting = createTRPCRouter({
       },
     });
   }),
+
+  
 });

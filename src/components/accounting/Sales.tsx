@@ -32,7 +32,7 @@ export default function Sales() {
   });
 
   const { toast } = useToast();
-  const { isLoading, mutateAsync } = api.accounting.addSales.useMutation({
+  const { isLoading, mutateAsync } = api.sales.addSales.useMutation({
     onSuccess: () => {
       toast({ description: "Sales Added Succesfully" });
       reset();

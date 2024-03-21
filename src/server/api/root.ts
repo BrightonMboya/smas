@@ -3,6 +3,7 @@ import { products } from "./routers/products";
 import { accounting } from "./routers/expenses";
 import { supplier } from "./routers/suppliers";
 import { invoices } from "./routers/invoces";
+import { sales } from "./routers/sales";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   accounting,
   supplier,
   invoices,
+  sales,
 });
 
 // export type definition of API

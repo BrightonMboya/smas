@@ -37,6 +37,7 @@ import {
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
+import { format } from "date-fns";
 
 export type Sales = {
   id: number;
@@ -112,6 +113,12 @@ export const columns: ColumnDef<Sales>[] = [
   },
 
   {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => <div>{format(row.getValue("date"), "PPP")}</div>,
+  },
+
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -139,6 +146,16 @@ export const columns: ColumnDef<Sales>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white font-montserrat">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Link
+                href={{
+                  pathname: "/sales/edit/",
+                  query: { salesId: sale.id },
+                }}
+              >
+                Edit Sale
+              </Link>
+            </DropdownMenuItem>
 
             <DropdownMenuItem className="cursor-pointer">
               <Button

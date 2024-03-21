@@ -9,7 +9,7 @@ import Button from "~/components/ui/Button";
 
 export default function Page() {
   const { isLoading, data } = api.accounting.allSales.useQuery();
-  console.log(data);
+
   return (
     <Layout>
       <main className="pl-5">
