@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export const debtsSchema = z.object({
   debtorName: z.string().min(1),
-  amount: z.string().min(1),
+  amount: z.number(),
   date: z.date(),
 });
 
@@ -74,8 +74,8 @@ export default function Page() {
               <div>
                 <Input
                   placeholder="500,000"
-                  {...register("amount")}
-                
+                  {...register("amount", { valueAsNumber: true })}
+                  type="number"
                 />
                 {errors.amount && (
                   <p className="text-sm text-red-500">Amount is required</p>

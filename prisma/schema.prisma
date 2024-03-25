@@ -81,7 +81,7 @@ model Suppliers {
 model Debts {
     id         String   @id @default(cuid())
     debtorName String
-    amount     String
+    amount     Int
     date       DateTime
     paid       Boolean  @default(false)
 }

@@ -5,12 +5,14 @@ import DebtList from "~/components/accounting/DebtsList";
 import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
+import { Toaster } from "~/components/ui/toaster";
 
 export default function Page() {
   const { isLoading, data } = api.debts.all.useQuery();
 
   return (
     <Layout>
+      <Toaster />
       <main className="pl-5">
         <div className="flex w-[1000px] items-center justify-between pt-[40px] ">
           <h3 className="text-3xl font-medium ">Your Debts</h3>
@@ -29,7 +31,8 @@ export default function Page() {
           />
         )}
         {isLoading && <LoadingSkeleton />}
-      {data?.length !== 0 && !isLoading && <DebtList debts={data}/>}
+        {/* @ts-expect-error */}
+        {data?.length !== 0 && !isLoading && <DebtList debts={data} />}
       </main>
     </Layout>
   );

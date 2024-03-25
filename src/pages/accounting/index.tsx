@@ -23,6 +23,7 @@ import { Spinner } from "~/components/ui/LoadingSkeleton";
 export default function DashboardPage() {
   const totalSales = api.accounting.totalSales.useQuery();
   const totalExpenses = api.accounting.totalExpenses.useQuery();
+  const totalDebts = api.debts.totalDebts.useQuery();
   return (
     <Layout>
       <Toaster />
@@ -31,10 +32,10 @@ export default function DashboardPage() {
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            <div className="flex items-center space-x-2 ">
+            {/* <div className="flex items-center space-x-2 ">
               <CalendarDateRangePicker />
               <Button>Download</Button>
-            </div>
+            </div> */}
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
@@ -87,7 +88,7 @@ export default function DashboardPage() {
                       strokeWidth="2"
                       className="h-4 w-4 text-muted-foreground"
                     >
-                     <Banknote height={20} width={20}/>
+                      <Banknote height={20} width={20} />
                     </svg>
                   </CardHeader>
                   <CardContent>
@@ -100,7 +101,9 @@ export default function DashboardPage() {
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Total Debts
+                    </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -116,10 +119,13 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-xs text-muted-foreground">
-                      +19% from last month
-                    </p>
+                    {totalDebts.isLoading ? (
+                      <Spinner />
+                    ) : (
+                      <div className="text-2xl font-bold">
+                        {`Rwf ${totalDebts.data?._sum.amount}`}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
                 <Card>

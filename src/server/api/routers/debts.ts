@@ -54,4 +54,45 @@ export const debts = createTRPCRouter({
       });
     }
   }),
+
+  markAsPaid: publicProcedure
+    .input(
+      z.object({
+        debtId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.db.debts.update({
+          where: {
+            id: input.debtId,
+          },
+          data: {
+            paid: true,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to mark it as paid",
+        });
+      }
+    }),
+
+  totalDebts: publicProcedure.query(async ({ ctx, input }) => {
+    try {
+      return await ctx.db.debts.aggregate({
+        _sum: {
+          amount: true,
+        },
+      });
+    } catch (cause) {
+      console.log(cause);
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Failed to fetch",
+      });
+    }
+  }),
 });

@@ -120,6 +120,15 @@ export const columns: ColumnDef<Debts>[] = [
       const debt = row.original;
       const utils = api.useUtils();
 
+      const debtRouter = api.debts.markAsPaid.useMutation({
+        onSuccess: () => {
+          toast({
+            description: "Debt marked as Paid",
+          });
+
+          utils.debts.all.invalidate();
+        },
+      });
       const { mutateAsync, isLoading } = api.debts.deleteDebt.useMutation({
         onSuccess: () => {
           toast({
@@ -142,6 +151,17 @@ export const columns: ColumnDef<Debts>[] = [
           <DropdownMenuContent align="end" className="bg-white font-montserrat">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                debtRouter.mutateAsync({
+                  debtId: debt.id,
+                });
+              }}
+            >
+              Mark as Paid
+            </DropdownMenuItem>
+
             <DropdownMenuItem className="cursor-pointer">
               <Button
                 variant="destructive"
@@ -161,11 +181,7 @@ export const columns: ColumnDef<Debts>[] = [
   },
 ];
 
-export default function DebtList({
-  debts,
-}: {
-  debts: Debts[] | undefined;
-}) {
+export default function DebtList({ debts }: { debts: Debts[] | undefined }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -197,10 +213,12 @@ export default function DebtList({
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Expenses..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter Debts by names..."
+          value={
+            (table.getColumn("debtorName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("debtorName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
