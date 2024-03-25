@@ -10,19 +10,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
+import Link from "next/link";
 
 export const supplierSchema = z.object({
-  fullName: z.string(),
-  phoneNumber: z.string(),
-  product: z.string(),
-  company: z.string(),
+  fullName: z.string().min(1),
+  phoneNumber: z.string().min(1),
+  product: z.string().min(1),
+  company: z.string().min(1),
   notes: z.string().optional(),
 });
 
 export type ISupplierSchema = z.infer<typeof supplierSchema>;
 
 export default function Page() {
-  const { register, handleSubmit, reset } = useForm<ISupplierSchema>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm<ISupplierSchema>({
     resolver: zodResolver(supplierSchema),
   });
 
@@ -30,12 +36,13 @@ export default function Page() {
   const { isLoading, mutateAsync } = api.supplier.add.useMutation({
     onSuccess: () => {
       toast({ description: "Supplier Added Succesfully" });
-     reset()
+      reset();
     },
   });
   const onSubmit: SubmitHandler<ISupplierSchema> = (data) => {
     try {
       mutateAsync(data);
+      console.log(errors, "wth?");
     } catch (cause) {
       console.log(cause);
     }
@@ -44,30 +51,63 @@ export default function Page() {
     <Layout>
       <Toaster />
       <main className="mt-[40px] pl-[30px]">
-        <h3 className="text-2xl font-medium ">New Supplier</h3>
+        <div className="flex w-[1000px] items-center justify-between pt-[30px] ">
+          <h3 className="text-3xl font-medium ">New Supplier </h3>
+          <div className="flex items-center gap-2">
+            <Link href="/suppliers/">
+              <Button>View Suppliers</Button>
+            </Link>
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
             <ItemLayout>
               <AssetLabel label="Full Name" />
-              <Input placeholder="John Doe" {...register("fullName")} />
+              <div>
+                <Input placeholder="John Doe" {...register("fullName")} />
+                {errors.fullName && (
+                  <p className="text-sm text-red-500">Full Name is required</p>
+                )}
+              </div>
             </ItemLayout>
 
             <ItemLayout>
-              <AssetLabel label="Product" />
-              <Input placeholder="Inyange Waters" {...register("product")} />
+              <AssetLabel label="Product Name" />
+              <div>
+                <Input placeholder="Inyange Waters" {...register("product")} />
+                {errors.product && (
+                  <p className="text-sm text-red-500">
+                    Product Name is required
+                  </p>
+                )}
+              </div>
             </ItemLayout>
 
             <ItemLayout>
               <AssetLabel label="Phone Number" />
-              <Input placeholder="+91 780348912" {...register("phoneNumber")} />
+              <div>
+                <Input
+                  placeholder="+91 780348912"
+                  {...register("phoneNumber")}
+                />
+                {errors.phoneNumber && (
+                  <p className="text-sm text-red-500">
+                    Phone Number is required
+                  </p>
+                )}
+              </div>
             </ItemLayout>
 
             <ItemLayout>
-              <AssetLabel
-                label="Company"
-                // caption="Gender of the guest as it appears in passport"
-              />
-              <Input placeholder="Inyange Inc" {...register("company")} />
+              <AssetLabel label="Company" />
+              <div>
+                <Input placeholder="Inyange Inc" {...register("company")} />
+                {errors.company && (
+                  <p className="text-sm text-red-500">
+                   Company Name is required
+                  </p>
+                )}
+              </div>
             </ItemLayout>
 
             <ItemLayout>

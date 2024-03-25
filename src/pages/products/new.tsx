@@ -15,10 +15,10 @@ import { useToast } from "~/utils/hooks/useToast";
 import { ToastAction } from "~/components/ui/Toast";
 
 export const productSchema = z.object({
-  name: z.string(),
-  buyingPrice: z.string(),
-  sellingPrice: z.string(),
-  stockAvailable: z.number(),
+  name: z.string().min(1),
+  buyingPrice: z.string().min(1),
+  sellingPrice: z.string().min(1),
+  stockAvailable: z.number().min(1),
   description: z.string().optional(),
 });
 
@@ -27,7 +27,7 @@ export type ProductSchema = z.infer<typeof productSchema>;
 export default function Page() {
   const {
     reset,
-    formState: errors,
+    formState: {errors},
     handleSubmit,
     register,
   } = useForm<ProductSchema>({
@@ -39,17 +39,17 @@ export default function Page() {
       toast({
         description: "Product added successfully",
       });
-      reset()
+      reset();
     },
     onError: (error) => {
-       toast({
-         variant: "destructive",
-         title: "Uh oh! Something went wrong.",
-         description: `${error.message}`,
-         action: <ToastAction altText="Try again">Try again</ToastAction>,
-         duration: 1500,
-       });
-    }
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: `${error.message}`,
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        duration: 1500,
+      });
+    },
   });
 
   const onSubmit: SubmitHandler<ProductSchema> = (data) => {
@@ -67,6 +67,8 @@ export default function Page() {
       console.log(cause);
     }
   };
+
+  console.log(errors)
   return (
     <Layout>
       <Toaster />
@@ -75,26 +77,46 @@ export default function Page() {
         <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
           <ItemLayout>
             <AssetLabel label="Product Name" />
-            <Input placeholder="Cement bags" {...register("name")} />
+            <div>
+              <Input placeholder="Cement bags" {...register("name")} />
+              {errors.name && (
+                <p className="text-sm text-red-500">Product Name is required</p>
+              )}
+            </div>
           </ItemLayout>
 
           <ItemLayout>
             <AssetLabel label="Stock Available" />
-            <Input
-              placeholder="20"
-              {...register("stockAvailable", { valueAsNumber: true })}
-              type="number"
-            />
+            <div>
+              <Input
+                placeholder="20"
+                {...register("stockAvailable", { valueAsNumber: true })}
+                type="number"
+              />
+              {errors.stockAvailable && (
+                <p className="text-sm text-red-500">Stock is required</p>
+              )}
+            </div>
           </ItemLayout>
 
           <ItemLayout>
             <AssetLabel label="Buying Price" />
-            <Input placeholder="200,000" {...register("buyingPrice")} />
+            <div>
+              <Input placeholder="200,000" {...register("buyingPrice")} />
+              {errors.buyingPrice && (
+                <p className="text-sm text-red-500">Buying Price is required</p>
+              )}
+            </div>
           </ItemLayout>
 
           <ItemLayout>
             <AssetLabel label="Selling Price" />
-            <Input placeholder="300,000" {...register("sellingPrice")} />
+            <div>
+              <Input placeholder="300,000" {...register("sellingPrice")} />
+              {errors.sellingPrice && (
+                <p className="text-sm text-red-500">Selling Price is required</p>
+              )}
+            </div>
           </ItemLayout>
 
           <ItemLayout>

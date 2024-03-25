@@ -17,8 +17,6 @@ export const accounting = createTRPCRouter({
       }
     }),
 
- 
-
   recentSales: publicProcedure.query(async ({ ctx }) => {
     try {
       return await ctx.db.sales.findMany({
@@ -41,11 +39,18 @@ export const accounting = createTRPCRouter({
           },
         },
       },
+      orderBy: {
+        date: "desc",
+      },
     });
   }),
 
   allExpenses: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.expenses.findMany();
+    return await ctx.db.expenses.findMany({
+      orderBy: {
+        date: "desc",
+      },
+    });
   }),
 
   deleteSale: publicProcedure
@@ -92,6 +97,4 @@ export const accounting = createTRPCRouter({
       },
     });
   }),
-
-  
 });

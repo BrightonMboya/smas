@@ -38,15 +38,15 @@ import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
 import { format } from "date-fns";
 
-export type Expenses = {
+export type Debts = {
   id: string;
-  name: string;
+  debotrName: string;
   amount: number;
-  description: string | null;
+  paid: boolean;
   date: Date;
 };
 
-export const columns: ColumnDef<Expenses>[] = [
+export const columns: ColumnDef<Debts>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -71,9 +71,11 @@ export const columns: ColumnDef<Expenses>[] = [
   },
 
   {
-    accessorKey: "name",
-    header: "expense Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    accessorKey: "debtorName",
+    header: "Debtor Name",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("debtorName")}</div>
+    ),
   },
 
   {
@@ -85,17 +87,29 @@ export const columns: ColumnDef<Expenses>[] = [
   },
 
   {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("description")}</div>
-    ),
-  },
-  {
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => (
       <div className="capitalize">{format(row.getValue("date"), "PPP")}</div>
+    ),
+  },
+  {
+    accessorKey: "paid",
+    header: "Status",
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {row.getValue("paid") ? (
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+            <span>Paid</span>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-2 rounded-full bg-red-500"></div>
+            <span>Unpaid</span>
+          </div>
+        )}
+      </div>
     ),
   },
 
@@ -103,16 +117,16 @@ export const columns: ColumnDef<Expenses>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const sale = row.original;
+      const debt = row.original;
       const utils = api.useUtils();
 
-      const { mutateAsync, isLoading } = api.accounting.deleteSale.useMutation({
+      const { mutateAsync, isLoading } = api.debts.deleteDebt.useMutation({
         onSuccess: () => {
           toast({
-            description: "Expense Deleted Succesfully",
+            description: "Debt Deleted Succesfully",
           });
 
-          utils.products.all.invalidate();
+          utils.debts.all.invalidate();
         },
       });
       const { toast } = useToast();
@@ -134,10 +148,10 @@ export const columns: ColumnDef<Expenses>[] = [
                 type="button"
                 disabled={isLoading}
                 onClick={() =>
-                  mutateAsync({ saleId: sale.id as unknown as string })
+                  mutateAsync({ debtId: debt.id as unknown as string })
                 }
               >
-                Delete Expense
+                Delete Debt
               </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -147,10 +161,10 @@ export const columns: ColumnDef<Expenses>[] = [
   },
 ];
 
-export default function ExpenseList({
-  expenses,
+export default function DebtList({
+  debts,
 }: {
-  expenses: Expenses[] | undefined;
+  debts: Debts[] | undefined;
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -161,7 +175,7 @@ export default function ExpenseList({
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: expenses!,
+    data: debts!,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

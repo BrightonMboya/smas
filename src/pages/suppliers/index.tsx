@@ -15,11 +15,11 @@ export default function Page() {
         <div className="flex w-[1000px] items-center justify-between pt-[40px] ">
           <h3 className="text-3xl font-medium ">Your Company </h3>
           <div className="flex items-center gap-2">
-            <Link href="/suppliers/new">
-              <Button variant="ghost">View Suppliers</Button>
+            <Link href="/suppliers/">
+              {/* <Button variant="ghost">View Suppliers</Button> */}
             </Link>
             <Link href="/suppliers/new">
-              <Button>New Suppliers</Button>
+              <Button>New Supplier</Button>
             </Link>
           </div>
         </div>

@@ -17,6 +17,8 @@ import {
   LogOutIcon,
   Activity,
   Banknote,
+  Container,
+  PiggyBank,
 } from "lucide-react";
 
 export default function SideBar() {
@@ -107,7 +109,7 @@ export default function SideBar() {
               }
           `}
           >
-            <Send width={20} height={20} />
+            <Container width={20} height={20} />
 
             <h3>Products</h3>
           </div>
@@ -140,6 +142,21 @@ export default function SideBar() {
           >
             <Banknote width={20} height={20} />
             <h3>Expenses</h3>
+          </div>
+        </Link>
+
+        <Link href="/debts" className="mt-5">
+          <div
+            className={`flex space-x-2
+              ${
+                router.pathname.startsWith("/debts")
+                  ? "text-dark"
+                  : "text-gray-500"
+              }
+          `}
+          >
+            <PiggyBank width={20} height={20} />
+            <h3>Debts</h3>
           </div>
         </Link>
 

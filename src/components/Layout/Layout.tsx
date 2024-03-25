@@ -18,7 +18,7 @@ export default function Layout({ children }: Props) {
       </section> */}
       <SignedIn>
         <section>
-          <div className="flex space-x-[300px] ">
+          <div className="flex space-x-[200px] ">
             <SideBar />
             <main className="">{children}</main>
           </div>
@@ -27,7 +27,6 @@ export default function Layout({ children }: Props) {
 
       <SignedOut>
         <LoginForm />
-        
       </SignedOut>
     </>
   );
