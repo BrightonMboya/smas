@@ -1,6 +1,7 @@
 import Link from "next/link";
 import NoAsset from "~/components/Assets/NoAsset";
 import Layout from "~/components/Layout/Layout";
+import DebtList from "~/components/accounting/DebtsList";
 import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
@@ -28,7 +29,7 @@ export default function Page() {
           />
         )}
         {isLoading && <LoadingSkeleton />}
-      
+      {data?.length !== 0 && !isLoading && <DebtList debts={data}/>}
       </main>
     </Layout>
   );
