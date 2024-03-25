@@ -77,6 +77,14 @@ export const columns: ColumnDef<Products>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("description")}</div>
+    ),
+  },
+
+  {
     accessorKey: "buyingPrice",
     header: "Buying Price",
     cell: ({ row }) => (

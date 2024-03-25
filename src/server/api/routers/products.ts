@@ -15,7 +15,11 @@ export const products = createTRPCRouter({
   }),
 
   all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.products.findMany();
+    return await ctx.db.products.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }),
 
   delete: publicProcedure
@@ -73,8 +77,8 @@ export const products = createTRPCRouter({
             buyingPrice: input.buyingPrice,
             stockAvailable: input.stockAvailable,
             sellingPrice: input.sellingPrice,
-            name: input.name
-          }
+            name: input.name,
+          },
         });
         return editedProduct;
       } catch (cause) {
