@@ -43,7 +43,7 @@ export default function DashboardPage() {
               <TabsTrigger value="expenseandsales">
                 Expense and Sales
               </TabsTrigger>
-              <TabsTrigger value="reports">Reports</TabsTrigger>
+              {/* <TabsTrigger value="reports">Reports</TabsTrigger> */}
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -179,9 +179,9 @@ export default function DashboardPage() {
             <TabsContent value="expenseandsales" className="space-y-4">
               <ExpenseAndSales />
             </TabsContent>
-            <TabsContent value="reports" className="space-y-4">
+            {/* <TabsContent value="reports" className="space-y-4">
               <Reports />
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </div>
       </div>
