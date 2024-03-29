@@ -30,18 +30,24 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  recentSales: publicProcedure.query(async ({ ctx }) => {
-    try {
-      return await ctx.db.sales.findMany({
-        take: 5,
-        // orderBy: {
-        //   date: "desc",
-        // },
-      });
-    } catch (cause) {
-      console.log(cause);
-    }
-  }),
+  recentSales: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ input, ctx }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.sales.findMany({
+          where: {
+            organizationsId: organizationId?.id,
+          },
+          take: 5,
+          // orderBy: {
+          //   date: "desc",
+          // },
+        });
+      } catch (cause) {
+        console.log(cause);
+      }
+    }),
 
   allExpenses: publicProcedure
     .input(organizationEmailSchema)
@@ -90,20 +96,32 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  totalSales: publicProcedure.query(async ({ ctx }) => {
-    const totalSales = await ctx.db.sales.aggregate({
-      _sum: {
-        amount: true,
-      },
-    });
-    return totalSales;
-  }),
+  totalSales: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ input, ctx }) => {
+      const organizationId = await useOrganizationId(input.organizationEmail);
+      const totalSales = await ctx.db.sales.aggregate({
+        _sum: {
+          amount: true,
+        },
+        where: {
+          organizationsId: organizationId?.id,
+        },
+      });
+      return totalSales;
+    }),
 
-  totalExpenses: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.expenses.aggregate({
-      _sum: {
-        amount: true,
-      },
-    });
-  }),
+  totalExpenses: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ input, ctx }) => {
+      const organizationId = await useOrganizationId(input.organizationEmail);
+      return await ctx.db.expenses.aggregate({
+        _sum: {
+          amount: true,
+        },
+        where: {
+          organizationsId: organizationId?.id,
+        },
+      });
+    }),
 });

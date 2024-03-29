@@ -2,23 +2,31 @@ import { TRPCError } from "@trpc/server";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
 import { debtsSchema } from "~/pages/debts/new";
+import { organizationEmailSchema } from "~/utils/constants";
+import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const debts = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
-    try {
-      return await ctx.db.debts.findMany({
-        orderBy: {
-          date: "desc",
-        },
-      });
-    } catch (cause) {
-      console.log(cause);
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Could not fetch Debts",
-      });
-    }
-  }),
+  all: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ input, ctx }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.debts.findMany({
+          orderBy: {
+            date: "desc",
+          },
+          where: {
+            organizationsId: organizationId?.id,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Could not fetch Debts",
+        });
+      }
+    }),
 
   deleteDebt: publicProcedure
     .input(
@@ -41,19 +49,27 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  add: publicProcedure.input(debtsSchema).mutation(async ({ ctx, input }) => {
-    try {
-      return await ctx.db.debts.create({
-        data: input,
-      });
-    } catch (cause) {
-      console.log(cause);
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Failed to add new Debt",
-      });
-    }
-  }),
+  add: publicProcedure
+    .input(debtsSchema.merge(organizationEmailSchema))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.debts.create({
+          data: {
+            debtorName: input.debtorName,
+            amount: input.amount,
+            date: input.date,
+            organizationsId: organizationId?.id!,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to add new Debt",
+        });
+      }
+    }),
 
   markAsPaid: publicProcedure
     .input(
@@ -80,19 +96,25 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  totalDebts: publicProcedure.query(async ({ ctx, input }) => {
-    try {
-      return await ctx.db.debts.aggregate({
-        _sum: {
-          amount: true,
-        },
-      });
-    } catch (cause) {
-      console.log(cause);
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Failed to fetch",
-      });
-    }
-  }),
+  totalDebts: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ ctx, input }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.debts.aggregate({
+          _sum: {
+            amount: true,
+          },
+          where: {
+            organizationsId: organizationId?.id,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to fetch",
+        });
+      }
+    }),
 });

@@ -10,6 +10,7 @@ import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 export const debtsSchema = z.object({
   debtorName: z.string().min(1),
@@ -30,17 +31,32 @@ export default function Page() {
   });
 
   const { toast } = useToast();
+  const { user } = useUser();
   const { isLoading, mutateAsync } = api.debts.add.useMutation({
     onSuccess: () => {
       toast({ description: "Debt Added Succesfully" });
       reset();
     },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        description: "Failed to add new debt",
+      });
+    },
   });
   const onSubmit: SubmitHandler<IDebtsSchema> = (data) => {
     try {
-      mutateAsync(data);
+      mutateAsync({
+        ...data,
+        organizationEmail: user?.primaryEmailAddress
+          ?.emailAddress as unknown as string,
+      });
     } catch (cause) {
       console.log(cause);
+      toast({
+        variant: "destructive",
+        description: "Failed to add new debt",
+      });
     }
   };
   return (
