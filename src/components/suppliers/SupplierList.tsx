@@ -94,6 +94,13 @@ export const columns: ColumnDef<Suppliers>[] = [
     ),
   },
   {
+    accessorKey: "notes",
+    header: "Notes",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("notes")}</div>
+    ),
+  },
+  {
     accessorKey: "phoneNumber",
     header: "Phone Number",
     cell: ({ row }) => (
@@ -129,7 +136,6 @@ export const columns: ColumnDef<Suppliers>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white font-montserrat">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
 
             <DropdownMenuItem className="cursor-pointer">
               <Button

@@ -6,9 +6,14 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
 import Button from "~/components/ui/Button";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  const { data, isLoading } = api.products.all.useQuery();
+  const user = useUser();
+  const { data, isLoading } = api.products.all.useQuery({
+    organizationEmail: user?.user?.primaryEmailAddress
+      ?.emailAddress as unknown as string,
+  });
   return (
     <Layout>
       <main className="pl-5">

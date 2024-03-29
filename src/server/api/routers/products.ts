@@ -1,26 +1,55 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import z from "zod";
 import { productSchema } from "~/pages/products/new";
+import {
+  FAILED_TO_CREATE,
+  NOT_FOUND,
+  organizationEmailSchema,
+} from "~/utils/constants";
+import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const products = createTRPCRouter({
-  add: publicProcedure.input(productSchema).mutation(async ({ input, ctx }) => {
-    try {
-      const newProduct = await ctx.db.products.create({
-        data: input,
-      });
-      return newProduct;
-    } catch (cause) {
-      console.log(cause);
-    }
-  }),
+  add: publicProcedure
+    .input(productSchema.merge(organizationEmailSchema))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        const newProduct = await ctx.db.products.create({
+          data: {
+            name: input.name,
+            buyingPrice: input.buyingPrice,
+            sellingPrice: input.sellingPrice,
+            stockAvailable: input.stockAvailable,
+            description: input.description,
+            organizationsId: organizationId?.id!,
+          },
+        });
+        return newProduct;
+      } catch (cause) {
+        console.log(cause);
+        throw FAILED_TO_CREATE;
+      }
+    }),
 
-  all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.products.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }),
+  all: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ ctx, input }) => {
+      try {
+        return await ctx.db.products.findMany({
+          where: {
+            Organizations: {
+              emailAddress: input.organizationEmail,
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw NOT_FOUND;
+      }
+    }),
 
   delete: publicProcedure
     .input(

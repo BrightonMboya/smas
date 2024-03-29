@@ -13,6 +13,7 @@ import { inferProcedureInput } from "@trpc/server";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import { ToastAction } from "~/components/ui/Toast";
+import { useUser } from "@clerk/nextjs";
 
 export const productSchema = z.object({
   name: z.string().min(1),
@@ -27,7 +28,7 @@ export type ProductSchema = z.infer<typeof productSchema>;
 export default function Page() {
   const {
     reset,
-    formState: {errors},
+    formState: { errors },
     handleSubmit,
     register,
   } = useForm<ProductSchema>({
@@ -52,6 +53,8 @@ export default function Page() {
     },
   });
 
+  const user = useUser();
+
   const onSubmit: SubmitHandler<ProductSchema> = (data) => {
     type Input = inferProcedureInput<AppRouter["products"]["add"]>;
     const productData: Input = {
@@ -60,6 +63,8 @@ export default function Page() {
       sellingPrice: data.sellingPrice,
       description: data.description,
       stockAvailable: data.stockAvailable,
+      organizationEmail: user?.user?.primaryEmailAddress
+        ?.emailAddress as unknown as string,
     };
     try {
       mutateAsync(productData);
@@ -68,7 +73,7 @@ export default function Page() {
     }
   };
 
-  console.log(errors)
+  console.log(errors);
   return (
     <Layout>
       <Toaster />
@@ -114,7 +119,9 @@ export default function Page() {
             <div>
               <Input placeholder="300,000" {...register("sellingPrice")} />
               {errors.sellingPrice && (
-                <p className="text-sm text-red-500">Selling Price is required</p>
+                <p className="text-sm text-red-500">
+                  Selling Price is required
+                </p>
               )}
             </div>
           </ItemLayout>
