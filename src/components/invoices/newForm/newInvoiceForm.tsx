@@ -85,16 +85,25 @@ export default function NewInvoiceForm() {
       });
     },
   });
+  const { user } = useUser();
 
   const onSubmit: SubmitHandler<InvoiceSchema> = (data) => {
     type Input = inferProcedureInput<AppRouter["invoices"]["create"]>;
     const input: Input = {
       ...data,
+      organizationEmail: user?.primaryEmailAddress
+        ?.emailAddress as unknown as string,
     };
     try {
       mutateAsync(input);
     } catch (cause) {
       console.log(cause);
+      toast({
+        variant: "destructive",
+        title: "Faield to add invoices",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        duration: 1500,
+      });
     }
   };
   console.log(errors);
