@@ -1,12 +1,12 @@
 import { TRPCError } from "@trpc/server";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { protectedProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
 import { debtsSchema } from "~/pages/debts/new";
 import { organizationEmailSchema } from "~/utils/constants";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const debts = createTRPCRouter({
-  all: publicProcedure
+  all: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       try {
@@ -28,7 +28,7 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  deleteDebt: publicProcedure
+  deleteDebt: protectedProcedure
     .input(
       z.object({
         debtId: z.string(),
@@ -49,7 +49,7 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  add: publicProcedure
+  add: protectedProcedure
     .input(debtsSchema.merge(organizationEmailSchema))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -71,7 +71,7 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  markAsPaid: publicProcedure
+  markAsPaid: protectedProcedure
     .input(
       z.object({
         debtId: z.string(),
@@ -96,7 +96,7 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  totalDebts: publicProcedure
+  totalDebts: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ ctx, input }) => {
       try {

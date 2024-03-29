@@ -1,9 +1,9 @@
 import { NOT_FOUND, organizationEmailSchema } from "~/utils/constants";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const dashboard = createTRPCRouter({
-  overview: publicProcedure
+  overview: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       try {

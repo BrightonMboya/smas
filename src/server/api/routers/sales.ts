@@ -1,12 +1,12 @@
 import z from "zod";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { protectedProcedure, createTRPCRouter } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { salesSchema } from "~/components/accounting/Sales";
 import { NOT_FOUND, organizationEmailSchema } from "~/utils/constants";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const sales = createTRPCRouter({
-  allSales: publicProcedure
+  allSales: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       try {
@@ -31,7 +31,7 @@ export const sales = createTRPCRouter({
         throw NOT_FOUND;
       }
     }),
-  fetchSalesById: publicProcedure
+  fetchSalesById: protectedProcedure
     .input(
       z.object({
         salesId: z.string(),
@@ -52,7 +52,7 @@ export const sales = createTRPCRouter({
       }
     }),
 
-  addSales: publicProcedure
+  addSales: protectedProcedure
     .input(salesSchema.merge(organizationEmailSchema))
     .mutation(async ({ input, ctx }) => {
       try {
@@ -104,7 +104,7 @@ export const sales = createTRPCRouter({
       }
     }),
 
-  editSales: publicProcedure
+  editSales: protectedProcedure
     .input(salesSchema.merge(z.object({ saleId: z.string() })))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -166,7 +166,7 @@ export const sales = createTRPCRouter({
       }
     }),
 
-  yearlySales: publicProcedure.query(async ({ ctx }) => {
+  yearlySales: protectedProcedure.query(async ({ ctx }) => {
     type SalesData = {
       name: string;
       total: string;

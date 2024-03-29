@@ -1,5 +1,5 @@
 import { expensesSchema } from "~/components/accounting/Expenses";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { protectedProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
 
 import {
@@ -10,7 +10,7 @@ import {
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const accounting = createTRPCRouter({
-  addExpense: publicProcedure
+  addExpense: protectedProcedure
     .input(expensesSchema.merge(organizationEmailSchema))
     .mutation(async ({ input, ctx }) => {
       try {
@@ -30,7 +30,7 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  recentSales: publicProcedure
+  recentSales: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       try {
@@ -49,7 +49,7 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  allExpenses: publicProcedure
+  allExpenses: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       try {
@@ -68,7 +68,7 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  deleteSale: publicProcedure
+  deleteSale: protectedProcedure
     .input(z.object({ saleId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
@@ -82,7 +82,7 @@ export const accounting = createTRPCRouter({
       }
     }),
 
-  deleteExpense: publicProcedure
+  deleteExpense: protectedProcedure
     .input(z.object({ expenseId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {

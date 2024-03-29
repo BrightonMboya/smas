@@ -1,4 +1,4 @@
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import z from "zod";
 import { productSchema } from "~/pages/products/new";
 import {
@@ -9,7 +9,7 @@ import {
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const products = createTRPCRouter({
-  add: publicProcedure
+  add: protectedProcedure
     .input(productSchema.merge(organizationEmailSchema))
     .mutation(async ({ input, ctx }) => {
       try {
@@ -31,7 +31,7 @@ export const products = createTRPCRouter({
       }
     }),
 
-  all: publicProcedure
+  all: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ ctx, input }) => {
       try {
@@ -51,7 +51,7 @@ export const products = createTRPCRouter({
       }
     }),
 
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(
       z.object({
         productId: z.string(),
@@ -69,7 +69,7 @@ export const products = createTRPCRouter({
       }
     }),
 
-  fetchById: publicProcedure
+  fetchById: protectedProcedure
     .input(
       z.object({
         productId: z.string(),
@@ -87,7 +87,7 @@ export const products = createTRPCRouter({
       }
     }),
 
-  edit: publicProcedure
+  edit: protectedProcedure
     .input(
       productSchema.merge(
         z.object({

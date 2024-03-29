@@ -1,11 +1,11 @@
 import z from "zod";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { protectedProcedure, createTRPCRouter } from "../trpc";
 import { invoiceSchema } from "~/components/invoices/newForm/newInvoiceForm";
 import { organizationEmailSchema } from "~/utils/constants";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const invoices = createTRPCRouter({
-  create: publicProcedure
+  create: protectedProcedure
     .input(invoiceSchema.merge(organizationEmailSchema))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -32,7 +32,7 @@ export const invoices = createTRPCRouter({
       }
     }),
 
-  all: publicProcedure
+  all: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       const organizationId = await useOrganizationId(input.organizationEmail);
@@ -66,7 +66,7 @@ export const invoices = createTRPCRouter({
 
       return invoicesWithAmount;
     }),
-  queryById: publicProcedure
+  queryById: protectedProcedure
     .input(
       z.object({
         invoiceId: z.string(),
