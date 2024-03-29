@@ -1,14 +1,23 @@
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import { supplierSchema } from "~/pages/suppliers/new";
 import z from "zod";
+import {
+  FAILED_TO_CREATE,
+  FAILED_TO_DELETE,
+  organizationEmailSchema,
+} from "~/utils/constants";
+import { TRPCError } from "@trpc/server";
+import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const supplier = createTRPCRouter({
   add: publicProcedure
-    .input(supplierSchema)
+    .input(supplierSchema.merge(organizationEmailSchema))
     .mutation(async ({ ctx, input }) => {
       try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
         return await ctx.db.suppliers.create({
           data: {
+            organizationsId: organizationId?.id!,
             fullName: input.fullName,
             phoneNumber: input.phoneNumber,
             product: input.product,
@@ -21,17 +30,50 @@ export const supplier = createTRPCRouter({
       }
     }),
 
-  all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.suppliers.findMany();
-  }),
+  all: publicProcedure
+    .input(
+      z.object({
+        organizationEmail: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const organizationId = await ctx.db.organizations.findUnique({
+          where: {
+            emailAddress: input.organizationEmail,
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        return await ctx.db.suppliers.findMany({
+          where: {
+            organizationsId: organizationId?.id,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to create a new record",
+          cause: cause,
+        });
+      }
+    }),
 
   delete: publicProcedure
     .input(z.object({ productId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.suppliers.delete({
-        where: {
-          id: input.productId,
-        },
-      });
+      try {
+        return await ctx.db.suppliers.delete({
+          where: {
+            id: input.productId,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw FAILED_TO_DELETE;
+      }
     }),
 });

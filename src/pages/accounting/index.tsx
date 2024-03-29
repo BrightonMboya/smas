@@ -1,6 +1,3 @@
-import { Metadata } from "next";
-
-import Button from "~/components/ui/Button";
 import {
   Card,
   CardContent,
@@ -69,7 +66,7 @@ export default function DashboardPage() {
                     {totalSales.isLoading ? (
                       <Spinner />
                     ) : (
-                      <div className="text-2xl font-bold">{`Rwf ${totalSales.data?._sum.amount}`}</div>
+                      <div className="text-2xl font-bold">{`Rwf ${totalSales.data?._sum.amount || 0}`}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -95,7 +92,7 @@ export default function DashboardPage() {
                     {totalExpenses.isLoading ? (
                       <Spinner />
                     ) : (
-                      <div className="text-2xl font-bold">{`Rwf ${totalExpenses.data?._sum.amount}`}</div>
+                      <div className="text-2xl font-bold">{`Rwf ${totalExpenses.data?._sum.amount || 0}`}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -123,7 +120,7 @@ export default function DashboardPage() {
                       <Spinner />
                     ) : (
                       <div className="text-2xl font-bold">
-                        {`Rwf ${totalDebts.data?._sum.amount}`}
+                        {`Rwf ${totalDebts.data?._sum.amount || 0}`}
                       </div>
                     )}
                   </CardContent>

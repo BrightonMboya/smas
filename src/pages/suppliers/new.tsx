@@ -11,6 +11,7 @@ import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 export const supplierSchema = z.object({
   fullName: z.string().min(1),
@@ -27,10 +28,11 @@ export default function Page() {
     register,
     handleSubmit,
     reset,
-    formState: {errors},
+    formState: { errors },
   } = useForm<ISupplierSchema>({
     resolver: zodResolver(supplierSchema),
   });
+  const user = useUser();
 
   const { toast } = useToast();
   const { isLoading, mutateAsync } = api.supplier.add.useMutation({
@@ -38,11 +40,21 @@ export default function Page() {
       toast({ description: "Supplier Added Succesfully" });
       reset();
     },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        description: "Failed to add the new supplier",
+      });
+    },
   });
+
   const onSubmit: SubmitHandler<ISupplierSchema> = (data) => {
     try {
-      mutateAsync(data);
-      console.log(errors, "wth?");
+      mutateAsync({
+        ...data,
+        organizationEmail: user?.user?.primaryEmailAddress
+          ?.emailAddress as unknown as string,
+      });
     } catch (cause) {
       console.log(cause);
     }
@@ -104,7 +116,7 @@ export default function Page() {
                 <Input placeholder="Inyange Inc" {...register("company")} />
                 {errors.company && (
                   <p className="text-sm text-red-500">
-                   Company Name is required
+                    Company Name is required
                   </p>
                 )}
               </div>
