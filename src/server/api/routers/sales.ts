@@ -2,9 +2,35 @@ import z from "zod";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { salesSchema } from "~/components/accounting/Sales";
-import { Prisma } from "@prisma/client";
+import { NOT_FOUND, organizationEmailSchema } from "~/utils/constants";
+import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const sales = createTRPCRouter({
+  allSales: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ input, ctx }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.sales.findMany({
+          where: {
+            organizationsId: organizationId?.id,
+          },
+          include: {
+            Products: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            date: "desc",
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw NOT_FOUND;
+      }
+    }),
   fetchSalesById: publicProcedure
     .input(
       z.object({
@@ -27,9 +53,11 @@ export const sales = createTRPCRouter({
     }),
 
   addSales: publicProcedure
-    .input(salesSchema)
+    .input(salesSchema.merge(organizationEmailSchema))
     .mutation(async ({ input, ctx }) => {
       try {
+        // look for the organizationId
+        const organizationId = await useOrganizationId(input.organizationEmail);
         // Calculate total amount
         const totalAmount = input.amount * input.quantity;
 
@@ -60,8 +88,13 @@ export const sales = createTRPCRouter({
 
         const newSales = await ctx.db.sales.create({
           data: {
-            ...input,
             amount: totalAmount,
+            customerName: input.customerName,
+            quantity: input.quantity,
+            status: input.status,
+            date: input.date,
+            productsId: input.productsId,
+            organizationsId: organizationId?.id!,
           },
         });
 

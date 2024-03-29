@@ -6,9 +6,14 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
 import Button from "~/components/ui/Button";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  const { isLoading, data } = api.accounting.allSales.useQuery();
+  const user = useUser();
+  const { isLoading, data } = api.sales.allSales.useQuery({
+    organizationEmail: user?.user?.primaryEmailAddress
+      ?.emailAddress as unknown as string,
+  });
 
   return (
     <Layout>
@@ -18,16 +23,16 @@ export default function Page() {
           <h3 className="text-3xl font-medium ">Your Company </h3>
           <div className="flex items-center gap-2">
             <Link href="/sales/new">
-              <Button>New Sales</Button>
+              <Button>Make a Sale</Button>
             </Link>
           </div>
         </div>
         {data?.length === 0 && (
           <NoAsset
-            bigTitle="You haven't added any products"
-            smallTitle="It's easier to manage. Go ahead and add new products to manage now"
-            c2a="Add Products"
-            c2aUrl="/products/new"
+            bigTitle="Looks like you haven't added any sales yet"
+            smallTitle="When you make sales, they will appear here"
+            c2a="Make a Sale"
+            c2aUrl="/sales/new"
           />
         )}
         {data?.length !== 0 && !isLoading && <SalesList sales={data} />}

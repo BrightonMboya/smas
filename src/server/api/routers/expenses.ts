@@ -30,21 +30,6 @@ export const accounting = createTRPCRouter({
     }
   }),
 
-  allSales: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.sales.findMany({
-      include: {
-        Products: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      orderBy: {
-        date: "desc",
-      },
-    });
-  }),
-
   allExpenses: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.expenses.findMany({
       orderBy: {
