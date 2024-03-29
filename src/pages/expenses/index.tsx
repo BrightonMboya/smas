@@ -6,9 +6,14 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
 import Button from "~/components/ui/Button";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  const { isLoading, data } = api.accounting.allExpenses.useQuery();
+  const { user } = useUser();
+  const { isLoading, data } = api.accounting.allExpenses.useQuery({
+    organizationEmail: user?.primaryEmailAddress
+      ?.emailAddress as unknown as string,
+  });
 
   return (
     <Layout>
@@ -24,10 +29,10 @@ export default function Page() {
         </div>
         {data?.length === 0 && (
           <NoAsset
-            bigTitle="You haven't added any products"
-            smallTitle="It's easier to manage. Go ahead and add new products to manage now"
-            c2a="Add Products"
-            c2aUrl="/products/new"
+            bigTitle="Looks like you dont have any expenses yet"
+            smallTitle="When you make expenses they will appear here"
+            c2a="Make an expense"
+            c2aUrl="/expenses/new"
           />
         )}
         {data?.length !== 0 && !isLoading && <ExpenseList expenses={data} />}

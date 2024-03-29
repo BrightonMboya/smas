@@ -2,18 +2,31 @@ import { expensesSchema } from "~/components/accounting/Expenses";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
 
-import { TRPCError } from "@trpc/server";
+import {
+  FAILED_TO_CREATE,
+  NOT_FOUND,
+  organizationEmailSchema,
+} from "~/utils/constants";
+import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const accounting = createTRPCRouter({
   addExpense: publicProcedure
-    .input(expensesSchema)
+    .input(expensesSchema.merge(organizationEmailSchema))
     .mutation(async ({ input, ctx }) => {
       try {
-        const newExpense = await ctx.db.expenses.create({
-          data: input,
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.expenses.create({
+          data: {
+            organizationsId: organizationId?.id!,
+            name: input.name,
+            description: input.description,
+            date: input.date,
+            amount: input.amount,
+          },
         });
       } catch (cause) {
         console.log(cause);
+        throw FAILED_TO_CREATE;
       }
     }),
 
@@ -30,13 +43,24 @@ export const accounting = createTRPCRouter({
     }
   }),
 
-  allExpenses: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.expenses.findMany({
-      orderBy: {
-        date: "desc",
-      },
-    });
-  }),
+  allExpenses: publicProcedure
+    .input(organizationEmailSchema)
+    .query(async ({ input, ctx }) => {
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        return await ctx.db.expenses.findMany({
+          orderBy: {
+            date: "desc",
+          },
+          where: {
+            organizationsId: organizationId?.id,
+          },
+        });
+      } catch (cause) {
+        console.log(cause);
+        throw NOT_FOUND;
+      }
+    }),
 
   deleteSale: publicProcedure
     .input(z.object({ saleId: z.string() }))
