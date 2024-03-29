@@ -95,33 +95,4 @@ export const accounting = createTRPCRouter({
         console.log(cause);
       }
     }),
-
-  totalSales: publicProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ input, ctx }) => {
-      const organizationId = await useOrganizationId(input.organizationEmail);
-      const totalSales = await ctx.db.sales.aggregate({
-        _sum: {
-          amount: true,
-        },
-        where: {
-          organizationsId: organizationId?.id,
-        },
-      });
-      return totalSales;
-    }),
-
-  totalExpenses: publicProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ input, ctx }) => {
-      const organizationId = await useOrganizationId(input.organizationEmail);
-      return await ctx.db.expenses.aggregate({
-        _sum: {
-          amount: true,
-        },
-        where: {
-          organizationsId: organizationId?.id,
-        },
-      });
-    }),
 });

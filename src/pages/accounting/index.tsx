@@ -16,11 +16,14 @@ import { api } from "~/utils/api";
 import { Banknote } from "lucide-react";
 import { Toaster } from "~/components/ui/toaster";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
+import { useUser } from "@clerk/nextjs";
 
 export default function DashboardPage() {
-  const totalSales = api.accounting.totalSales.useQuery();
-  const totalExpenses = api.accounting.totalExpenses.useQuery();
-  const totalDebts = api.debts.totalDebts.useQuery();
+  const { user } = useUser();
+  const organizationEmail = user?.primaryEmailAddress?.emailAddress;
+  const { data, isLoading } = api.dashboard.overview.useQuery({
+    organizationEmail: organizationEmail as unknown as string,
+  });
   return (
     <Layout>
       <Toaster />
@@ -63,10 +66,10 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    {totalSales.isLoading ? (
+                    {isLoading ? (
                       <Spinner />
                     ) : (
-                      <div className="text-2xl font-bold">{`Rwf ${totalSales.data?._sum.amount || 0}`}</div>
+                      <div className="text-2xl font-bold">{`Rwf ${data?.totalSales._sum.amount || 0}`}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -89,10 +92,10 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    {totalExpenses.isLoading ? (
+                    {isLoading ? (
                       <Spinner />
                     ) : (
-                      <div className="text-2xl font-bold">{`Rwf ${totalExpenses.data?._sum.amount || 0}`}</div>
+                      <div className="text-2xl font-bold">{`Rwf ${data?.totalExpenses._sum.amount || 0}`}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -116,11 +119,11 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    {totalDebts.isLoading ? (
+                    {isLoading ? (
                       <Spinner />
                     ) : (
                       <div className="text-2xl font-bold">
-                        {`Rwf ${totalDebts.data?._sum.amount || 0}`}
+                        {`Rwf ${data?.totalDebts._sum.amount || 0}`}
                       </div>
                     )}
                   </CardContent>
