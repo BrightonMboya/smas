@@ -13,50 +13,64 @@ datasource db {
 
 model Organizations {
     name         String
-    id           Int    @id @default(autoincrement())
-    emailAddress String @unique
+    id           String      @id @default(cuid())
+    emailAddress String      @unique
+    expenses     Expenses[]
+    products     Products[]
+    sales        Sales[]
+    invoices     Invoices[]
+    suppliers    Suppliers[]
+    debts        Debts[]
 }
 
 model Expenses {
-    id          String   @id @default(cuid())
-    name        String
-    date        DateTime
-    amount      Int
-    description String?
+    id              String        @id @default(cuid())
+    name            String
+    date            DateTime
+    amount          Int
+    description     String?
+    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+    organizationsId String
 }
 
 model Products {
-    id             String   @id @default(cuid())
-    createdAt      DateTime @default(now())
-    name           String
-    buyingPrice    String
-    sellingPrice   String
-    stockAvailable Int
-    description    String?
-    sales          Sales[]
+    id              String        @id @default(cuid())
+    createdAt       DateTime      @default(now())
+    name            String
+    buyingPrice     String
+    sellingPrice    String
+    stockAvailable  Int
+    description     String?
+    sales           Sales[]
+    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+    organizationsId String
 }
 
 model Sales {
-    id           String   @id @default(cuid())
-    customerName String
-    amount       Int
-    quantity     Int
-    status       String
-    Products     Products @relation(fields: [productsId], references: [id])
-    productsId   String
-    date         DateTime
+    id              String        @id @default(cuid())
+    customerName    String
+    amount          Int
+    quantity        Int
+    status          String
+    Products        Products      @relation(fields: [productsId], references: [id])
+    productsId      String
+    date            DateTime
+    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+    organizationsId String
 }
 
 model Invoices {
-    id             String         @id @default(cuid())
-    invoiceName    String
-    invoiceDate    DateTime
-    invoiceDueDate DateTime
-    companyAdress  String
-    clientAdress   String
-    clientName     String
-    companyName    String
-    invoiceItems   InvoiceItems[]
+    id              String         @id @default(cuid())
+    invoiceName     String
+    invoiceDate     DateTime
+    invoiceDueDate  DateTime
+    companyAdress   String
+    clientAdress    String
+    clientName      String
+    companyName     String
+    invoiceItems    InvoiceItems[]
+    Organizations   Organizations  @relation(fields: [organizationsId], references: [id])
+    organizationsId String
 }
 
 model InvoiceItems {
@@ -70,18 +84,22 @@ model InvoiceItems {
 }
 
 model Suppliers {
-    id          String  @id @default(cuid())
-    fullName    String
-    phoneNumber String
-    product     String
-    company     String
-    notes       String?
+    id              String        @id @default(cuid())
+    fullName        String
+    phoneNumber     String
+    product         String
+    company         String
+    notes           String?
+    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+    organizationsId String
 }
 
 model Debts {
-    id         String   @id @default(cuid())
-    debtorName String
-    amount     Int
-    date       DateTime
-    paid       Boolean  @default(false)
+    id              String        @id @default(cuid())
+    debtorName      String
+    amount          Int
+    date            DateTime
+    paid            Boolean       @default(false)
+    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
+    organizationsId String
 }
