@@ -18,18 +18,6 @@ export default function Page() {
             className="object-cover opacity-40"
           />
 
-          <div className="relative z-20 flex items-center text-lg font-medium">
-            <div className="relative hidden h-[65px] w-[148px] lg:block">
-              {/* <Image
-                src="/new_logo.png"
-                style={{
-                  borderRadius: "12px",
-                }}
-                alt="logo"
-                layout="fill"
-              /> */}
-            </div>
-          </div>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">

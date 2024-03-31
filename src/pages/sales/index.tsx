@@ -15,6 +15,7 @@ export default function Page() {
       ?.emailAddress as unknown as string,
   });
 
+
   return (
     <Layout>
       <main className="pl-5">
@@ -35,7 +36,15 @@ export default function Page() {
             c2aUrl="/sales/new"
           />
         )}
-        {data?.length !== 0 && !isLoading && <SalesList sales={data} />}
+        {data === null && (
+          <h3>
+            Your Organization is not registered, contact our team to be
+            registered
+          </h3>
+        )}
+        {data?.length !== 0 && !isLoading && data !== null && (
+          <SalesList sales={data} />
+        )}
         {isLoading && <LoadingSkeleton />}
       </main>
     </Layout>

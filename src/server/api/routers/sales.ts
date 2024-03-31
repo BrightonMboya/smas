@@ -11,21 +11,25 @@ export const sales = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       try {
         const organizationId = await useOrganizationId(input.organizationEmail);
-        return await ctx.db.sales.findMany({
-          where: {
-            organizationsId: organizationId?.id,
-          },
-          include: {
-            Products: {
-              select: {
-                name: true,
+        // console.log(organizationId, ">>>>>>>>>")
+        if (organizationId !== null) {
+          return await ctx.db.sales.findMany({
+            where: {
+              organizationsId: organizationId?.id,
+            },
+            include: {
+              Products: {
+                select: {
+                  name: true,
+                },
               },
             },
-          },
-          orderBy: {
-            date: "desc",
-          },
-        });
+            orderBy: {
+              date: "desc",
+            },
+          });
+        }
+        return null;
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;
