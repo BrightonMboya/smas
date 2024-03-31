@@ -37,8 +37,16 @@ export default function Page() {
             c2aUrl="/suppliers/new"
           />
         )}
+        {data === null && (
+          <h3>
+            Your Organization is not registered, contact our team to be
+            registered
+          </h3>
+        )}
 
-        {data?.length !== 0 && !isLoading && <SupplierList suppliers={data} />}
+        {data?.length !== 0 && data !== null && !isLoading && (
+          <SupplierList suppliers={data} />
+        )}
         {isLoading && <LoadingSkeleton />}
       </main>
     </Layout>

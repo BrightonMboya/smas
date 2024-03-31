@@ -11,14 +11,17 @@ export const debts = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       try {
         const organizationId = await useOrganizationId(input.organizationEmail);
-        return await ctx.db.debts.findMany({
-          orderBy: {
-            date: "desc",
-          },
-          where: {
-            organizationsId: organizationId?.id,
-          },
-        });
+        if (organizationId !== null) {
+          return await ctx.db.debts.findMany({
+            orderBy: {
+              date: "desc",
+            },
+            where: {
+              organizationsId: organizationId?.id,
+            },
+          });
+        }
+        return null;
       } catch (cause) {
         console.log(cause);
         throw new TRPCError({

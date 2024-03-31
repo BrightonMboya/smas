@@ -36,8 +36,16 @@ export default function Page() {
           />
         )}
         {isLoading && <LoadingSkeleton />}
-        {/* @ts-expect-error */}
-        {data?.length !== 0 && !isLoading && <DebtList debts={data} />}
+        {data === null && (
+          <h3>
+            Your Organization is not registered, contact our team to be
+            registered
+          </h3>
+        )}
+        {data?.length !== 0 && data !== null && !isLoading && (
+          // @ts-expect-error
+          <DebtList debts={data} />
+        )}
       </main>
     </Layout>
   );

@@ -38,20 +38,16 @@ export const supplier = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const organizationId = await ctx.db.organizations.findUnique({
-          where: {
-            emailAddress: input.organizationEmail,
-          },
-          select: {
-            id: true,
-          },
-        });
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        if (organizationId !== null) {
+          return await ctx.db.suppliers.findMany({
+            where: {
+              organizationsId: organizationId?.id,
+            },
+          });
+        }
 
-        return await ctx.db.suppliers.findMany({
-          where: {
-            organizationsId: organizationId?.id,
-          },
-        });
+        return null;
       } catch (cause) {
         console.log(cause);
         throw new TRPCError({

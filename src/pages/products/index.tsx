@@ -37,7 +37,15 @@ export default function Page() {
             c2aUrl="/products/new"
           />
         )}
-        {data?.length !== 0 && !isLoading && <ProudctList products={data} />}
+        {data === null && (
+          <h3>
+            Your Organization is not registered, contact our team to be
+            registered
+          </h3>
+        )}
+        {data?.length !== 0 && data !== null && !isLoading && (
+          <ProudctList products={data} />
+        )}
         {isLoading && <LoadingSkeleton />}
       </main>
     </Layout>

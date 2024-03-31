@@ -35,7 +35,13 @@ export default function Page() {
             c2aUrl="/expenses/new"
           />
         )}
-        {data?.length !== 0 && !isLoading && <ExpenseList expenses={data} />}
+        {data === null && (
+          <h3>
+            Your Organization is not registered, contact our team to be
+            registered
+          </h3>
+        )}
+        {data?.length !== 0 && data !== null && !isLoading && <ExpenseList expenses={data!} />}
         {isLoading && <LoadingSkeleton />}
       </main>
     </Layout>
