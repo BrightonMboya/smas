@@ -26,7 +26,7 @@ export default function SideBar() {
   const { signOut } = useClerk();
 
   return (
-    <section className="fixed min-h-screen bg-lightest">
+    <section className="fixed hidden min-h-screen bg-lightest md:block">
       <div className="spac flex w-full flex-col  justify-start px-5 pt-5 ">
         <UserButton
           appearance={{

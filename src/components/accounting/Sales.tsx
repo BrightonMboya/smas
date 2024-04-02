@@ -63,7 +63,7 @@ export default function Sales() {
   return (
     <>
       <Toaster />
-      <Card id="#sales">
+      <Card id="#sales" className="max-w-xl">
         <CardHeader>
           <CardTitle>Record Sales</CardTitle>
           <CardDescription>Input your sales details here</CardDescription>

@@ -73,7 +73,6 @@ export default function Page() {
     }
   };
 
-  console.log(errors);
   return (
     <Layout>
       <Toaster />
@@ -139,7 +138,7 @@ export default function Page() {
           </ItemLayout>
         </section>
         <Button
-          className="mt-[50px] w-[100px]"
+          className="mt-[20px] w-[100px] md:mt-[50px]"
           type="submit"
           disabled={isLoading}
         >

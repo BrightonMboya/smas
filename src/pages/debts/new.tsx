@@ -63,7 +63,7 @@ export default function Page() {
     <Layout>
       <Toaster />
       <main className="mt-[40px] pl-[30px]">
-        <div className="flex w-[1000px] items-center justify-between pt-[30px] ">
+        <div className="flex items-center space-x-10 pt-[30px] md:w-[1000px] md:justify-between  ">
           <h3 className="text-3xl font-medium ">New Debt </h3>
           <div className="flex items-center gap-2">
             <Link href="/debts/">
@@ -112,7 +112,10 @@ export default function Page() {
               </div>
             </ItemLayout>
           </section>
-          <Button className="mt-[50px] w-[100px]" disabled={isLoading}>
+          <Button
+            className="mt-[20px] w-[100px] md:mt-[50px]"
+            disabled={isLoading}
+          >
             Save
           </Button>
         </form>
