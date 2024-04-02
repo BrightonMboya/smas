@@ -15,13 +15,12 @@ export default function Page() {
       ?.emailAddress as unknown as string,
   });
 
-
   return (
     <Layout>
       <main className="pl-5">
         <Toaster />
-        <div className="flex w-[1000px] items-center justify-between pt-[40px] ">
-          <h3 className="text-3xl font-medium ">Your Company </h3>
+        <div className="flex w-[90vw] items-center justify-between  pt-[40px] md:w-[1000px]">
+          <h3 className="text-2xl font-medium md:text-3xl ">Your Company </h3>
           <div className="flex items-center gap-2">
             <Link href="/sales/new">
               <Button>Make a Sale</Button>

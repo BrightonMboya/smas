@@ -19,7 +19,7 @@ export default function Page() {
     <Layout>
       <Toaster />
       <main className="pl-5">
-        <div className="flex w-[1000px] items-center justify-between pt-[40px] ">
+        <div className="flex items-center justify-between pt-[40px] md:w-[1000px] ">
           <h3 className="text-3xl font-medium ">Your Debts</h3>
           <div className="flex items-center gap-2">
             <Link href="/debts/new">

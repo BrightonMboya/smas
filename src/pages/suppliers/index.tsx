@@ -18,7 +18,7 @@ export default function Page() {
     <Layout>
       <main className="pl-5">
         {isError && <h3>We have an error</h3>}
-        <div className="flex w-[1000px] items-center justify-between pt-[40px] ">
+        <div className="flex md:w-[1000px] items-center justify-between pt-[40px] ">
           <h3 className="text-3xl font-medium ">Your Company </h3>
           <div className="flex items-center gap-2">
             <Link href="/suppliers/">
@@ -44,9 +44,7 @@ export default function Page() {
           </h3>
         )}
 
-        {data?.length !== 0 && data !== null && !isLoading && (
-          <SupplierList suppliers={data} />
-        )}
+        {data?.length !== 0 &&  data !==  null && !isLoading && <SupplierList suppliers={data} />}
         {isLoading && <LoadingSkeleton />}
       </main>
     </Layout>
