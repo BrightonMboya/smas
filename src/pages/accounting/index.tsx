@@ -28,7 +28,7 @@ export default function DashboardPage() {
     <Layout>
       <Toaster />
 
-      <div className="w-[1200px]">
+      <div className="md:w-[1200px]">
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
@@ -52,18 +52,7 @@ export default function DashboardPage() {
                     <CardTitle className="text-sm font-medium">
                       Total Sales
                     </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
+                    <p>Rwf</p>
                   </CardHeader>
                   <CardContent>
                     {isLoading ? (

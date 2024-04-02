@@ -10,7 +10,7 @@ interface Props {
 export default function InvoiceDetalsForm({ register }: Props) {
   return (
     <form>
-      <div className="w-[500px] space-y-5">
+      <div className="md:w-[500px] space-y-5">
         <ItemLayout>
           <AssetLabel label="Invoice Number" />
           <Input {...register("invoiceName")} />
@@ -31,7 +31,7 @@ export default function InvoiceDetalsForm({ register }: Props) {
         </ItemLayout>
       </div>
 
-      <section className="flex space-x-10 pt-[60px]">
+      <section className="flex flex-col pt-[60px] md:flex-row md:space-x-10">
         <div className="bg-slate-100/90 p-3">
           <h3>
             From{" "}
@@ -51,7 +51,7 @@ export default function InvoiceDetalsForm({ register }: Props) {
           </div>
         </div>
 
-        <div className="bg-slate-100/90 p-3">
+        <div className="mt-10 bg-slate-100/90 p-3 md:mt-0">
           <h3>
             For{" "}
             <span className="text-sm italic text-gray-500">

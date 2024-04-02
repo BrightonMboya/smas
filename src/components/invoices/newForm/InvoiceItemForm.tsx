@@ -17,7 +17,10 @@ export default function InvoiceItemForm({
   keyIdentifier,
 }: Props) {
   return (
-    <section className="flex items-center space-x-10 pt-5" key={keyIdentifier}>
+    <section
+      className="flex flex-col space-y-5 pt-5 md:flex-row md:items-center md:space-x-10 md:space-y-0"
+      key={keyIdentifier}
+    >
       <div>
         <Label>Item Name</Label>
         <Input
