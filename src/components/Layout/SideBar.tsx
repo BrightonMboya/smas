@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/router";
@@ -22,12 +24,21 @@ import {
   Menu,
   MoveLeft,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SideBar() {
   const router = useRouter();
   const { signOut } = useClerk();
   const [showNav, setShowNav] = useState(false);
+
+  useEffect(() => {
+    const { innerWidth: width } = window;
+    return () => {
+      if (width >= 500) {
+        setShowNav(true);
+      }
+    };
+  }, [showNav]);
 
   return (
     <section className="relative">
@@ -41,7 +52,7 @@ export default function SideBar() {
         <section className="fixed z-[1000] min-h-screen w-screen bg-lightest md:block md:w-[220px]">
           <div className="flex w-full flex-col  justify-start px-5 pt-5 ">
             <button type="button" onClick={() => setShowNav(!showNav)}>
-              <MoveLeft size={30} color="#46783E" />
+              <MoveLeft size={30} color="#46783E" className="lg:hidden" />
             </button>
             <UserButton
               appearance={{
