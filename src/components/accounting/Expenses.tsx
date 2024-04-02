@@ -68,7 +68,7 @@ export default function Expenses() {
     <>
       <Toaster />
 
-      <Card className="max-w-lg">
+      <Card className="w-[400px] md:max-w-xl">
         <CardHeader>
           <CardTitle>Record Expenses</CardTitle>
           <CardDescription>Input your expenses details here</CardDescription>
