@@ -2,16 +2,25 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { api } from "~/utils/api";
-import  { Spinner } from "../ui/LoadingSkeleton";
-
+import { Spinner } from "../ui/LoadingSkeleton";
+import { useUser } from "@clerk/nextjs";
 export function Overview() {
-  const { data, isLoading } = api.sales.yearlySales.useQuery();
+  const { user } = useUser();
+  const { data, isLoading } = api.sales.yearlySales.useQuery({
+    organizationEmail: user?.primaryEmailAddress
+      ?.emailAddress as unknown as string,
+  });
 
   return (
     <>
-      {isLoading ? (
-        <Spinner />
-      ) : (
+      {isLoading && <Spinner />}
+      {data === null && (
+        <p>
+          Your organization isnt registered yet, contact our team to get
+          registered
+        </p>
+      )}
+      {data !== null && (
         <ResponsiveContainer width="100%" height={350} className="ml-5">
           <BarChart data={data}>
             <XAxis

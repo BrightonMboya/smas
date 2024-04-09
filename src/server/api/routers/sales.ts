@@ -170,46 +170,57 @@ export const sales = createTRPCRouter({
       }
     }),
 
-  yearlySales: protectedProcedure.query(async ({ ctx }) => {
-    type SalesData = {
-      name: string;
-      total: string;
-    };
-    try {
-      const totalSales = await ctx.db.sales.findMany();
-      const monthlySales: { [key: string]: number } = {
-        Jan: 0,
-        Feb: 0,
-        Mar: 0,
-        Apr: 0,
-        May: 0,
-        Jun: 0,
-        Jul: 0,
-        Aug: 0,
-        Sep: 0,
-        Oct: 0,
-        Nov: 0,
-        Dec: 0,
+  yearlySales: protectedProcedure
+    .input(
+      z.object({
+        organizationEmail: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      type SalesData = {
+        name: string;
+        total: string;
       };
-      totalSales.forEach((sale) => {
-        const month = sale.date.toLocaleDateString("en-US", { month: "short" });
-        monthlySales[month] += (sale.amount * sale.quantity) / 10000;
-      });
-      const result: { name: string; total: number }[] = [];
-      const months = Object.keys(monthlySales);
-      months.forEach((month) => {
-        result.push({
-          name: month,
-          total: monthlySales[month]!,
+      try {
+        const organizationId = await useOrganizationId(input.organizationEmail);
+        if (organizationId !== null) {
+          const totalSales = await ctx.db.sales.findMany();
+          const monthlySales: { [key: string]: number } = {
+            Jan: 0,
+            Feb: 0,
+            Mar: 0,
+            Apr: 0,
+            May: 0,
+            Jun: 0,
+            Jul: 0,
+            Aug: 0,
+            Sep: 0,
+            Oct: 0,
+            Nov: 0,
+            Dec: 0,
+          };
+          totalSales.forEach((sale) => {
+            const month = sale.date.toLocaleDateString("en-US", {
+              month: "short",
+            });
+            monthlySales[month] += (sale.amount * sale.quantity) / 10000;
+          });
+          const result: { name: string; total: number }[] = [];
+          const months = Object.keys(monthlySales);
+          months.forEach((month) => {
+            result.push({
+              name: month,
+              total: monthlySales[month]!,
+            });
+          });
+          return result;
+        }else return null
+      } catch (cause) {
+        console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to load all sales",
         });
-      });
-      return result;
-    } catch (cause) {
-      console.log(cause);
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Failed to load all sales",
-      });
-    }
-  }),
+      }
+    }),
 });

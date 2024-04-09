@@ -35,15 +35,17 @@ export const accounting = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       try {
         const organizationId = await useOrganizationId(input.organizationEmail);
-        return await ctx.db.sales.findMany({
-          where: {
-            organizationsId: organizationId?.id,
-          },
-          take: 5,
-          // orderBy: {
-          //   date: "desc",
-          // },
-        });
+        if (organizationId !== null) {
+          return await ctx.db.sales.findMany({
+            where: {
+              organizationsId: organizationId?.id,
+            },
+            take: 5,
+            // orderBy: {
+            //   date: "desc",
+            // },
+          });
+        } else return null;
       } catch (cause) {
         console.log(cause);
       }
@@ -54,7 +56,7 @@ export const accounting = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       try {
         const organizationId = await useOrganizationId(input.organizationEmail);
-        console.log(organizationId, ">>>><>>>??>>>>???")
+        console.log(organizationId, ">>>><>>>??>>>>???");
         if (organizationId !== null) {
           return await ctx.db.expenses.findMany({
             orderBy: {
@@ -65,7 +67,7 @@ export const accounting = createTRPCRouter({
             },
           });
         }
-        return null
+        return null;
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;

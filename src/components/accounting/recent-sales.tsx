@@ -38,6 +38,7 @@ export function RecentSales() {
             <div className="ml-auto font-medium">{sale.amount}</div>
           </div>
         ))}
+        {data === null && <p>Your organization isnt registered yet, contact our team to get registered</p>}
     </div>
   );
 }

@@ -155,9 +155,9 @@ export default function DashboardPage() {
                 <Card className="col-span-3">
                   <CardHeader>
                     <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>
+                    {/* <CardDescription>
                       You made 265 sales this month.
-                    </CardDescription>
+                    </CardDescription> */}
                   </CardHeader>
                   <CardContent>
                     <RecentSales />
