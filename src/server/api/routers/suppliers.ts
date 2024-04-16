@@ -72,4 +72,48 @@ export const supplier = createTRPCRouter({
         throw FAILED_TO_DELETE;
       }
     }),
+
+  fetchSupplierById: protectedProcedure
+    .input(z.object({ supplierId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.suppliers.findUnique({
+        where: {
+          id: input.supplierId,
+        },
+      });
+    }),
+
+  editSupplier: protectedProcedure
+    .input(supplierSchema.merge(z.object({ supplierId: z.string() })))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const supplier = await ctx.db.suppliers.findUnique({
+          where: {
+            id: input.supplierId,
+          },
+        });
+
+        if (!supplier) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Product Not Found",
+          });
+        }
+
+        await ctx.db.suppliers.update({
+          where: {
+            id: input.supplierId
+          },
+          data: {
+            fullName: input.fullName,
+            company: input.company,
+            product: input.product,
+            phoneNumber: input.phoneNumber,
+            notes: input.notes
+          }
+        })
+      } catch (cause) {
+        console.log(cause);
+      }
+    }),
 });
