@@ -22,6 +22,7 @@ import { PersonIcon } from "@radix-ui/react-icons";
 import { useRouter, usePathname } from "next/navigation";
 import Button from "../ui/Button";
 import { SetStateAction, type Dispatch } from "react";
+import { useClerk } from "@clerk/nextjs";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -30,7 +31,8 @@ interface Props {
 
 export default function SideBarContent({ showNav, setShowNav }: Props) {
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { signOut } = useClerk();
 
   return (
     <section className="fixed z-[1000]  min-h-screen w-screen bg-lightest md:block md:w-[220px]">
@@ -44,7 +46,6 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         >
           <MoveLeft size={30} color="#46783E" className="lg:hidden" />
         </button>
-       
 
         <Accordion type="single" collapsible className="text-gray-500">
           <AccordionItem value="itienaries">
@@ -64,11 +65,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
               <Link href="/invoices/new">
                 <div
                   className={`flex items-center justify-center space-x-2
-              ${
-                pathname === "/invoices/new"
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
+              ${pathname === "/invoices/new" ? "text-dark" : "text-gray-500"}
           `}
                 >
                   <BadgePercent width={20} height={20} />
@@ -99,9 +96,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                pathname?.includes("/suppliers")
-                  ? "text-dark"
-                  : "text-gray-500"
+                pathname?.includes("/suppliers") ? "text-dark" : "text-gray-500"
               }
           `}
           >
@@ -114,11 +109,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <Link href="/products" className="mt-5">
           <div
             className={`flex space-x-2
-              ${
-                pathname?.includes("/products")
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
+              ${pathname?.includes("/products") ? "text-dark" : "text-gray-500"}
           `}
           >
             <Container width={20} height={20} />
@@ -130,11 +121,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <Link href="/sales" className="mt-5">
           <div
             className={`flex space-x-2
-              ${
-                pathname?.includes("/sales")
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
+              ${pathname?.includes("/sales") ? "text-dark" : "text-gray-500"}
           `}
           >
             <Activity width={20} height={20} />
@@ -145,11 +132,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <Link href="/expenses" className="mt-5">
           <div
             className={`flex space-x-2
-              ${
-                pathname?.includes("/expenses")
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
+              ${pathname?.includes("/expenses") ? "text-dark" : "text-gray-500"}
           `}
           >
             <Banknote width={20} height={20} />
@@ -160,11 +143,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <Link href="/debts" className="mt-5">
           <div
             className={`flex space-x-2
-              ${
-                pathname?.includes("/debts")
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
+              ${pathname?.includes("/debts") ? "text-dark" : "text-gray-500"}
           `}
           >
             <PiggyBank width={20} height={20} />
@@ -175,7 +154,9 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <Button
           className="fixed bottom-10  w-[150px] space-x-2"
           variant="destructive"
-          onClick={() => {}}
+          onClick={() => {
+            signOut(() => router.push("/auth/sign-in"));
+          }}
         >
           <LogOutIcon />
           <span>Log out</span>
