@@ -1,3 +1,4 @@
+"use client";
 import Button from "~/components/ui/Button";
 import { Label } from "~/components/ui/label";
 import {
@@ -36,7 +37,7 @@ export default function Expenses() {
   });
   const { toast } = useToast();
   const { user } = useUser();
-  const { isLoading, mutateAsync } = api.accounting.addExpense.useMutation({
+  const { isPending, mutateAsync } = api.accounting.addExpense.useMutation({
     onSuccess: () => {
       toast({ description: "Expense Added Succesfully" });
       reset();
@@ -120,7 +121,7 @@ export default function Expenses() {
               placeholder="Made a huge profit here ..."
               {...register("description")}
             />
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" disabled={isPending}>
               Submit Expense
             </Button>
           </form>

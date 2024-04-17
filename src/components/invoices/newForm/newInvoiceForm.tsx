@@ -1,3 +1,4 @@
+"use client";
 import Button from "../../ui/Button";
 import { z } from "zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
@@ -11,7 +12,7 @@ import { api } from "~/utils/api";
 import { ToastAction } from "~/components/ui/Toast";
 import { useToast } from "~/utils/hooks/useToast";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { CardTitle, CardHeader, CardContent, Card } from "~/components/ui/Card";
 import Total from "./TotalAmount";
 
@@ -67,7 +68,7 @@ export default function NewInvoiceForm() {
 
   const { toast } = useToast();
 
-  const { mutateAsync, isLoading } = api.invoices.create.useMutation({
+  const { mutateAsync, isPending } = api.invoices.create.useMutation({
     onSuccess: () => {
       toast({
         description: "Invoice Added succesfully",
@@ -146,7 +147,7 @@ export default function NewInvoiceForm() {
             </Button>
 
             <Button className="mt-10" type="submit">
-              {isLoading ? <Spinner /> : " Save Invoice"}
+              {isPending ? <Spinner /> : " Save Invoice"}
             </Button>
           </form>
         </CardContent>
