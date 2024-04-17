@@ -1,3 +1,4 @@
+"use client"
 import Button from "../ui/Button";
 import { Label } from "../ui/label";
 import {
@@ -41,7 +42,7 @@ export default function Sales() {
 
   const { toast } = useToast();
   const { user } = useUser();
-  const { isLoading, mutateAsync } = api.sales.addSales.useMutation({
+  const { isPending, mutateAsync } = api.sales.addSales.useMutation({
     onSuccess: () => {
       toast({ description: "Sales Added Succesfully" });
       reset();
@@ -156,7 +157,7 @@ export default function Sales() {
                 </p>
               )}
             </div>
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" disabled={isPending}>
               Submit Sale
             </Button>
           </form>

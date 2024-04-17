@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import NoAsset from "~/components/Assets/NoAsset";
 import Layout from "~/components/Layout/Layout";
