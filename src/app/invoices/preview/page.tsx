@@ -1,3 +1,4 @@
+"use client"
 import { CardTitle, CardHeader, CardContent, Card } from "~/components/ui/Card";
 import Button from "~/components/ui/Button";
 import { Separator } from "~/components/ui/seperator";
@@ -8,14 +9,15 @@ import {
   Table,
   TableHead,
 } from "~/components/ui/table";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import { format } from "date-fns";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 
 export default function Component() {
-  const { query } = useRouter();
-  const invoiceId = query.invoiceId;
+  const searchParams = useSearchParams();
+  const invoiceId = searchParams?.get("invoiceId");
+  
   const { data, isLoading } = api.invoices.queryById.useQuery({
     invoiceId: invoiceId as unknown as string,
   });

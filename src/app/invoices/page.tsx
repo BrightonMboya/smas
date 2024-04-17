@@ -1,3 +1,5 @@
+"use client"
+
 import Layout from "~/components/Layout/Layout";
 import { Header, NoAsset } from "~/components/Assets";
 import { ReactElement } from "react";
@@ -6,6 +8,8 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import InvoiceList from "~/components/invoices/invoiceTables/InvoiceList";
 import { Toaster } from "~/components/ui/toaster";
 import { useUser } from "@clerk/nextjs";
+
+
 function Page() {
   const { user } = useUser();
   const { data, isLoading } = api.invoices.all.useQuery({
