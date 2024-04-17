@@ -1,12 +1,13 @@
+"use client";
 import Layout from "~/components/Layout/Layout";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { type ISupplierSchema, supplierSchema } from "./new";
+import { type ISupplierSchema, supplierSchema } from "../new/page";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useToast } from "~/utils/hooks/useToast";
@@ -14,9 +15,10 @@ import { Toaster } from "~/components/ui/toaster";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 
 export default function Page() {
-  const { query } = useRouter();
+  const searchParams = useSearchParams();
+  const supplierId = searchParams?.get("supplierId") as unknown as string;
   const { isLoading, data, isError } = api.supplier.fetchSupplierById.useQuery({
-    supplierId: query.supplierId as unknown as string,
+    supplierId: supplierId,
   });
 
   const { register, handleSubmit, setValue } = useForm<ISupplierSchema>({
@@ -44,7 +46,7 @@ export default function Page() {
 
   const supplierRouter = api.supplier.editSupplier.useMutation({
     onSuccess: () => {
-      toast({ description: "Sale Edited Succesfully" });
+      toast({ description: "Supplier Edited Succesfully" });
     },
     onError: (cause) => {
       toast({
@@ -57,7 +59,7 @@ export default function Page() {
     try {
       supplierRouter.mutateAsync({
         ...data,
-        supplierId: query.supplierId as unknown as string,
+        supplierId: supplierId,
       });
     } catch (cause) {
       console.log(cause);

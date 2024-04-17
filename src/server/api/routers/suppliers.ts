@@ -1,5 +1,5 @@
 import { protectedProcedure, createTRPCRouter } from "../trpc";
-import { supplierSchema } from "~/pages/suppliers/new";
+import { supplierSchema } from "~/app/suppliers/new/page";
 import z from "zod";
 import {
   FAILED_TO_CREATE,
@@ -102,16 +102,16 @@ export const supplier = createTRPCRouter({
 
         await ctx.db.suppliers.update({
           where: {
-            id: input.supplierId
+            id: input.supplierId,
           },
           data: {
             fullName: input.fullName,
             company: input.company,
             product: input.product,
             phoneNumber: input.phoneNumber,
-            notes: input.notes
-          }
-        })
+            notes: input.notes,
+          },
+        });
       } catch (cause) {
         console.log(cause);
       }

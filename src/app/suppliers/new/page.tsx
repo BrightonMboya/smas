@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
@@ -35,7 +36,7 @@ export default function Page() {
   const user = useUser();
 
   const { toast } = useToast();
-  const { isLoading, mutateAsync } = api.supplier.add.useMutation({
+  const { isPending, mutateAsync } = api.supplier.add.useMutation({
     onSuccess: () => {
       toast({ description: "Supplier Added Succesfully" });
       reset();
@@ -134,7 +135,7 @@ export default function Page() {
               />
             </ItemLayout>
           </section>
-          <Button className="md:mt-[50px] mt-[20px] w-[100px]" disabled={isLoading}>
+          <Button className="md:mt-[50px] mt-[20px] w-[100px]" disabled={isPending}>
             Save
           </Button>
         </form>
