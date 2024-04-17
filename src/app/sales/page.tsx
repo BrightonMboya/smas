@@ -1,3 +1,4 @@
+"use client"
 import { NoAsset } from "~/components/Assets";
 import Layout from "~/components/Layout/Layout";
 import { api } from "~/utils/api";

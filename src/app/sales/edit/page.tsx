@@ -1,5 +1,6 @@
+"use client";
 import Layout from "~/components/Layout/Layout";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
@@ -14,9 +15,11 @@ import { Toaster } from "~/components/ui/toaster";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 
 export default function Page() {
-  const { query } = useRouter();
+  const searchParams = useSearchParams();
+  const saleId = searchParams?.get("salesId") as unknown as string;
+
   const { isLoading, data, isError } = api.sales.fetchSalesById.useQuery({
-    salesId: query.salesId as unknown as string,
+    salesId: saleId,
   });
 
   const { register, handleSubmit, setValue } = useForm<SalesSchema>({
@@ -47,17 +50,17 @@ export default function Page() {
       toast({ description: "Sale Edited Succesfully" });
     },
     onError: (cause) => {
-        toast({
-            description: cause.message
-        })
-    }
+      toast({
+        description: cause.message,
+      });
+    },
   });
 
   const onSubmit: SubmitHandler<SalesSchema> = (data) => {
     try {
       salesRouter.mutateAsync({
         ...data,
-        saleId: query.salesId as unknown as string,
+        saleId: saleId,
       });
     } catch (cause) {
       console.log(cause);

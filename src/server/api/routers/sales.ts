@@ -162,11 +162,11 @@ export const sales = createTRPCRouter({
         return editedSale;
       } catch (cause) {
         // @ts-ignore
-        console.log(cause?.message);
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Failed to edit this sale",
-        });
+        console.log(cause);
+        // throw new TRPCError({
+        //   code: "BAD_REQUEST",
+        //   message: "Failed to edit this sale",
+        // });
       }
     }),
 

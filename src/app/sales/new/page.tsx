@@ -1,3 +1,4 @@
+"use client"
 import Sales from "~/components/accounting/Sales";
 import Layout from "~/components/Layout/Layout";
 
