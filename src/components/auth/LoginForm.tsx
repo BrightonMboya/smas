@@ -19,20 +19,13 @@ export function LoginForm() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <UserAuthForm />
             <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
+              Don't have an acccount?{" "}
               <Link
-                href="/terms"
+                href="/auth/sign-up"
                 className="underline underline-offset-4 hover:text-primary"
               >
-                Terms of Service
+                Sign Up
               </Link>{" "}
-              and{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Privacy Policy
-              </Link>
               .
             </p>
           </div>

@@ -41,9 +41,10 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    redirect("/error");
+    console.log("I got an error", error);
+    redirect("/auth/error");
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/accounting");
 }
