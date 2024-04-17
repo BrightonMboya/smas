@@ -7,37 +7,48 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { Label } from "../ui/label";
 import { signup } from "~/app/auth/actions";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "~/trpc/react";
+
+export const authSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+
+export type AuthSchema = z.infer<typeof authSchema>;
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function SignUpForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { register, handleSubmit } = useForm<AuthSchema>({
+    resolver: zodResolver(authSchema),
+  });
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
+  const { mutateAsync, isLoading } = api.auth.signUp.useMutation();
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+  const onSubmit: SubmitHandler<AuthSchema> = (data) => {
+    mutateAsync(data);
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
             <Input
-              id="email"
               placeholder="name@example.com"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
+              {...register("email")}
+              required
             />
           </div>
 
@@ -46,15 +57,16 @@ export default function SignUpForm({ className, ...props }: UserAuthFormProps) {
               Password
             </Label>
             <Input
-              id="password"
               placeholder="super-secret"
               type="password"
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
+              {...register("password")}
+              required
             />
           </div>
-          <Button formAction={signup} disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
