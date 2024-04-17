@@ -1,3 +1,4 @@
+"use client"
 import Expenses from "~/components/accounting/Expenses";
 import Layout from "~/components/Layout/Layout";
 
