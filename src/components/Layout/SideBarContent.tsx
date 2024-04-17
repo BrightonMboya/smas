@@ -19,9 +19,8 @@ import {
 
 import Link from "next/link";
 import { PersonIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 import Button from "../ui/Button";
-import { UserButton, useClerk } from "@clerk/nextjs";
 import { SetStateAction, type Dispatch } from "react";
 
 interface Props {
@@ -31,7 +30,8 @@ interface Props {
 
 export default function SideBarContent({ showNav, setShowNav }: Props) {
   const router = useRouter();
-  const { signOut } = useClerk();
+  const pathname = usePathname()
+
   return (
     <section className="fixed z-[1000]  min-h-screen w-screen bg-lightest md:block md:w-[220px]">
       <div className="flex w-full flex-col  justify-start px-5 pt-5 ">
@@ -44,11 +44,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         >
           <MoveLeft size={30} color="#46783E" className="lg:hidden" />
         </button>
-        <UserButton
-          appearance={{
-            variables: {},
-          }}
-        />
+       
 
         <Accordion type="single" collapsible className="text-gray-500">
           <AccordionItem value="itienaries">
@@ -57,7 +53,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
               <Link href="/invoices">
                 <div
                   className={`flex items-center justify-center space-x-2
-              ${router.pathname === "/invoices" ? "text-dark" : "text-gray-500"}
+              ${pathname === "/invoices" ? "text-dark" : "text-gray-500"}
           `}
                 >
                   <Receipt width={20} height={20} />
@@ -69,7 +65,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
                 <div
                   className={`flex items-center justify-center space-x-2
               ${
-                router.pathname === "/invoices/new"
+                pathname === "/invoices/new"
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -87,7 +83,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                router.pathname.startsWith("/accounting")
+                pathname?.includes("/accounting")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -103,7 +99,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                router.pathname.startsWith("/suppliers")
+                pathname?.includes("/suppliers")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -119,7 +115,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                router.pathname.startsWith("/products")
+                pathname?.includes("/products")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -135,7 +131,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                router.pathname.startsWith("/sales")
+                pathname?.includes("/sales")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -150,7 +146,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                router.pathname.startsWith("/expenses")
+                pathname?.includes("/expenses")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -165,7 +161,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                router.pathname.startsWith("/debts")
+                pathname?.includes("/debts")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -179,7 +175,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <Button
           className="fixed bottom-10  w-[150px] space-x-2"
           variant="destructive"
-          onClick={() => signOut(() => router.push("/auth/sign-in"))}
+          onClick={() => {}}
         >
           <LogOutIcon />
           <span>Log out</span>
