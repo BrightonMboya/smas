@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Input from "~/components/ui/Input";
 import Button from "~/components/ui/Button";
@@ -32,7 +33,7 @@ export default function Page() {
 
   const { toast } = useToast();
   const { user } = useUser();
-  const { isLoading, mutateAsync } = api.debts.add.useMutation({
+  const { isPending, mutateAsync } = api.debts.add.useMutation({
     onSuccess: () => {
       toast({ description: "Debt Added Succesfully" });
       reset();
@@ -114,7 +115,7 @@ export default function Page() {
           </section>
           <Button
             className="mt-[20px] w-[100px] md:mt-[50px]"
-            disabled={isLoading}
+            disabled={isPending}
           >
             Save
           </Button>
