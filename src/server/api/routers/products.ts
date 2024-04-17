@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import z from "zod";
-import { productSchema } from "~/pages/products/new";
+import { productSchema } from "~/app/products/new/page";
 import {
   FAILED_TO_CREATE,
   NOT_FOUND,
@@ -39,7 +39,8 @@ export const products = createTRPCRouter({
           orderBy: {
             createdAt: "desc",
           },
-        });f
+        });
+        f;
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;

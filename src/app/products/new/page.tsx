@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
@@ -35,7 +36,7 @@ export default function Page() {
     resolver: zodResolver(productSchema),
   });
   const { toast } = useToast();
-  const { isLoading, mutateAsync } = api.products.add.useMutation({
+  const { isPending, mutateAsync } = api.products.add.useMutation({
     onSuccess: () => {
       toast({
         description: "Product added successfully",
@@ -140,7 +141,7 @@ export default function Page() {
         <Button
           className="mt-[20px] w-[100px] md:mt-[50px]"
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
         >
           Save
         </Button>
