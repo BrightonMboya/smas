@@ -7,3 +7,11 @@ It Includes:-
 - Accounting
 - Supplier Management
 - Stock Management and more
+
+
+# Todo
+- [] Add supabase auth
+- [] We will use Google and Email Providers
+- [] Add RLS to supabase dashboard
+- [] Remove clerk and its dependencies
+- [] Test out the RLS if it works
