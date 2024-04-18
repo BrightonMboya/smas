@@ -19,7 +19,7 @@ import {
 
 import Link from "next/link";
 import { PersonIcon } from "@radix-ui/react-icons";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Button from "../ui/Button";
 import { SetStateAction, type Dispatch } from "react";
 import { createClient } from "~/utils/supabase/client";
@@ -30,7 +30,6 @@ interface Props {
 }
 
 export default function SideBarContent({ showNav, setShowNav }: Props) {
-  const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
 
@@ -51,10 +50,10 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <AccordionItem value="itienaries">
             <AccordionTrigger>Invoice Management</AccordionTrigger>
             <AccordionContent className="flex flex-col space-y-5">
-              <Link href="/invoices">
+              <Link href="/dashboard/invoices">
                 <div
                   className={`flex items-center justify-center space-x-2
-              ${pathname === "/invoices" ? "text-dark" : "text-gray-500"}
+              ${pathname === "/dashboard/invoices" ? "text-dark" : "text-gray-500"}
           `}
                 >
                   <Receipt width={20} height={20} />
@@ -62,10 +61,10 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
                 </div>
               </Link>
 
-              <Link href="/invoices/new">
+              <Link href="/dashboard/invoices/new">
                 <div
                   className={`flex items-center justify-center space-x-2
-              ${pathname === "/invoices/new" ? "text-dark" : "text-gray-500"}
+              ${pathname === "/dashboard/invoices/new" ? "text-dark" : "text-gray-500"}
           `}
                 >
                   <BadgePercent width={20} height={20} />
@@ -76,11 +75,11 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </AccordionItem>
         </Accordion>
 
-        <Link href="/accounting">
+        <Link href="/dashboard/accounting">
           <div
             className={`flex space-x-2
               ${
-                pathname?.includes("/accounting")
+                pathname?.includes("/dashboard/accounting")
                   ? "text-dark"
                   : "text-gray-500"
               }
@@ -92,11 +91,11 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </div>
         </Link>
 
-        <Link href="/suppliers" className="mt-5">
+        <Link href="/dashboard/suppliers" className="mt-5">
           <div
             className={`flex space-x-2
               ${
-                pathname?.includes("/suppliers") ? "text-dark" : "text-gray-500"
+                pathname?.includes("/dashboard/suppliers") ? "text-dark" : "text-gray-500"
               }
           `}
           >
@@ -106,10 +105,10 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </div>
         </Link>
 
-        <Link href="/products" className="mt-5">
+        <Link href="/dashboard/products" className="mt-5">
           <div
             className={`flex space-x-2
-              ${pathname?.includes("/products") ? "text-dark" : "text-gray-500"}
+              ${pathname?.includes("/dashboard/products") ? "text-dark" : "text-gray-500"}
           `}
           >
             <Container width={20} height={20} />
@@ -118,10 +117,10 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </div>
         </Link>
 
-        <Link href="/sales" className="mt-5">
+        <Link href="/dashboard/sales" className="mt-5">
           <div
             className={`flex space-x-2
-              ${pathname?.includes("/sales") ? "text-dark" : "text-gray-500"}
+              ${pathname?.includes("/dashboard/sales") ? "text-dark" : "text-gray-500"}
           `}
           >
             <Activity width={20} height={20} />
@@ -129,10 +128,10 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </div>
         </Link>
 
-        <Link href="/expenses" className="mt-5">
+        <Link href="/dashboard/expenses" className="mt-5">
           <div
             className={`flex space-x-2
-              ${pathname?.includes("/expenses") ? "text-dark" : "text-gray-500"}
+              ${pathname?.includes("/dashboard/expenses") ? "text-dark" : "text-gray-500"}
           `}
           >
             <Banknote width={20} height={20} />
@@ -140,10 +139,10 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </div>
         </Link>
 
-        <Link href="/debts" className="mt-5">
+        <Link href="/dashboard/debts" className="mt-5">
           <div
             className={`flex space-x-2
-              ${pathname?.includes("/debts") ? "text-dark" : "text-gray-500"}
+              ${pathname?.includes("/dashboard/debts") ? "text-dark" : "text-gray-500"}
           `}
           >
             <PiggyBank width={20} height={20} />

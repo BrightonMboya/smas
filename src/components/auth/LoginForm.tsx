@@ -1,7 +1,7 @@
 "use client";
-import { SignIn } from "@clerk/nextjs";
 import Link from "next/link";
 import { UserAuthForm } from "./UserAuthForm";
+import { signIn } from "~/app/auth/actions";
 
 export function LoginForm() {
   return (

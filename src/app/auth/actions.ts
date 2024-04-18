@@ -5,6 +5,28 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "~/utils/supabase/server";
 
+export const signIn = async (formData: FormData) => {
+  "use server";
+  console.log(formData.entries.toString())
+
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const supabase = createClient();
+  console.log(email, password, "???????");
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.log(error.message);
+    return redirect("/auth/sign-in?message=Could not authenticate user");
+  }
+
+  return redirect("/dashboard/accounting");
+};
+
 export async function login(formData: FormData) {
   const supabase = createClient();
 
