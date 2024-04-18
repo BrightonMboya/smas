@@ -22,7 +22,7 @@ import { PersonIcon } from "@radix-ui/react-icons";
 import { useRouter, usePathname } from "next/navigation";
 import Button from "../ui/Button";
 import { SetStateAction, type Dispatch } from "react";
-import { useClerk } from "@clerk/nextjs";
+import { createClient } from "~/utils/supabase/client";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -32,7 +32,7 @@ interface Props {
 export default function SideBarContent({ showNav, setShowNav }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const { signOut } = useClerk();
+  const supabase = createClient();
 
   return (
     <section className="fixed z-[1000]  min-h-screen w-screen bg-lightest md:block md:w-[220px]">
@@ -155,7 +155,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           className="fixed bottom-10  w-[150px] space-x-2"
           variant="destructive"
           onClick={() => {
-            signOut(() => router.push("/auth/sign-in"));
+            supabase.auth.signOut();
           }}
         >
           <LogOutIcon />

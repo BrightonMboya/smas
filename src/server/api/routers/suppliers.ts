@@ -1,5 +1,5 @@
 import { protectedProcedure, createTRPCRouter } from "../trpc";
-import { supplierSchema } from "~/app/suppliers/new/page";
+import { supplierSchema } from "~/app/dashboard/suppliers/new/page";
 import z from "zod";
 import {
   FAILED_TO_CREATE,

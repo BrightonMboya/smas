@@ -21,8 +21,8 @@ export const config = {
    * Remove the first value when removing clerk auth
    */
   matcher: [
-    "/((?!.*\\..*|_next).*)",
-    "/",
+    // "/((?!.*\\..*|_next).*)",
+    // "/",
     "/(api|trpc)(.*)",
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],

@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import z from "zod";
-import { productSchema } from "~/app/products/new/page";
+import { productSchema } from "~/app/dashboard/products/new/page";
 import {
   FAILED_TO_CREATE,
   NOT_FOUND,

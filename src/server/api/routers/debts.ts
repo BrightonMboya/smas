@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { protectedProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
-import { debtsSchema } from "~/app/debts/new/page";
+import { debtsSchema } from "~/app/dashboard/debts/new/page";
 import { organizationEmailSchema } from "~/utils/constants";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
