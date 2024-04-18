@@ -7,7 +7,7 @@ import { createClient } from "~/utils/supabase/server";
 
 export const signIn = async (formData: FormData) => {
   "use server";
-  console.log(formData.entries.toString())
+  console.log(formData.entries.toString());
 
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -27,28 +27,13 @@ export const signIn = async (formData: FormData) => {
   return redirect("/dashboard/accounting");
 };
 
-export async function login(formData: FormData) {
+export const signOut = async () => {
+  "use server";
+
   const supabase = createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
-
-  const { error } = await supabase.auth.signInWithPassword(data);
-
-  if (error) {
-    console.log("I got an error");
-    console.log(error);
-    redirect("/auth/error");
-  }
-
-  revalidatePath("/", "layout");
-  console.log("I got  a redirect");
-  redirect("/accounting");
-}
+  await supabase.auth.signOut();
+  return redirect("/auth/sign-in");
+};
 
 interface AuthProps {
   email: string;

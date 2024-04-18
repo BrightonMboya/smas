@@ -22,7 +22,9 @@ import { PersonIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import Button from "../ui/Button";
 import { SetStateAction, type Dispatch } from "react";
-import { createClient } from "~/utils/supabase/client";
+import { signOut } from "~/app/auth/actions";
+import { useFormStatus } from "react-dom";
+import { Spinner } from "../ui/LoadingSkeleton";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -31,7 +33,8 @@ interface Props {
 
 export default function SideBarContent({ showNav, setShowNav }: Props) {
   const pathname = usePathname();
-  const supabase = createClient();
+  const { pending, action } = useFormStatus();
+  const isPending = pending && action === signOut;
 
   return (
     <section className="fixed z-[1000]  min-h-screen w-screen bg-lightest md:block md:w-[220px]">
@@ -95,7 +98,9 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <div
             className={`flex space-x-2
               ${
-                pathname?.includes("/dashboard/suppliers") ? "text-dark" : "text-gray-500"
+                pathname?.includes("/dashboard/suppliers")
+                  ? "text-dark"
+                  : "text-gray-500"
               }
           `}
           >
@@ -150,16 +155,21 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </div>
         </Link>
 
-        <Button
-          className="fixed bottom-10  w-[150px] space-x-2"
-          variant="destructive"
-          onClick={() => {
-            supabase.auth.signOut();
-          }}
-        >
-          <LogOutIcon />
-          <span>Log out</span>
-        </Button>
+        <form action={signOut}>
+          <Button
+            className="fixed bottom-10  w-[150px] space-x-2"
+            variant="destructive"
+          >
+            {isPending ? (
+              <Spinner />
+            ) : (
+              <>
+                <LogOutIcon />
+                <span>Log out</span>
+              </>
+            )}
+          </Button>
+        </form>
       </div>
     </section>
   );
