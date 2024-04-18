@@ -125,7 +125,7 @@ export default function Page() {
           <Button
             className="mt-[50px] w-[100px]"
             type="submit"
-            disabled={salesRouter.isPending}
+            disabled={salesRouter.isLoading}
           >
             Save
           </Button>

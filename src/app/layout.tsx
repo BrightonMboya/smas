@@ -3,7 +3,6 @@ import "~/styles/globals.css";
 import { Inter, Montserrat } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { ClerkProvider } from "@clerk/nextjs";
 import { createClient } from "~/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -32,12 +31,10 @@ export default async function RootLayout({
   //   return redirect("/auth/login");
   // }
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${monsterrat.className}`}>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${monsterrat.className}`}>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
+      </body>
+    </html>
   );
 }

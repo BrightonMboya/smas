@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import NoAsset from "~/components/Assets/NoAsset";
 import Layout from "~/components/Layout/Layout";
@@ -7,13 +7,10 @@ import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
-import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  const { user } = useUser();
   const { isLoading, data } = api.debts.all.useQuery({
-    organizationEmail: user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: "",
   });
 
   return (

@@ -110,7 +110,7 @@ export default function Page() {
             <Button
               className="mt-[50px] w-[100px]"
               type="submit"
-              disabled={productsRouter.isPending}
+              disabled={productsRouter.isLoading}
             >
               Save
             </Button>

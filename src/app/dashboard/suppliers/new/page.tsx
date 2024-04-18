@@ -12,7 +12,6 @@ import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
 
 export const supplierSchema = z.object({
   fullName: z.string().min(1),
@@ -33,10 +32,9 @@ export default function Page() {
   } = useForm<ISupplierSchema>({
     resolver: zodResolver(supplierSchema),
   });
-  const user = useUser();
 
   const { toast } = useToast();
-  const { isPending, mutateAsync } = api.supplier.add.useMutation({
+  const { isLoading, mutateAsync } = api.supplier.add.useMutation({
     onSuccess: () => {
       toast({ description: "Supplier Added Succesfully" });
       reset();
@@ -53,8 +51,7 @@ export default function Page() {
     try {
       mutateAsync({
         ...data,
-        organizationEmail: user?.user?.primaryEmailAddress
-          ?.emailAddress as unknown as string,
+        organizationEmail: ""
       });
     } catch (cause) {
       console.log(cause);
@@ -135,7 +132,7 @@ export default function Page() {
               />
             </ItemLayout>
           </section>
-          <Button className="md:mt-[50px] mt-[20px] w-[100px]" disabled={isPending}>
+          <Button className="md:mt-[50px] mt-[20px] w-[100px]" disabled={isLoading}>
             Save
           </Button>
         </form>

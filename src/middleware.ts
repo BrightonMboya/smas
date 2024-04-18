@@ -1,15 +1,6 @@
-import { authMiddleware } from "@clerk/nextjs";
-
 import { type NextRequest } from "next/server";
 import { updateSession } from "~/utils/supabase/middleware";
 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/nextjs/middleware for more information about configuring your middleware
-export default authMiddleware({
-  ignoredRoutes: ["/invoices/preview"],
-  publicRoutes: [""],
-});
 
 export const config = {
   /*
@@ -21,9 +12,6 @@ export const config = {
    * Remove the first value when removing clerk auth
    */
   matcher: [
-    // "/((?!.*\\..*|_next).*)",
-    // "/",
-    "/(api|trpc)(.*)",
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

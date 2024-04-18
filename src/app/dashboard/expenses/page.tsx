@@ -7,13 +7,10 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
 import Button from "~/components/ui/Button";
-import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  const { user } = useUser();
   const { isLoading, data } = api.accounting.allExpenses.useQuery({
-    organizationEmail: user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: ""
   });
 
   return (

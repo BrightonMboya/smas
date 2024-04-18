@@ -7,14 +7,11 @@ import { api } from "~/utils/api";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import InvoiceList from "~/components/invoices/invoiceTables/InvoiceList";
 import { Toaster } from "~/components/ui/toaster";
-import { useUser } from "@clerk/nextjs";
 
 
 function Page() {
-  const { user } = useUser();
   const { data, isLoading } = api.invoices.all.useQuery({
-    organizationEmail: user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: ""
   });
 
   return (

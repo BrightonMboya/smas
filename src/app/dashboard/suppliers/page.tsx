@@ -6,13 +6,10 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  const user = useUser();
   const { isLoading, data, isError } = api.supplier.all.useQuery({
-    organizationEmail: user?.user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail:""
   });
 
   return (

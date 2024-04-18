@@ -5,7 +5,7 @@ import { cn } from "~/utils/utils";
 import { signIn } from "~/app/auth/actions";
 import Image from "next/legacy/image";
 
-import { SubmitButton } from "~/app/auth/login/submit-button";
+import { SubmitButton } from "../../_components/submit-button";
 
 export default function Page({
   searchParams,

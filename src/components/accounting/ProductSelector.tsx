@@ -22,7 +22,6 @@ import Link from "next/link";
 import { Spinner } from "../ui/LoadingSkeleton";
 import { ControllerRenderProps } from "react-hook-form";
 import { SalesSchema } from "./Sales";
-import { useUser } from "@clerk/nextjs";
 
 interface Props {
   field: ControllerRenderProps<SalesSchema, "productsId">;
@@ -34,10 +33,8 @@ export default function ProductSelector({ field }: Props) {
   const [remaingProduct, setRemainingProducts] = React.useState(0);
   const [showRemainingProducts, setShowRemainingProducts] =
     React.useState(false);
-  const { user } = useUser();
   const { data, isLoading } = api.products.all.useQuery({
-    organizationEmail: user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: ""
   });
 
   return (

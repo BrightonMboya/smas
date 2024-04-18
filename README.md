@@ -10,8 +10,8 @@ It Includes:-
 
 
 # Todo
-- [] Add supabase auth
+- [x] Add supabase auth
 - [] We will use Google and Email Providers
 - [] Add RLS to supabase dashboard
-- [] Remove clerk and its dependencies
+- [x] Remove clerk and its dependencies
 - [] Test out the RLS if it works

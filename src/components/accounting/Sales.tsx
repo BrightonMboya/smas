@@ -15,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import ProductSelector from "./ProductSelector";
 import { useToast } from "~/utils/hooks/useToast";
-import { useUser } from "@clerk/nextjs";
 import { Toaster } from "../ui/toaster";
 
 export const salesSchema = z.object({
@@ -41,8 +40,7 @@ export default function Sales() {
   });
 
   const { toast } = useToast();
-  const { user } = useUser();
-  const { isPending, mutateAsync } = api.sales.addSales.useMutation({
+  const { isLoading, mutateAsync } = api.sales.addSales.useMutation({
     onSuccess: () => {
       toast({ description: "Sales Added Succesfully" });
       reset();
@@ -57,8 +55,7 @@ export default function Sales() {
   const onSubmit: SubmitHandler<SalesSchema> = (data) => {
     mutateAsync({
       ...data,
-      organizationEmail: user?.primaryEmailAddress
-        ?.emailAddress as unknown as string,
+      organizationEmail: ""
     });
   };
   return (
@@ -157,7 +154,7 @@ export default function Sales() {
                 </p>
               )}
             </div>
-            <Button className="w-full" type="submit" disabled={isPending}>
+            <Button className="w-full" type="submit" disabled={isLoading}>
               Submit Sale
             </Button>
           </form>

@@ -15,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "../ui/toaster";
-import { useUser } from "@clerk/nextjs";
 
 export const expensesSchema = z.object({
   name: z.string().min(1),
@@ -36,8 +35,7 @@ export default function Expenses() {
     resolver: zodResolver(expensesSchema),
   });
   const { toast } = useToast();
-  const { user } = useUser();
-  const { isPending, mutateAsync } = api.accounting.addExpense.useMutation({
+  const { isLoading, mutateAsync } = api.accounting.addExpense.useMutation({
     onSuccess: () => {
       toast({ description: "Expense Added Succesfully" });
       reset();
@@ -54,8 +52,7 @@ export default function Expenses() {
     try {
       mutateAsync({
         ...data,
-        organizationEmail: user?.primaryEmailAddress
-          ?.emailAddress as unknown as string,
+        organizationEmail: "",
       });
     } catch (cause) {
       console.log(cause);
@@ -121,7 +118,7 @@ export default function Expenses() {
               placeholder="Made a huge profit here ..."
               {...register("description")}
             />
-            <Button className="w-full" type="submit" disabled={isPending}>
+            <Button className="w-full" type="submit" disabled={isLoading}>
               Submit Expense
             </Button>
           </form>

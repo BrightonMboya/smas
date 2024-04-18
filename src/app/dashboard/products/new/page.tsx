@@ -14,7 +14,6 @@ import { inferProcedureInput } from "@trpc/server";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import { ToastAction } from "~/components/ui/Toast";
-import { useUser } from "@clerk/nextjs";
 
 export const productSchema = z.object({
   name: z.string().min(1),
@@ -36,7 +35,7 @@ export default function Page() {
     resolver: zodResolver(productSchema),
   });
   const { toast } = useToast();
-  const { isPending, mutateAsync } = api.products.add.useMutation({
+  const { isLoading, mutateAsync } = api.products.add.useMutation({
     onSuccess: () => {
       toast({
         description: "Product added successfully",
@@ -54,8 +53,6 @@ export default function Page() {
     },
   });
 
-  const user = useUser();
-
   const onSubmit: SubmitHandler<ProductSchema> = (data) => {
     type Input = inferProcedureInput<AppRouter["products"]["add"]>;
     const productData: Input = {
@@ -64,8 +61,7 @@ export default function Page() {
       sellingPrice: data.sellingPrice,
       description: data.description,
       stockAvailable: data.stockAvailable,
-      organizationEmail: user?.user?.primaryEmailAddress
-        ?.emailAddress as unknown as string,
+      organizationEmail: "",
     };
     try {
       mutateAsync(productData);
@@ -141,7 +137,7 @@ export default function Page() {
         <Button
           className="mt-[20px] w-[100px] md:mt-[50px]"
           type="submit"
-          disabled={isPending}
+          disabled={isLoading}
         >
           Save
         </Button>

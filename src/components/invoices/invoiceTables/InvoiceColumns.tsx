@@ -14,7 +14,6 @@ import Button from "~/components/ui/Button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { api } from "~/utils/api";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 
 type AdditionalTripType = {
@@ -101,8 +100,7 @@ export const columns: ColumnDef<Invoices>[] = [
       const invoice = row.original;
       const { toast } = useToast();
       const router = useRouter();
-      const user = useUser();
-      const organizationEmail = user?.user?.primaryEmailAddress?.emailAddress;
+      const organizationEmail = ""
       // const { mutateAsync, isLoading } = api.invoices.markAsPaid.useMutation({
       //   onSuccess: () => {
       //     toast({

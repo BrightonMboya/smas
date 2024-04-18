@@ -14,7 +14,6 @@
     "updatePrisma": "npx prisma generate && npx prisma db push && npx prisma studio"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.29.7",
     "@hookform/resolvers": "^3.3.4",
     "@next/font": "^14.0.4",
     "@prisma/client": "^5.6.0",

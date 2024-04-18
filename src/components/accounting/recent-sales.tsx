@@ -2,13 +2,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { api } from "~/utils/api";
 import { format } from "date-fns";
 import { Spinner } from "../ui/LoadingSkeleton";
-import { useUser } from "@clerk/nextjs";
 
 export function RecentSales() {
-  const { user } = useUser();
   const { data, isLoading } = api.accounting.recentSales.useQuery({
-    organizationEmail: user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: ""
   });
 
   return (

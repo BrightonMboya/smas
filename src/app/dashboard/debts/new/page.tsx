@@ -11,7 +11,6 @@ import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
 
 export const debtsSchema = z.object({
   debtorName: z.string().min(1),
@@ -32,8 +31,8 @@ export default function Page() {
   });
 
   const { toast } = useToast();
-  const { user } = useUser();
-  const { isPending, mutateAsync } = api.debts.add.useMutation({
+
+  const { isLoading, mutateAsync } = api.debts.add.useMutation({
     onSuccess: () => {
       toast({ description: "Debt Added Succesfully" });
       reset();
@@ -49,8 +48,7 @@ export default function Page() {
     try {
       mutateAsync({
         ...data,
-        organizationEmail: user?.primaryEmailAddress
-          ?.emailAddress as unknown as string,
+        organizationEmail: "",
       });
     } catch (cause) {
       console.log(cause);
@@ -115,7 +113,7 @@ export default function Page() {
           </section>
           <Button
             className="mt-[20px] w-[100px] md:mt-[50px]"
-            disabled={isPending}
+            disabled={isLoading}
           >
             Save
           </Button>
