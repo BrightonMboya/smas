@@ -50,7 +50,16 @@ export default function Page({
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
               <div className={cn("grid gap-6")}>
                 <form className="animate-in flex w-full flex-1 flex-col justify-center gap-2 ">
-                  <Label className="text-md" htmlFor="email">
+                  <Label className="text-md" htmlFor="organization_name">
+                    Organization Name
+                  </Label>
+                  <Input
+                    className=" rounded-md border bg-inherit px-4 py-2"
+                    placeholder="Sample Organization"
+                    required
+                    name="organization_name"
+                  />
+                  <Label className="text-md mt-5" htmlFor="email" >
                     Email
                   </Label>
                   <Input

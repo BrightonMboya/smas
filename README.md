@@ -3,13 +3,62 @@
 This software is intended to help small businesses record and manage their expense and sales.
 
 It Includes:-
+
 - Invoice Management
 - Accounting
 - Supplier Management
 - Stock Management and more
 
+## Stack Used
+- NextJS for front-end
+- Prisma -  for table managements and migrations
+- Supabase - Data hosting, storage, auth, and also it used to query the data
+- trpc - For handling mutations, queries etc
+
+## Authentication
+
+This project uses Supabase Auth. For self hosting, follow the supabase guide on self hosting supabase. The reason is to be able to use Supabase RLS since we are building a multi-tenant application.
+
+Auth should work pretty well once you configure the environment variables well.
+
+
+## Client Onboarding
+Getting the client onboarding right is the important step when creating a multitenant saas like this one. This makes sure that an organization cant see the data of the other organization.
+
+The first step is signing up a user
+
+## Setting up Supabase RLS.
+We will enable RLS for every table in the project, users should be able to perform CRUD if the id matches the uid in the database
+
+Head over to the sql editor section of supabase and paste the following sql query, it enables the RLS on all tables
+
+To grant the permission to our tables for the authenticated roles, we need to turn them on the postgres database. This will allow the authenticated role to get access to our database, if you wont do this step and perform  RLS, you wont be able to see the data in the client.
+
+Go to the sql editor and paste the following sql query
+
+```sql
+grant usage on schema "public" to anon;
+grant usage on schema "public" to authenticated;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA "public" TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA "public" TO anon;
+```
+
+
+Then the following sql what is doing is adding RLS to all of the tables making sure organizations can do crud ops to the data belonging to them based on the organization_id
+
+```sql
+create policy "Enable crud ops on debts"
+on "public"."Debts"
+to authenticated
+using (
+  (( SELECT (auth.uid())::text AS uid) = organizations_id)
+);
+```
+
 
 # Todo
+
 - [x] Add supabase auth
 - [] We will use Google and Email Providers
 - [] Add RLS to supabase dashboard

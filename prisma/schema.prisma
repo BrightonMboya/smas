@@ -3,12 +3,14 @@
 
 generator client {
     provider = "prisma-client-js"
+    // previewFeatures = ["multischema"]
 }
 
 datasource db {
     provider  = "postgresql"
     url       = env("DATABASE_URL")
     directUrl = env("DIRECT_DATABASE_URL")
+    // schemas   = ["public", "auth"]
 }
 
 model Organizations {
@@ -21,6 +23,8 @@ model Organizations {
     invoices     Invoices[]
     suppliers    Suppliers[]
     debts        Debts[]
+
+    // @@schema("auth")
 }
 
 model Expenses {
@@ -31,6 +35,8 @@ model Expenses {
     description     String?
     Organizations   Organizations @relation(fields: [organizationsId], references: [id])
     organizationsId String
+
+    // @@schema("auth")
 }
 
 model Products {
@@ -44,6 +50,8 @@ model Products {
     sales           Sales[]
     Organizations   Organizations @relation(fields: [organizationsId], references: [id])
     organizationsId String
+
+    // @@schema("auth")
 }
 
 model Sales {
@@ -57,6 +65,8 @@ model Sales {
     date            DateTime
     Organizations   Organizations @relation(fields: [organizationsId], references: [id])
     organizationsId String
+
+    // @@schema("auth")
 }
 
 model Invoices {
@@ -71,6 +81,8 @@ model Invoices {
     invoiceItems    InvoiceItems[]
     Organizations   Organizations  @relation(fields: [organizationsId], references: [id])
     organizationsId String
+
+    // @@schema("public")
 }
 
 model InvoiceItems {
@@ -81,6 +93,8 @@ model InvoiceItems {
     rate       Int
     Invoices   Invoices @relation(fields: [invoicesId], references: [id])
     invoicesId String
+
+    // @@schema("auth")
 }
 
 model Suppliers {
@@ -92,14 +106,18 @@ model Suppliers {
     notes           String?
     Organizations   Organizations @relation(fields: [organizationsId], references: [id])
     organizationsId String
+
+    // @@schema("auth")
 }
 
 model Debts {
-    id              String        @id @default(cuid())
-    debtorName      String
-    amount          Int
-    date            DateTime
-    paid            Boolean       @default(false)
-    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
-    organizationsId String
+    id               String        @id @default(cuid())
+    debtorName       String
+    amount           Int
+    date             DateTime
+    paid             Boolean       @default(false)
+    Organizations    Organizations @relation(fields: [organizations_id], references: [id])
+    organizations_id String
+
+    // @@schema("auth")
 }

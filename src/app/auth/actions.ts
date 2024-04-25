@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { db } from "~/server/db";
 
 import { createClient } from "~/utils/supabase/server";
 
@@ -42,19 +43,38 @@ export const signUp = async (formData: FormData) => {
   const origin = headers().get("origin");
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const organization_name = formData.get("organization_name") as string;
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        organization_name: organization_name,
+      },
+    },
     // options: {
     //   emailRedirectTo: `${origin}/auth/callback`,
     // },
   });
 
+  // then we add the info on the organization_table
+  console.log(data)
+  if (data.user !== null && !error) {
+    const res = await db.organizations.create({
+      data: {
+        name: organization_name,
+        id: data?.user?.id,
+        emailAddress: email,
+      },
+    });
+    console.log(res);
+  }
+
   if (error) {
     console.log(error.message);
-    return redirect("/auth/sign-up?message=Could not authenticate user");
+    return redirect(`/auth/sign-up?message=${error.message}`);
   }
 
   return redirect("/dashboard/accounting");

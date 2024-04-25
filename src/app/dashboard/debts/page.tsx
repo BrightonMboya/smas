@@ -7,12 +7,17 @@ import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
+import { createClient } from "~/utils/supabase/client";
 
-export default function Page() {
-  const { isLoading, data } = api.debts.all.useQuery({
-    organizationEmail: "",
-  });
+export default async function Page() {
+  // const { isLoading, data } = api.debts.all.useQuery({
+  //   organizationEmail: "",
+  // });
 
+  const supabase = createClient();
+  const { data, error } = await supabase.from("Debts").select();
+  console.log(data, error);
+  const isLoading = false;
   return (
     <Layout>
       <Toaster />
@@ -41,7 +46,6 @@ export default function Page() {
           </h3>
         )}
         {data?.length !== 0 && data !== null && !isLoading && (
-          // @ts-expect-error
           <DebtList debts={data} />
         )}
       </main>
