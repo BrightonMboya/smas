@@ -6,11 +6,12 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
+import { createClient } from "~/utils/supabase/server";
 
 /**
  * 1. CONTEXT
@@ -24,9 +25,15 @@ import { db } from "~/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
+
+const supabase = createClient();
+
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const { data } = await supabase.auth.getUser();
   return {
     db,
+    supabase,
+    auth: data.user,
     ...opts,
   };
 };
@@ -81,4 +88,34 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
-export const protectedProcedure = t.procedure;
+
+/**
+ * Protected (authenticated) procedure
+ *
+ * This procedure ensures that all the operations are perfomed if the user is authenticated
+ * We use supabase auth to determine that
+ *
+ */
+
+const isAuthed = t.middleware(async ({ next, ctx }) => {
+  if (!ctx.auth?.id) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      auth: ctx.auth,
+    },
+  });
+});
+
+// const isAuthed = t.middleware(({ next, ctx }) => {
+//   if (!ctx.auth.userId) {
+//     throw new TRPCError({ code: "UNAUTHORIZED" });
+//   }
+//   return next({
+//     ctx: {
+//       auth: ctx.auth,
+//     },
+//   });
+// });
+export const protectedProcedure = t.procedure.use(isAuthed);

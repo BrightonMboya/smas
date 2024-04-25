@@ -18,7 +18,7 @@ export default async function RootLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log(user, ">>>>>>>");
+  // console.log(user, ">>>>>>>");
   if (!user) {
     return redirect("/auth/sign-in");
   }

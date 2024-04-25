@@ -1,11 +1,21 @@
 import { TRPCError } from "@trpc/server";
-import { protectedProcedure, createTRPCRouter } from "../trpc";
+import { protectedProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 import z from "zod";
 import { debtsSchema } from "~/app/dashboard/debts/new/page";
 import { organizationEmailSchema } from "~/utils/constants";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const debts = createTRPCRouter({
+  test: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const { data, error } = await ctx.supabase.from("Debts").select();
+      console.log(error, "??????")
+      console.log(data, "<<<<>>>><><")
+      return data;
+    } catch (cause) {
+      console.log(cause);
+    }
+  }),
   all: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {

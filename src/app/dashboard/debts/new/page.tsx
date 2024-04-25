@@ -11,6 +11,9 @@ import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
+import { addDebt } from "../_actions/debtsActions";
+import { createClient } from "~/utils/supabase/client";
+// import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export const debtsSchema = z.object({
   debtorName: z.string().min(1),
@@ -44,12 +47,24 @@ export default function Page() {
       });
     },
   });
-  const onSubmit: SubmitHandler<IDebtsSchema> = (data) => {
+  const onSubmit: SubmitHandler<IDebtsSchema> = async (data) => {
     try {
-      mutateAsync({
-        ...data,
-        organizationEmail: "",
+      const supabase = createClient();
+      const user = await supabase.auth.getUser();
+      const res = await addDebt({
+        debtorName: data.debtorName,
+        amount: data.amount,
+        date: data.date,
+        organizations_id: user?.data?.user?.id as string,
       });
+      if (res.data) {
+        console.log(data, "the data");
+      }
+      console.log(res.error, "error");
+      // mutateAsync({
+      //   ...data,
+      //   organizationEmail: "",
+      // });
     } catch (cause) {
       console.log(cause);
       toast({
@@ -65,8 +80,8 @@ export default function Page() {
         <div className="flex items-center space-x-10 pt-[30px] md:w-[1000px] md:justify-between  ">
           <h3 className="text-3xl font-medium ">New Debt </h3>
           <div className="flex items-center gap-2">
-            <Link href="/debts/">
-              <Button>View all Debts</Button>
+            <Link href="/dashboard/debts/">
+              <Button>View all Debts!</Button>
             </Link>
           </div>
         </div>
