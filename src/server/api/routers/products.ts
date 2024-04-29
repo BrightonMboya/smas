@@ -1,4 +1,4 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import z from "zod";
 import { productSchema } from "~/app/dashboard/products/new/page";
 import {
@@ -10,10 +10,10 @@ import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const products = createTRPCRouter({
   add: protectedProcedure
-    .input(productSchema.merge(organizationEmailSchema))
+    .input(productSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
+        const organizationId = "";
         const newProduct = await ctx.db.products.create({
           data: {
             name: input.name,
@@ -21,7 +21,7 @@ export const products = createTRPCRouter({
             sellingPrice: input.sellingPrice,
             stockAvailable: input.stockAvailable,
             description: input.description,
-            organizationsId: organizationId?.id!,
+            organizationsId: organizationId,
           },
         });
         return newProduct;
@@ -40,7 +40,6 @@ export const products = createTRPCRouter({
             createdAt: "desc",
           },
         });
-        f;
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;

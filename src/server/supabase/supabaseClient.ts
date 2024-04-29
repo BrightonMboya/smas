@@ -4,7 +4,6 @@ import { type Database } from "./supabaseTypes";
 
 import { env } from "~/env";
 
-
 export const getServiceSupabase = () =>
   createClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
@@ -27,9 +26,10 @@ export const supabase = () =>
 
 export const getUserAsAdmin = async (token: string) => {
   const { data, error } = await getServiceSupabase().auth.getUser(token);
+  //  console.log(data, ">?>><><><A>>ASA<<AS<ASA")
 
   if (error) {
-    console.error(error);
+    console.error(error.message);
     throw error;
   }
 

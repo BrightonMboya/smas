@@ -6,6 +6,24 @@ import { db } from "~/server/db";
 
 import { createClient } from "~/utils/supabase/server";
 
+import { cache } from "react";
+
+
+export const getUser = cache(async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error || data.user?.id === null) {
+    return {
+      user: null,
+      session: null,
+    };
+  }
+
+  return data.user;
+});
+
+
+
 export const signIn = async (formData: FormData) => {
   "use server";
   const email = formData.get("email") as string;
@@ -60,7 +78,7 @@ export const signUp = async (formData: FormData) => {
   });
 
   // then we add the info on the organization_table
-  console.log(data)
+  console.log(data);
   if (data.user !== null && !error) {
     const res = await db.organizations.create({
       data: {

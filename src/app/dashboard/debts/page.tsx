@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import NoAsset from "~/components/Assets/NoAsset";
 import Layout from "~/components/Layout/Layout";
@@ -8,18 +9,20 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
 import { fetchDebts } from "./_actions/debtsActions";
-import { createClient } from "~/utils/supabase/server";
+
 import { useUserId } from "~/utils/hooks/useUserId";
 
-export default async function Page() {
-  const organizations_id = await useUserId();
+export default function Page() {
+  // const organizations_id = await useUserId();
 
-  const { data, error } = await fetchDebts(organizations_id);
+  // const { data, error } = await fetchDebts(organizations_id);
+  const {data} = api.debts.getAllDebts.useQuery();
+  console.log(data, ">>>>")
 
   return (
     <Layout>
       <Toaster />
-      {!error && (
+     
         <main className="pl-5">
           <div className="flex items-center justify-between pt-[40px] md:w-[1000px] ">
             <h3 className="text-3xl font-medium ">Your Debts</h3>
@@ -44,13 +47,12 @@ export default async function Page() {
               registered
             </h3>
           )}
-          {data?.length !== 0 && data !== null && (
+          {/* {data?.length !== 0 && data !== null && (
             // @ts-ignore
             <DebtList debts={data} />
-          )}
+          )} */}
         </main>
-      )}
-      {error && <p>Sth went wrong</p>}
+   
     </Layout>
   );
 }

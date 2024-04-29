@@ -1,8 +1,7 @@
-"use server"
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export async function createClient() {
+export function createClient() {
   const cookieStore = cookies();
 
   return createServerClient(

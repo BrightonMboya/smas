@@ -1,10 +1,10 @@
 import "~/styles/globals.css";
 
-import { Inter, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { createClient } from "~/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+
 
 const monsterrat = Montserrat({
   subsets: ["latin"],
@@ -30,10 +30,16 @@ export default async function RootLayout({
   // if (!user) {
   //   return redirect("/auth/login");
   // }
+
+ 
   return (
     <html lang="en">
       <body className={`${monsterrat.className}`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider headers={headers()}>
+         
+          {children}
+         
+          </TRPCReactProvider>
       </body>
     </html>
   );

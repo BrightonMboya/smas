@@ -1,4 +1,4 @@
-import { createTRPCRouter, createCallerFactory } from "~/server/api/trpc";
+import { createTRPCRouter } from "~/server/api/trpc";
 import { products } from "./routers/products";
 import { accounting } from "./routers/expenses";
 import { supplier } from "./routers/suppliers";
@@ -14,13 +14,13 @@ import { auth } from "./routers/auth";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  products,
-  accounting,
-  supplier,
-  invoices,
-  sales,
+  // products,
+  // accounting,
+  // supplier,
+  // invoices,
+  // sales,
   debts,
-  dashboard,
+  // dashboard,
   auth,
 });
 
@@ -34,4 +34,4 @@ export type AppRouter = typeof appRouter;
  * const res = await trpc.post.all();
  *       ^? Post[]
  */
-export const createCaller = createCallerFactory(appRouter);
+// export const createCaller = createCallerFactory(appRouter);
