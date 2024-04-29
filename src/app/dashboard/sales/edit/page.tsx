@@ -6,13 +6,13 @@ import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { type SalesSchema, salesSchema } from "~/components/accounting/Sales";
+import { SubmitHandler, useForm } from "react-hook-form"
+import { type SalesSchema, salesSchema } from "../_components/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "~/components/ui/toaster";
-import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
+import LoadingSkeleton, { Spinner } from "~/components/ui/LoadingSkeleton";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -41,6 +41,7 @@ export default function Page() {
         setValue("date", data?.date),
         setValue("quantity", data?.quantity),
         setValue("productsId", data?.productsId);
+        setValue("status", data?.status)
     }
   }, [data, setValue]);
   const { toast } = useToast();
@@ -127,6 +128,7 @@ export default function Page() {
             type="submit"
             disabled={salesRouter.isLoading}
           >
+            {salesRouter.isLoading && <Spinner/>}
             Save
           </Button>
         </form>

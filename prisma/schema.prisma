@@ -63,8 +63,8 @@ model Sales {
     Products        Products      @relation(fields: [productsId], references: [id])
     productsId      String
     date            DateTime
-    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
-    organizationsId String
+    Organizations   Organizations @relation(fields: [organization_id], references: [id])
+    organization_id String
 
     // @@schema("auth")
 }

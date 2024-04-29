@@ -1,35 +1,29 @@
 import z from "zod";
-import { protectedProcedure, createTRPCRouter } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { salesSchema } from "~/components/accounting/Sales";
-import { NOT_FOUND, organizationEmailSchema } from "~/utils/constants";
-import useOrganizationId from "~/utils/hooks/useOrganizationId";
+import { NOT_FOUND } from "~/utils/constants";
+import { salesSchema } from "~/app/dashboard/sales/_components/schema";
 
 export const sales = createTRPCRouter({
   allSales: protectedProcedure
-    .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        // console.log(organizationId, ">>>>>>>>>")
-        if (organizationId !== null) {
-          return await ctx.db.sales.findMany({
-            where: {
-              organizationsId: organizationId?.id,
-            },
-            include: {
-              Products: {
-                select: {
-                  name: true,
-                },
+        return ctx.db.sales.findMany({
+          where: {
+            // @ts-ignore
+            organization_id: ctx.user?.id,
+          },
+          include: {
+            Products: {
+              select: {
+                name: true,
               },
             },
-            orderBy: {
-              date: "desc",
-            },
-          });
-        }
-        return null;
+          },
+          orderBy: {
+            date: "desc",
+          },
+        });
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;
@@ -57,11 +51,9 @@ export const sales = createTRPCRouter({
     }),
 
   addSales: protectedProcedure
-    .input(salesSchema.merge(organizationEmailSchema))
+    .input(salesSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        // look for the organizationId
-        const organizationId = await useOrganizationId(input.organizationEmail);
         // Calculate total amount
         const totalAmount = input.amount * input.quantity;
 
@@ -98,7 +90,8 @@ export const sales = createTRPCRouter({
             status: input.status,
             date: input.date,
             productsId: input.productsId,
-            organizationsId: organizationId?.id!,
+            // @ts-ignore
+            organization_id: ctx.user?.id,
           },
         });
 
@@ -182,39 +175,41 @@ export const sales = createTRPCRouter({
         total: string;
       };
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        if (organizationId !== null) {
-          const totalSales = await ctx.db.sales.findMany();
-          const monthlySales: { [key: string]: number } = {
-            Jan: 0,
-            Feb: 0,
-            Mar: 0,
-            Apr: 0,
-            May: 0,
-            Jun: 0,
-            Jul: 0,
-            Aug: 0,
-            Sep: 0,
-            Oct: 0,
-            Nov: 0,
-            Dec: 0,
-          };
-          totalSales.forEach((sale) => {
-            const month = sale.date.toLocaleDateString("en-US", {
-              month: "short",
-            });
-            monthlySales[month] += (sale.amount * sale.quantity) / 10000;
+        const totalSales = await ctx.db.sales.findMany({
+          where: {
+            // @ts-ignore
+            organization_id: ctx.user?.id,
+          },
+        });
+        const monthlySales: { [key: string]: number } = {
+          Jan: 0,
+          Feb: 0,
+          Mar: 0,
+          Apr: 0,
+          May: 0,
+          Jun: 0,
+          Jul: 0,
+          Aug: 0,
+          Sep: 0,
+          Oct: 0,
+          Nov: 0,
+          Dec: 0,
+        };
+        totalSales.forEach((sale) => {
+          const month = sale.date.toLocaleDateString("en-US", {
+            month: "short",
           });
-          const result: { name: string; total: number }[] = [];
-          const months = Object.keys(monthlySales);
-          months.forEach((month) => {
-            result.push({
-              name: month,
-              total: monthlySales[month]!,
-            });
+          monthlySales[month] += (sale.amount * sale.quantity) / 10000;
+        });
+        const result: { name: string; total: number }[] = [];
+        const months = Object.keys(monthlySales);
+        months.forEach((month) => {
+          result.push({
+            name: month,
+            total: monthlySales[month]!,
           });
-          return result;
-        }else return null
+        });
+        return result;
       } catch (cause) {
         console.log(cause);
         throw new TRPCError({

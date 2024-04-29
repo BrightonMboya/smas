@@ -149,7 +149,7 @@ export const columns: ColumnDef<Sales>[] = [
             <DropdownMenuItem>
               <Link
                 href={{
-                  pathname: "/sales/edit/",
+                  pathname: "/dashboard/sales/edit/",
                   query: { salesId: sale.id },
                 }}
               >

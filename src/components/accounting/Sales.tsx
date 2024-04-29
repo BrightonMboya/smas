@@ -10,23 +10,14 @@ import {
 } from "../ui/Card";
 import Input from "../ui/Input";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import ProductSelector from "./ProductSelector";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "../ui/toaster";
+import { salesSchema, type SalesSchema } from "~/app/dashboard/sales/_components/schema";
 
-export const salesSchema = z.object({
-  customerName: z.string().min(1),
-  amount: z.number().min(1),
-  quantity: z.number().min(1),
-  status: z.string().min(1),
-  date: z.date(),
-  productsId: z.string().min(1),
-});
 
-export type SalesSchema = z.infer<typeof salesSchema>;
 
 export default function Sales() {
   const {
@@ -55,7 +46,7 @@ export default function Sales() {
   const onSubmit: SubmitHandler<SalesSchema> = (data) => {
     mutateAsync({
       ...data,
-      organizationEmail: ""
+      
     });
   };
   return (
