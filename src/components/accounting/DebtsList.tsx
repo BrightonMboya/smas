@@ -126,7 +126,7 @@ export const columns: ColumnDef<Debts>[] = [
             description: "Debt marked as Paid",
           });
 
-          utils.debts.all.invalidate();
+          utils.debts.getAllDebts.invalidate();
         },
       });
       const { mutateAsync, isLoading } = api.debts.deleteDebt.useMutation({
@@ -135,7 +135,7 @@ export const columns: ColumnDef<Debts>[] = [
             description: "Debt Deleted Succesfully",
           });
 
-          utils.debts.all.invalidate();
+          utils.debts.getAllDebts.invalidate();
         },
       });
       const { toast } = useToast();
@@ -154,6 +154,7 @@ export const columns: ColumnDef<Debts>[] = [
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => {
+                
                 debtRouter.mutateAsync({
                   debtId: debt.id,
                 });

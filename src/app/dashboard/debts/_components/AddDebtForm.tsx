@@ -4,25 +4,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "~/components/ui/Input";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
-import { addDebt } from "../_actions/debtsActions";
 import z from "zod";
 import { useToast } from "~/utils/hooks/useToast";
 import Button from "~/components/ui/Button";
 import { api } from "~/utils/api";
-
-export const debtsSchema = z.object({
-  debtorName: z.string().min(1),
-  amount: z.number(),
-  date: z.date(),
-});
+import { debtsSchema } from "./newDebtSchema";
 
 export type IDebtsSchema = z.infer<typeof debtsSchema>;
 
-export default function AddDebtForm({
-  organizations_id,
-}: {
-  organizations_id: string;
-}) {
+export default function AddDebtForm() {
   const {
     register,
     handleSubmit,
@@ -33,7 +23,7 @@ export default function AddDebtForm({
   });
 
   const { toast } = useToast();
-  const { isLoading, mutateAsync } = api.debts.add.useMutation({
+  const { isLoading, mutateAsync } = api.debts.createNewDebt.useMutation({
     onSuccess: () => {
       toast({ description: "Debt Added Succesfully" });
       reset();
@@ -48,20 +38,10 @@ export default function AddDebtForm({
 
   const onSubmit: SubmitHandler<IDebtsSchema> = async (data) => {
     try {
-      const res = await addDebt({
-        debtorName: data.debtorName,
-        amount: data.amount,
-        date: data.date,
-        organizations_id: organizations_id,
+      mutateAsync({
+        ...data,
+        
       });
-      if (res.data) {
-        console.log(data, "the data");
-      }
-      console.log(res.error, "error");
-      // mutateAsync({
-      //   ...data,
-      //   organizationEmail: "",
-      // });
     } catch (cause) {
       console.log(cause);
       toast({

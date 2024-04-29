@@ -12,9 +12,7 @@ import { api } from "~/trpc/react";
 // import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export default function Page() {
-  const { data } = api.auth.getProfile.useQuery();
-  console.log(data, ">>>>>>");
-  const organizations_id = data;
+
 
   return (
     <Layout>
@@ -28,7 +26,7 @@ export default function Page() {
             </Link>
           </div>
         </div>
-        {/* <AddDebtForm organizations_id={organizations_id} /> */}
+        <AddDebtForm  />
       </main>
     </Layout>
   );

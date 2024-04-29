@@ -5,19 +5,13 @@ import Layout from "~/components/Layout/Layout";
 import DebtList from "~/components/accounting/DebtsList";
 import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
-// import { api } from "~/utils/api";
 import { api } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
-import { fetchDebts } from "./_actions/debtsActions";
 
-import { useUserId } from "~/utils/hooks/useUserId";
 
 export default function Page() {
-  // const organizations_id = await useUserId();
+  const {data, isLoading} = api.debts.getAllDebts.useQuery();
 
-  // const { data, error } = await fetchDebts(organizations_id);
-  const {data} = api.debts.getAllDebts.useQuery();
-  console.log(data, ">>>>")
 
   return (
     <Layout>
@@ -40,17 +34,17 @@ export default function Page() {
               c2aUrl="/dashboard/debts/new"
             />
           )}
-          {/* {isLoading && <LoadingSkeleton />} */}
+          {isLoading && <LoadingSkeleton />}
           {data === null && (
             <h3>
               Your Organization is not registered, contact our team to be
               registered
             </h3>
           )}
-          {/* {data?.length !== 0 && data !== null && (
+          {data?.length !== 0 && data !== null && !isLoading && (
             // @ts-ignore
             <DebtList debts={data} />
-          )} */}
+          )}
         </main>
    
     </Layout>
