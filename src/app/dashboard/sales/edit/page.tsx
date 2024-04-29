@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
-import { Textarea } from "~/components/ui/TextArea";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import { SubmitHandler, useForm } from "react-hook-form"
 import { type SalesSchema, salesSchema } from "../_components/schema";

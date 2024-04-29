@@ -5,23 +5,14 @@ import { Textarea } from "~/components/ui/TextArea";
 import Button from "~/components/ui/Button";
 import Layout from "~/components/Layout/Layout";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
-import z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
+import { supplierSchema, ISupplierSchema } from "../_components/schema";
 
-export const supplierSchema = z.object({
-  fullName: z.string().min(1),
-  phoneNumber: z.string().min(1),
-  product: z.string().min(1),
-  company: z.string().min(1),
-  notes: z.string().optional(),
-});
-
-export type ISupplierSchema = z.infer<typeof supplierSchema>;
 
 export default function Page() {
   const {
@@ -51,7 +42,7 @@ export default function Page() {
     try {
       mutateAsync({
         ...data,
-        organizationEmail: ""
+        
       });
     } catch (cause) {
       console.log(cause);

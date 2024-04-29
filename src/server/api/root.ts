@@ -16,7 +16,7 @@ import { accounting } from "./routers/expenses";
 export const appRouter = createTRPCRouter({
   products,
   accounting,
-  // supplier,
+  supplier,
   // invoices,
   sales,
   debts,

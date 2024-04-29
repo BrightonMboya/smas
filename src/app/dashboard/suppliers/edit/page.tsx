@@ -7,12 +7,12 @@ import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { type ISupplierSchema, supplierSchema } from "../new/page";
+import { type ISupplierSchema, supplierSchema } from "../_components/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "~/components/ui/toaster";
-import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
+import LoadingSkeleton, { Spinner } from "~/components/ui/LoadingSkeleton";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -115,8 +115,9 @@ export default function Page() {
           <Button
             className="mt-[50px] w-[100px]"
             type="submit"
-            disabled={supplierRouter.isPending}
+            disabled={supplierRouter.isLoading}
           >
+            {supplierRouter.isLoading && <Spinner/>}
             Save
           </Button>
         </form>

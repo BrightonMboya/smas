@@ -80,6 +80,15 @@ to authenticated
 using (
   ((select (auth.uid())::text as uid) = organization_id)
 );
+
+
+alter table "public"."Suppliers" enable row level security;
+create policy "crud ops on suppliers"
+on "public"."Suppliers"
+to authenticated
+using (
+  ((select (auth.uid())::text as uid) = organization_id)
+);
 ```
 
 
