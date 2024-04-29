@@ -1,12 +1,12 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { products } from "./routers/products";
-import { accounting } from "./routers/expenses";
 import { supplier } from "./routers/suppliers";
 import { invoices } from "./routers/invoces";
 import { sales } from "./routers/sales";
 import { debts } from "./routers/debts";
 import { dashboard } from "./routers/dashboard";
 import { auth } from "./routers/auth";
+import { accounting } from "./routers/expenses";
 
 /**
  * This is the primary router for your server.
@@ -15,7 +15,7 @@ import { auth } from "./routers/auth";
  */
 export const appRouter = createTRPCRouter({
   // products,
-  // accounting,
+  accounting,
   // supplier,
   // invoices,
   // sales,

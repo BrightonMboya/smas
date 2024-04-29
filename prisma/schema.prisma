@@ -33,8 +33,8 @@ model Expenses {
     date            DateTime
     amount          Int
     description     String?
-    Organizations   Organizations @relation(fields: [organizationsId], references: [id])
-    organizationsId String
+    Organizations   Organizations @relation(fields: [organization_id], references: [id])
+    organization_id String
 
     // @@schema("auth")
 }

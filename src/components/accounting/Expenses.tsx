@@ -16,14 +16,8 @@ import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "../ui/toaster";
 
-export const expensesSchema = z.object({
-  name: z.string().min(1),
-  date: z.date(),
-  amount: z.number().min(1),
-  description: z.string().optional(),
-});
-
-export type ExpensesSchema = z.infer<typeof expensesSchema>;
+import { expensesSchema, ExpensesSchema } from "~/app/dashboard/expenses/_components/_schema/expensesSchema";
+import { Spinner } from "../ui/LoadingSkeleton";
 
 export default function Expenses() {
   const {
@@ -52,7 +46,6 @@ export default function Expenses() {
     try {
       mutateAsync({
         ...data,
-        organizationEmail: "",
       });
     } catch (cause) {
       console.log(cause);
@@ -119,6 +112,7 @@ export default function Expenses() {
               {...register("description")}
             />
             <Button className="w-full" type="submit" disabled={isLoading}>
+              {isLoading && <Spinner/>}
               Submit Expense
             </Button>
           </form>

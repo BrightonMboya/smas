@@ -48,11 +48,20 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA "public" TO anon;
 Then the following sql what is doing is adding RLS to all of the tables making sure organizations can do crud ops to the data belonging to them based on the organization_id
 
 ```sql
+alter table "public"."Debts" enable row level security;
 create policy "Enable crud ops on debts"
 on "public"."Debts"
 to authenticated
 using (
   (( SELECT (auth.uid())::text AS uid) = organizations_id)
+);
+
+alter table "public"."Expenses" enable row level security;
+create policy "crud ops on expenses"
+on "public"."Expenses"
+to authenticated
+using (
+  (( SELECT (auth.uid())::text AS uid) = organization_id)
 );
 ```
 

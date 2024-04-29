@@ -6,9 +6,8 @@ import Layout from "~/components/Layout/Layout";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
 
-import { createClient } from "~/utils/supabase/server";
 import AddDebtForm from "../_components/AddDebtForm";
-import { api } from "~/trpc/react";
+
 // import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export default function Page() {

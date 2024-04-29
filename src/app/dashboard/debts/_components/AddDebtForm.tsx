@@ -9,6 +9,7 @@ import { useToast } from "~/utils/hooks/useToast";
 import Button from "~/components/ui/Button";
 import { api } from "~/utils/api";
 import { debtsSchema } from "./newDebtSchema";
+import { Spinner } from "~/components/ui/LoadingSkeleton";
 
 export type IDebtsSchema = z.infer<typeof debtsSchema>;
 
@@ -88,6 +89,7 @@ export default function AddDebtForm() {
         </ItemLayout>
       </section>
       <Button className="mt-[20px] w-[100px] md:mt-[50px]" disabled={isLoading}>
+        {isLoading && <Spinner/>}
         Save
       </Button>
     </form>

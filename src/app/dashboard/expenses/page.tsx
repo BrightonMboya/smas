@@ -9,10 +9,7 @@ import Link from "next/link";
 import Button from "~/components/ui/Button";
 
 export default function Page() {
-  const { isLoading, data } = api.accounting.allExpenses.useQuery({
-    organizationEmail: ""
-  });
-
+  const { isLoading, data } = api.accounting.allExpenses.useQuery();
   return (
     <Layout>
       <main className="pl-5">
@@ -20,7 +17,7 @@ export default function Page() {
         <div className="flex md:w-[1000px] items-center justify-between pt-[40px] ">
           <h3 className="text-3xl font-medium ">Your Expenses</h3>
           <div className="flex items-center gap-2">
-            <Link href="/expenses/new">
+            <Link href="/dashboard/expenses/new">
               <Button>New Expense</Button>
             </Link>
           </div>
@@ -30,7 +27,7 @@ export default function Page() {
             bigTitle="Looks like you dont have any expenses yet"
             smallTitle="When you make expenses they will appear here"
             c2a="Make an expense"
-            c2aUrl="/expenses/new"
+            c2aUrl="/dashboard/expenses/new"
           />
         )}
         {data === null && (
