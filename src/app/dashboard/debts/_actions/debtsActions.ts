@@ -1,16 +1,15 @@
-"use server";
 import { createClient } from "~/utils/supabase/server";
 import { QueryClient } from "@tanstack/react-query";
 import { UUID, randomUUID } from "crypto";
 
 const supabase = createClient();
 
-export async function fetchDebts() {
-  const user = await supabase.auth.getUser();
-  const { data, error } = await supabase
+export async function fetchDebts(organizations_id: string) {
+  // const user = await supabase.auth.getUser();
+  const { data, error } = await (await supabase)
     .from("Debts")
     .select()
-    .eq("organizations_id", user.data?.user?.id!);
+    .eq("organizations_id", organizations_id);
   return { data, error };
 }
 

@@ -7,11 +7,14 @@ import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 // import { api } from "~/utils/api";
 import { api } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
-import { createClient } from "~/utils/supabase/client";
 import { fetchDebts } from "./_actions/debtsActions";
+import { createClient } from "~/utils/supabase/server";
+import { useUserId } from "~/utils/hooks/useUserId";
 
 export default async function Page() {
-  const { data, error } = await fetchDebts();
+  const organizations_id = await useUserId();
+
+  const { data, error } = await fetchDebts(organizations_id);
 
   return (
     <Layout>
@@ -21,7 +24,7 @@ export default async function Page() {
           <div className="flex items-center justify-between pt-[40px] md:w-[1000px] ">
             <h3 className="text-3xl font-medium ">Your Debts</h3>
             <div className="flex items-center gap-2">
-              <Link href="/debts/new">
+              <Link href="/dashboard/debts/new">
                 <Button>New Debt</Button>
               </Link>
             </div>
