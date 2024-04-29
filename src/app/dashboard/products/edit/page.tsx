@@ -7,7 +7,7 @@ import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { productSchema, type ProductSchema } from "../new/page";
+import { productSchema, type ProductSchema } from "../_components/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useToast } from "~/utils/hooks/useToast";

@@ -63,6 +63,14 @@ to authenticated
 using (
   (( SELECT (auth.uid())::text AS uid) = organization_id)
 );
+
+alter table "public"."Products" enable row level security;
+create policy "crud ops on products table"
+on "public"."Products"
+to authenticated
+using (
+  ((select (auth.uid())::text as uid) = organization_id)
+);
 ```
 
 

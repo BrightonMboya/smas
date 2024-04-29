@@ -9,9 +9,7 @@ import Link from "next/link";
 import Button from "~/components/ui/Button";
 
 export default function Page() {
-  const { data, isLoading } = api.products.all.useQuery({
-    organizationEmail: "d.uwiduhaye@alustudent.com"
-  });
+  const { data, isLoading } = api.products.all.useQuery();
   return (
     <Layout>
       <main className="pl-5">
@@ -22,7 +20,7 @@ export default function Page() {
             <Link href="/products">
               <Button variant="ghost">View Products</Button>
             </Link>
-            <Link href="/products/new">
+            <Link href="/dashboard/products/new">
               <Button>New Products</Button>
             </Link>
           </div>
@@ -32,7 +30,7 @@ export default function Page() {
             bigTitle="You haven't added any products"
             smallTitle="It's easier to manage. Go ahead and add new products to manage now"
             c2a="Add Products"
-            c2aUrl="/products/new"
+            c2aUrl="/dashboard/products/new"
           />
         )}
         {data === null && (

@@ -14,16 +14,8 @@ import { inferProcedureInput } from "@trpc/server";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import { ToastAction } from "~/components/ui/Toast";
+import { ProductSchema, productSchema } from "../_components/schema";
 
-export const productSchema = z.object({
-  name: z.string().min(1),
-  buyingPrice: z.string().min(1),
-  sellingPrice: z.string().min(1),
-  stockAvailable: z.number().min(1),
-  description: z.string().optional(),
-});
-
-export type ProductSchema = z.infer<typeof productSchema>;
 
 export default function Page() {
   const {
@@ -61,7 +53,7 @@ export default function Page() {
       sellingPrice: data.sellingPrice,
       description: data.description,
       stockAvailable: data.stockAvailable,
-      organizationEmail: "",
+     
     };
     try {
       mutateAsync(productData);
