@@ -1,21 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { protectedProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 import z from "zod";
-import { debtsSchema } from "~/app/dashboard/debts/new/page";
 import { organizationEmailSchema } from "~/utils/constants";
+import { debtsSchema } from "~/app/dashboard/debts/_components/AddDebtForm";
 import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const debts = createTRPCRouter({
-  test: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const { data, error } = await ctx.supabase.from("Debts").select();
-      console.log(error, "??????")
-      console.log(data, "<<<<>>>><><")
-      return data;
-    } catch (cause) {
-      console.log(cause);
-    }
-  }),
+  
   all: protectedProcedure
     .input(organizationEmailSchema)
     .query(async ({ input, ctx }) => {
@@ -27,7 +18,7 @@ export const debts = createTRPCRouter({
               date: "desc",
             },
             where: {
-              organizationsId: organizationId?.id,
+               organizations_id: organizationId?.id,
             },
           });
         }
@@ -72,7 +63,7 @@ export const debts = createTRPCRouter({
             debtorName: input.debtorName,
             amount: input.amount,
             date: input.date,
-            organizationsId: organizationId?.id!,
+            organizations_id: organizationId?.id!,
           },
         });
       } catch (cause) {
@@ -119,7 +110,7 @@ export const debts = createTRPCRouter({
             amount: true,
           },
           where: {
-            organizationsId: organizationId?.id,
+             organizations_id: organizationId?.id,
           },
         });
       } catch (cause) {

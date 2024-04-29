@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "~/components/ui/Button";
 import Layout from "~/components/Layout/Layout";
 
@@ -6,12 +8,13 @@ import Link from "next/link";
 
 import { createClient } from "~/utils/supabase/server";
 import AddDebtForm from "../_components/AddDebtForm";
+import { api } from "~/trpc/react";
 // import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-export default async function Page() {
-  const supabase = createClient();
-  const user = await supabase.auth.getUser();
-  const organizations_id = user?.data?.user?.id as string;
+export default function Page() {
+  const { data } = api.auth.getProfile.useQuery();
+  console.log(data, ">>>>>>");
+  const organizations_id = data;
 
   return (
     <Layout>
@@ -25,7 +28,7 @@ export default async function Page() {
             </Link>
           </div>
         </div>
-        <AddDebtForm organizations_id={organizations_id} />
+        {/* <AddDebtForm organizations_id={organizations_id} /> */}
       </main>
     </Layout>
   );

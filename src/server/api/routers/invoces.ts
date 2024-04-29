@@ -17,7 +17,7 @@ export const invoices = createTRPCRouter({
         const newInvoice = await ctx.db.invoices.create({
           data: {
             ...invoiceData,
-            organizationsId: organizationId.id!,
+            organizationsId: organizationId?.id!,
             invoiceItems: {
               createMany: {
                 data: invoiceItems,

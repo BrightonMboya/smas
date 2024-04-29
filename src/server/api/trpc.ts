@@ -6,12 +6,13 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { TRPCError, initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
 import { createClient } from "~/utils/supabase/server";
+import { getUserAsAdmin } from "../supabase/supabaseClient";
 
 /**
  * 1. CONTEXT
@@ -26,14 +27,14 @@ import { createClient } from "~/utils/supabase/server";
  * @see https://trpc.io/docs/server/context
  */
 
-const supabase = createClient();
-
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const { data } = await supabase.auth.getUser();
+  const headers = opts.headers;
+  const authToken = headers.get("authorization");
+
+  const { user } = authToken ? await getUserAsAdmin(authToken) : { user: null };
   return {
     db,
-    supabase,
-    auth: data.user,
+    user,
     ...opts,
   };
 };
@@ -52,8 +53,9 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       ...shape,
       data: {
         ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+        zodError: error.cause instanceof ZodError
+          ? error.cause.flatten()
+          : null,
       },
     };
   },
@@ -94,28 +96,19 @@ export const publicProcedure = t.procedure;
  *
  * This procedure ensures that all the operations are perfomed if the user is authenticated
  * We use supabase auth to determine that
- *
  */
-
-const isAuthed = t.middleware(async ({ next, ctx }) => {
-  if (!ctx.auth?.id) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
   }
+
   return next({
     ctx: {
-      auth: ctx.auth,
+      user: ctx.user,
     },
   });
 });
 
-// const isAuthed = t.middleware(({ next, ctx }) => {
-//   if (!ctx.auth.userId) {
-//     throw new TRPCError({ code: "UNAUTHORIZED" });
-//   }
-//   return next({
-//     ctx: {
-//       auth: ctx.auth,
-//     },
-//   });
-// });
-export const protectedProcedure = t.procedure.use(isAuthed);
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
