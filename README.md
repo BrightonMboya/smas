@@ -12,7 +12,7 @@ It Includes:-
 ## Stack Used
 - NextJS for front-end
 - Prisma -  for table managements and migrations
-- Supabase - Data hosting, storage, auth, and also it used to query the data
+- Supabase - Data hosting, storage, and auth
 - trpc - For handling mutations, queries etc
 
 ## Authentication
@@ -89,6 +89,22 @@ to authenticated
 using (
   ((select (auth.uid())::text as uid) = organization_id)
 );
+
+alter table "public"."Invoices" enable row level security;
+create policy "crud ops on invoices"
+on "public"."Invoices"
+to authenticated
+using (
+  ((select (auth.uid())::text as uid) = organization_id)
+);
+
+alter table "public"."Organizations" enable row level security;
+create policy "organizations can view their own data"
+on "public"."Organizations"
+to authenticated
+using (
+  ((select (auth.uid())::text as uid) = id)
+);
 ```
 
 
@@ -96,6 +112,6 @@ using (
 
 - [x] Add supabase auth
 - [] We will use Google and Email Providers
-- [] Add RLS to supabase dashboard
+- [x] Add RLS to supabase dashboard
 - [x] Remove clerk and its dependencies
-- [] Test out the RLS if it works
+- [x] Test out the RLS if it works

@@ -1,7 +1,8 @@
+"use client"
 import { Label } from "../../ui/label";
 import Input from "../../ui/Input";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
-import { type InvoiceSchema } from "./newInvoiceForm";
+import { type InvoiceSchema } from "./schema";
 
 interface Props {
   idx: number;
@@ -57,7 +58,8 @@ export default function InvoiceItemForm({
       <div>
         <Label>Amount</Label>
         <Input
-          className="mt-4"
+          className="mt-4 read-only:cursor-not-allowed"
+          readOnly
           {...register(`invoiceItems.${idx}.amount`, {
             valueAsNumber: true,
             min: 0,

@@ -17,7 +17,7 @@ export const appRouter = createTRPCRouter({
   products,
   accounting,
   supplier,
-  // invoices,
+  invoices,
   sales,
   debts,
   // dashboard,

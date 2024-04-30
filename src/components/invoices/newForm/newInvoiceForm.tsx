@@ -1,6 +1,5 @@
 "use client";
 import Button from "../../ui/Button";
-import { z } from "zod";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InvoiceItemForm from "./InvoiceItemForm";
@@ -14,35 +13,8 @@ import { Spinner } from "~/components/ui/LoadingSkeleton";
 import { useRouter } from "next/navigation";
 import { CardTitle, CardHeader, CardContent, Card } from "~/components/ui/Card";
 import Total from "./TotalAmount";
+import { invoiceSchema, type InvoiceSchema, defaultInvoiceItems } from "./schema";
 
-export const invoiceSchema = z.object({
-  invoiceName: z.string(),
-  invoiceDate: z.date(),
-  invoiceDueDate: z.date(),
-  companyAdress: z.string(),
-  clientAdress: z.string(),
-  clientName: z.string(),
-  companyName: z.string(),
-  invoiceItems: z.array(
-    z.object({
-      itemName: z.string(),
-      quantity: z.number(),
-      amount: z.number(),
-      rate: z.number(),
-    }),
-  ),
-});
-
-const defaultInvoiceItems = [
-  {
-    itemName: "",
-    quantity: 0,
-    rate: 0,
-    amount: 0,
-  },
-];
-
-export type InvoiceSchema = z.infer<typeof invoiceSchema>;
 
 export default function NewInvoiceForm() {
   const {
@@ -72,7 +44,7 @@ export default function NewInvoiceForm() {
       toast({
         description: "Invoice Added succesfully",
       });
-      router.push("/invoices");
+      router.push("/dashboard/invoices");
     },
 
     onError: (error: { message: any }) => {
@@ -90,7 +62,6 @@ export default function NewInvoiceForm() {
     type Input = inferProcedureInput<AppRouter["invoices"]["create"]>;
     const input: Input = {
       ...data,
-      organizationEmail: "",
     };
     try {
       mutateAsync(input);
