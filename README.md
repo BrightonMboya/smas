@@ -53,7 +53,7 @@ create policy "Enable crud ops on debts"
 on "public"."Debts"
 to authenticated
 using (
-  (( SELECT (auth.uid())::text AS uid) = organizations_id)
+  (select auth.uid())::text = organizations_id
 );
 
 alter table "public"."Expenses" enable row level security;
@@ -61,7 +61,7 @@ create policy "crud ops on expenses"
 on "public"."Expenses"
 to authenticated
 using (
-  (( SELECT (auth.uid())::text AS uid) = organization_id)
+  (select auth.uid())::text as uid = organization_id
 );
 
 alter table "public"."Products" enable row level security;
@@ -69,7 +69,7 @@ create policy "crud ops on products table"
 on "public"."Products"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+   (select auth.uid())::text as uid = organization_id
 );
 
 
@@ -78,7 +78,7 @@ create policy "crud ops on sales table"
 on "public"."Sales"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+   (select auth.uid())::text as uid = organization_id
 );
 
 
@@ -87,7 +87,7 @@ create policy "crud ops on suppliers"
 on "public"."Suppliers"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+   (select auth.uid())::text as uid = organization_id
 );
 
 alter table "public"."Invoices" enable row level security;
@@ -95,7 +95,7 @@ create policy "crud ops on invoices"
 on "public"."Invoices"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+   (select auth.uid())::text as uid = organization_id
 );
 
 alter table "public"."Organizations" enable row level security;
@@ -103,7 +103,7 @@ create policy "organizations can view their own data"
 on "public"."Organizations"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = id)
+   (select auth.uid())::text as uid = organization_id
 );
 ```
 
