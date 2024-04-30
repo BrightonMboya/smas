@@ -110,8 +110,7 @@ using (
 
 # Todo
 
-- [x] Add supabase auth
-- [] We will use Google and Email Providers
-- [x] Add RLS to supabase dashboard
-- [x] Remove clerk and its dependencies
-- [x] Test out the RLS if it works
+- [] debug why fonts are not loading
+- [] chnage the font to inter
+- [] add user profile widget on the layout screen
+- [] try to change the full ui inspired by medusa ui
