@@ -1,23 +1,22 @@
 import z from "zod";
-import { protectedProcedure, createTRPCRouter } from "../trpc";
-import { invoiceSchema } from "~/components/invoices/newForm/newInvoiceForm";
-import { organizationEmailSchema } from "~/utils/constants";
-import useOrganizationId from "~/utils/hooks/useOrganizationId";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { invoiceSchema } from "~/components/invoices/newForm/schema";
+
 
 export const invoices = createTRPCRouter({
   create: protectedProcedure
-    .input(invoiceSchema.merge(organizationEmailSchema))
+    .input(invoiceSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
         // Extract invoice items from input
-        const { invoiceItems, organizationEmail, ...invoiceData } = input;
+        const { invoiceItems, ...invoiceData } = input;
 
         // Create invoice
         const newInvoice = await ctx.db.invoices.create({
           data: {
             ...invoiceData,
-            organizationsId: organizationId.id!,
+            // @ts-ignore
+            organization_id: ctx.user?.id,
             invoiceItems: {
               createMany: {
                 data: invoiceItems,
@@ -33,13 +32,13 @@ export const invoices = createTRPCRouter({
     }),
 
   all: protectedProcedure
-    .input(organizationEmailSchema)
+    
     .query(async ({ input, ctx }) => {
-      const organizationId = await useOrganizationId(input.organizationEmail);
       // return await ctx.db.invoices.findMany();
       const invoices = await ctx.db.invoices.findMany({
         where: {
-          organizationsId: organizationId?.id,
+          // @ts-ignore
+          organization_id: ctx.user?.id
         },
         select: {
           id: true,

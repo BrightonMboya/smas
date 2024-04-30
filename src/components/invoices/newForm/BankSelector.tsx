@@ -18,16 +18,13 @@ import {
   PopoverTrigger,
 } from "~/components/ui/Popover";
 import { api } from "~/utils/api";
-import { useUser } from "@clerk/nextjs";
 import CreateBankForm from "../bankForms/AddFormModal";
 
 export default function BankSelector() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-  const user = useUser();
   const { data } = api.invoices.fetchOrganizationBanks.useQuery({
-    organizationEmail: user?.user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: ""
   });
 
   return (

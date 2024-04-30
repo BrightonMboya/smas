@@ -1,9 +1,10 @@
 import "~/styles/globals.css";
 
-import { Inter, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { ClerkProvider } from "@clerk/nextjs";
+import { headers } from "next/headers";
+
 
 const monsterrat = Montserrat({
   subsets: ["latin"],
@@ -16,18 +17,30 @@ const monsterrat = Montserrat({
 //   icons: [{ rel: "icon", url: "/favicon.ico" }],
 // };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const supabase = createClient();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
+  // console.log(user, ">>>>>>>");
+  // if (!user) {
+  //   return redirect("/auth/login");
+  // }
+
+ 
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${monsterrat.className}`}>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${monsterrat.className}`}>
+        <TRPCReactProvider headers={headers()}>
+         
+          {children}
+         
+          </TRPCReactProvider>
+      </body>
+    </html>
   );
 }

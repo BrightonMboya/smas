@@ -1,23 +1,18 @@
-import { expensesSchema } from "~/components/accounting/Expenses";
-import { protectedProcedure, createTRPCRouter } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import z from "zod";
 
-import {
-  FAILED_TO_CREATE,
-  NOT_FOUND,
-  organizationEmailSchema,
-} from "~/utils/constants";
-import useOrganizationId from "~/utils/hooks/useOrganizationId";
+import { FAILED_TO_CREATE, NOT_FOUND } from "~/utils/constants";
+import { expensesSchema } from "~/app/dashboard/expenses/_components/_schema/expensesSchema";
 
 export const accounting = createTRPCRouter({
   addExpense: protectedProcedure
-    .input(expensesSchema.merge(organizationEmailSchema))
+    .input(expensesSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
         return await ctx.db.expenses.create({
           data: {
-            organizationsId: organizationId?.id!,
+            // @ts-ignore
+            organization_id: ctx.user?.id,
             name: input.name,
             description: input.description,
             date: input.date,
@@ -31,43 +26,31 @@ export const accounting = createTRPCRouter({
     }),
 
   recentSales: protectedProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ ctx }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        if (organizationId !== null) {
-          return await ctx.db.sales.findMany({
-            where: {
-              organizationsId: organizationId?.id,
-            },
-            take: 5,
-            // orderBy: {
-            //   date: "desc",
-            // },
-          });
-        } else return null;
+        return await ctx.db.sales.findMany({
+          where: {
+            organization_id: ctx.user?.id,
+          },
+          take: 5,
+        });
       } catch (cause) {
         console.log(cause);
       }
     }),
 
   allExpenses: protectedProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ ctx }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        console.log(organizationId, ">>>><>>>??>>>>???");
-        if (organizationId !== null) {
-          return await ctx.db.expenses.findMany({
-            orderBy: {
-              date: "desc",
-            },
-            where: {
-              organizationsId: organizationId?.id,
-            },
-          });
-        }
-        return null;
+        return await ctx.db.expenses.findMany({
+          where: {
+            // @ts-ignore
+            organization_id: ctx.user?.id,
+          },
+          orderBy: {
+            date: "desc",
+          },
+        });
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;

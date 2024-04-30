@@ -1,5 +1,5 @@
+"use client";
 import { useToast } from "~/utils/hooks/useToast";
-import { format } from "date-fns";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,14 +8,13 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Checkbox } from "~/components/ui/checkbox";
-import { type InvoiceSchema } from "../newForm/newInvoiceForm";
+import { type InvoiceSchema } from "../newForm/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import Button from "~/components/ui/Button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { api } from "~/utils/api";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 type AdditionalTripType = {
   id: string;
@@ -101,8 +100,7 @@ export const columns: ColumnDef<Invoices>[] = [
       const invoice = row.original;
       const { toast } = useToast();
       const router = useRouter();
-      const user = useUser();
-      const organizationEmail = user?.user?.primaryEmailAddress?.emailAddress;
+      
       // const { mutateAsync, isLoading } = api.invoices.markAsPaid.useMutation({
       //   onSuccess: () => {
       //     toast({
@@ -149,11 +147,14 @@ export const columns: ColumnDef<Invoices>[] = [
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => {
-                router.push({
-                  pathname: "/invoices/preview",
-                  query: { invoiceId: invoice.id },
-                });
+                router.push(`/dashboard/invoices/preview/?invoiceId=${invoice.id}`)
               }}
+              // onClick={() => {
+              //   router.push({
+              //     pathname: "/invoices/preview",
+              //     query: { invoiceId: invoice.id },
+              //   });
+              // }}
             >
               View Invoice
             </DropdownMenuItem>

@@ -1,19 +1,13 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import z from "zod";
-import { productSchema } from "~/app/products/new/page";
-import {
-  FAILED_TO_CREATE,
-  NOT_FOUND,
-  organizationEmailSchema,
-} from "~/utils/constants";
-import useOrganizationId from "~/utils/hooks/useOrganizationId";
+import { productSchema } from "~/app/dashboard/products/_components/schema";
+import { FAILED_TO_CREATE, NOT_FOUND } from "~/utils/constants";
 
 export const products = createTRPCRouter({
   add: protectedProcedure
-    .input(productSchema.merge(organizationEmailSchema))
+    .input(productSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
         const newProduct = await ctx.db.products.create({
           data: {
             name: input.name,
@@ -21,7 +15,8 @@ export const products = createTRPCRouter({
             sellingPrice: input.sellingPrice,
             stockAvailable: input.stockAvailable,
             description: input.description,
-            organizationsId: organizationId?.id!,
+            // @ts-ignore
+            organization_id: ctx.user?.id,
           },
         });
         return newProduct;
@@ -32,15 +27,17 @@ export const products = createTRPCRouter({
     }),
 
   all: protectedProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ ctx, input }) => {
+    .query(async ({ ctx }) => {
       try {
         return await ctx.db.products.findMany({
           orderBy: {
             createdAt: "desc",
           },
+          where: {
+            // @ts-ignore
+            organization_id: ctx.user?.id,
+          },
         });
-        f;
       } catch (cause) {
         console.log(cause);
         throw NOT_FOUND;

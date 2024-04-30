@@ -139,7 +139,7 @@ export const columns: ColumnDef<Products>[] = [
             <DropdownMenuItem className="cursor-pointer">
               <Link
                 href={{
-                  pathname: "/products/edit",
+                  pathname: "/dashboard/products/edit",
                   query: { productId: product.id },
                 }}
               >

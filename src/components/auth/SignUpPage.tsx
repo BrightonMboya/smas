@@ -1,5 +1,5 @@
-import { SignUp } from "@clerk/nextjs";
 import Image from "next/legacy/image";
+import SignUpForm from "./SignUpForm";
 
 import { Toaster } from "~/components/ui/toaster";
 
@@ -28,7 +28,7 @@ export default function Page() {
             </blockquote>
           </div>
         </div>
-        <div className="mx-auto flex w-full h-screen items-center flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="mx-auto flex h-screen w-full flex-col items-center justify-center space-y-6 sm:w-[350px]">
           <div className="grid gap-6">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
@@ -38,11 +38,7 @@ export default function Page() {
                 Create an account to get started
               </p>
             </div>
-            <SignUp
-              path="/auth/sign-up"
-              routing="path"
-              signInUrl="/auth/sign-in"
-            />
+            <SignUpForm/>
           </div>
         </div>
       </div>

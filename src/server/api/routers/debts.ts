@@ -1,77 +1,36 @@
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
+import { debtsSchema } from "~/app/dashboard/debts/_components/newDebtSchema";
 import { TRPCError } from "@trpc/server";
-import { protectedProcedure, createTRPCRouter } from "../trpc";
 import z from "zod";
-import { debtsSchema } from "~/app/debts/new/page";
-import { organizationEmailSchema } from "~/utils/constants";
-import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const debts = createTRPCRouter({
-  all: protectedProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ input, ctx }) => {
-      try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        if (organizationId !== null) {
-          return await ctx.db.debts.findMany({
-            orderBy: {
-              date: "desc",
-            },
-            where: {
-              organizationsId: organizationId?.id,
-            },
-          });
-        }
-        return null;
-      } catch (cause) {
-        console.log(cause);
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Could not fetch Debts",
-        });
-      }
-    }),
+  getAllDebts: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.debts.findMany({
+      where: {
+        // @ts-ignore
+        organizations_id: ctx.user.id,
+      },
+    });
+  }),
 
-  deleteDebt: protectedProcedure
-    .input(
-      z.object({
-        debtId: z.string(),
-      }),
-    )
+  createNewDebt: protectedProcedure
+    .input(debtsSchema)
     .mutation(async ({ ctx, input }) => {
-      try {
-        return await ctx.db.debts.delete({
-          where: {
-            id: input.debtId,
-          },
-        });
-      } catch (cause) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Failed to delete this debt",
-        });
-      }
-    }),
+      const newDebt = await ctx.db.debts.create({
+        data: {
+          debtorName: input.debtorName,
+          date: input.date,
+          amount: input.amount,
+          // @ts-ignore
+          organizations_id: ctx.user.id,
+        },
+      });
 
-  add: protectedProcedure
-    .input(debtsSchema.merge(organizationEmailSchema))
-    .mutation(async ({ ctx, input }) => {
-      try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        return await ctx.db.debts.create({
-          data: {
-            debtorName: input.debtorName,
-            amount: input.amount,
-            date: input.date,
-            organizationsId: organizationId?.id!,
-          },
-        });
-      } catch (cause) {
-        console.log(cause);
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Failed to add new Debt",
-        });
-      }
+      return newDebt;
     }),
 
   markAsPaid: protectedProcedure
@@ -99,24 +58,23 @@ export const debts = createTRPCRouter({
       }
     }),
 
-  totalDebts: protectedProcedure
-    .input(organizationEmailSchema)
-    .query(async ({ ctx, input }) => {
+    deleteDebt: protectedProcedure
+    .input(
+      z.object({
+        debtId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        return await ctx.db.debts.aggregate({
-          _sum: {
-            amount: true,
-          },
+        return await ctx.db.debts.delete({
           where: {
-            organizationsId: organizationId?.id,
+            id: input.debtId,
           },
         });
       } catch (cause) {
-        console.log(cause);
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Failed to fetch",
+          message: "Failed to delete this debt",
         });
       }
     }),

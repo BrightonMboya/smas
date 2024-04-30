@@ -3,12 +3,11 @@
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { api } from "~/utils/api";
 import { Spinner } from "../ui/LoadingSkeleton";
-import { useUser } from "@clerk/nextjs";
+
+
 export function Overview() {
-  const { user } = useUser();
   const { data, isLoading } = api.sales.yearlySales.useQuery({
-    organizationEmail: user?.primaryEmailAddress
-      ?.emailAddress as unknown as string,
+    organizationEmail: ""
   });
 
   return (

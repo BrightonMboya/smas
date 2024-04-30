@@ -106,7 +106,7 @@ export const columns: ColumnDef<Expenses>[] = [
       const sale = row.original;
       const utils = api.useUtils();
 
-      const { mutateAsync, isLoading } = api.accounting.deleteSale.useMutation({
+      const { mutateAsync, isLoading } = api.accounting.deleteExpense.useMutation({
         onSuccess: () => {
           toast({
             description: "Expense Deleted Succesfully",
@@ -134,7 +134,7 @@ export const columns: ColumnDef<Expenses>[] = [
                 type="button"
                 disabled={isLoading}
                 onClick={() =>
-                  mutateAsync({ saleId: sale.id as unknown as string })
+                  mutateAsync({ expenseId: sale.id as unknown as string })
                 }
               >
                 Delete Expense

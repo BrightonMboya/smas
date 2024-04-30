@@ -1,5 +1,7 @@
 "use client";
-import { SignIn } from "@clerk/nextjs";
+import Link from "next/link";
+import { UserAuthForm } from "./UserAuthForm";
+import { signIn } from "~/app/auth/actions";
 
 export function LoginForm() {
   return (
@@ -13,12 +15,21 @@ export function LoginForm() {
             Enter your email to login
           </p>
         </div>
-        <SignIn
-          afterSignInUrl="/accounting"
-          // routing="path"
-          // path="/auth/sign-in"
-          signUpUrl="/auth/sign-up"
-        />
+        <div className="lg:p-8">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <UserAuthForm />
+            <p className="px-8 text-center text-sm text-muted-foreground">
+              Don't have an acccount?{" "}
+              <Link
+                href="/auth/sign-up"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+                Sign Up
+              </Link>{" "}
+              .
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

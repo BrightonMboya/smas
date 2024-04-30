@@ -125,7 +125,7 @@ export const columns: ColumnDef<Sales>[] = [
       const sale = row.original;
       const utils = api.useUtils();
 
-      const { mutateAsync, isPending } = api.accounting.deleteSale.useMutation({
+      const { mutateAsync, isLoading } = api.accounting.deleteSale.useMutation({
         onSuccess: () => {
           toast({
             description: "Sale Deleted Succesfully",
@@ -149,7 +149,7 @@ export const columns: ColumnDef<Sales>[] = [
             <DropdownMenuItem>
               <Link
                 href={{
-                  pathname: "/sales/edit/",
+                  pathname: "/dashboard/sales/edit/",
                   query: { salesId: sale.id },
                 }}
               >
@@ -161,7 +161,7 @@ export const columns: ColumnDef<Sales>[] = [
               <Button
                 variant="destructive"
                 type="button"
-                disabled={isPending}
+                disabled={isLoading}
                 onClick={() =>
                   mutateAsync({ saleId: sale.id as unknown as string })
                 }

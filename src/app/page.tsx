@@ -18,11 +18,9 @@ import { api } from "~/utils/api";
 import { Banknote } from "lucide-react";
 import { Toaster } from "~/components/ui/toaster";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
-import { useUser } from "@clerk/nextjs";
 
 export default function DashboardPage() {
-  const { user } = useUser();
-  const organizationEmail = user?.primaryEmailAddress?.emailAddress;
+  const organizationEmail = "";
   const { data, isLoading } = api.dashboard.overview.useQuery({
     organizationEmail: organizationEmail as unknown as string,
   });

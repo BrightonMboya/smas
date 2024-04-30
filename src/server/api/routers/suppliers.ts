@@ -1,23 +1,18 @@
-import { protectedProcedure, createTRPCRouter } from "../trpc";
-import { supplierSchema } from "~/app/suppliers/new/page";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { supplierSchema } from "~/app/dashboard/suppliers/_components/schema";
 import z from "zod";
-import {
-  FAILED_TO_CREATE,
-  FAILED_TO_DELETE,
-  organizationEmailSchema,
-} from "~/utils/constants";
+import { FAILED_TO_CREATE, FAILED_TO_DELETE } from "~/utils/constants";
 import { TRPCError } from "@trpc/server";
-import useOrganizationId from "~/utils/hooks/useOrganizationId";
 
 export const supplier = createTRPCRouter({
   add: protectedProcedure
-    .input(supplierSchema.merge(organizationEmailSchema))
+    .input(supplierSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
         return await ctx.db.suppliers.create({
           data: {
-            organizationsId: organizationId?.id!,
+            // @ts-ignore
+            organization_Id: ctx.user?.id,
             fullName: input.fullName,
             phoneNumber: input.phoneNumber,
             product: input.product,
@@ -31,21 +26,14 @@ export const supplier = createTRPCRouter({
     }),
 
   all: protectedProcedure
-    .input(
-      z.object({
-        organizationEmail: z.string(),
-      }),
-    )
     .query(async ({ ctx, input }) => {
       try {
-        const organizationId = await useOrganizationId(input.organizationEmail);
-        if (organizationId !== null) {
-          return await ctx.db.suppliers.findMany({
-            where: {
-              organizationsId: organizationId?.id,
-            },
-          });
-        }
+        return await ctx.db.suppliers.findMany({
+          where: {
+            // @ts-ignore
+            organization_id: ctx.user?.id,
+          },
+        });
 
         return null;
       } catch (cause) {
