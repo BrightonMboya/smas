@@ -1,30 +1,19 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
-import {
-  Receipt,
-  BadgePercent,
-  LogOutIcon,
-  Activity,
-  Banknote,
-  Container,
-  PiggyBank,
-  MoveLeft,
-} from "lucide-react";
-
 import Link from "next/link";
-import { PersonIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
-import Button from "../ui/Button";
 import { SetStateAction, type Dispatch } from "react";
-import { signOut } from "~/app/auth/actions";
 import { useFormStatus } from "react-dom";
-import { Spinner } from "../ui/LoadingSkeleton";
+import {
+  PackageIcon,
+  CoinsIcon,
+  CreditCardIcon,
+  LineChartIcon,
+  ReceiptIcon,
+  SettingsIcon,
+  UsersIcon,
+  WalletIcon,
+} from "./icons";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -34,142 +23,75 @@ interface Props {
 export default function SideBarContent({ showNav, setShowNav }: Props) {
   const pathname = usePathname();
   const { pending, action } = useFormStatus();
-  const isPending = pending && action === signOut;
+
+  const baseLinkClass =
+    "flex items-center gap-2 rounded-md px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900  ";
+  const activeLinkClass = "text-white bg-indigo-500";
 
   return (
-    <section className="fixed z-[1000]  min-h-screen w-screen bg-lightest md:block md:w-[220px]">
-      <div className="flex w-full flex-col  justify-start px-5 pt-5 ">
-        <button
-          type="button"
-          onClick={() => {
-            setShowNav(!showNav);
-          }}
-          className="md:hidden"
-        >
-          <MoveLeft size={30} color="#46783E" className="lg:hidden" />
-        </button>
-
-        <Accordion type="single" collapsible className="text-gray-500">
-          <AccordionItem value="itienaries">
-            <AccordionTrigger>Invoice Management</AccordionTrigger>
-            <AccordionContent className="flex flex-col space-y-5">
-              <Link href="/dashboard/invoices">
-                <div
-                  className={`flex items-center justify-center space-x-2
-              ${pathname === "/dashboard/invoices" ? "text-dark" : "text-gray-500"}
-          `}
-                >
-                  <Receipt width={20} height={20} />
-                  <h3>Invoices</h3>
-                </div>
-              </Link>
-
-              <Link href="/dashboard/invoices/new">
-                <div
-                  className={`flex items-center justify-center space-x-2
-              ${pathname === "/dashboard/invoices/new" ? "text-dark" : "text-gray-500"}
-          `}
-                >
-                  <BadgePercent width={20} height={20} />
-                  <h3>New Invoice</h3>
-                </div>
-              </Link>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        <Link href="/dashboard/accounting">
-          <div
-            className={`flex space-x-2
-              ${
-                pathname?.includes("/dashboard/accounting")
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
-          `}
+    <section className="fixed z-[1000]  min-h-screen ">
+      <div className="flex h-screen max-h-screen w-[200px] flex-col gap-4 border-r-[1px] border-r-gray-300 bg-white p-4 ">
+        <div className="flex items-center gap-2 font-semibold text-gray-900 ">
+          <span>Fintech SaaS</span>
+        </div>
+        <nav className="flex flex-col gap-1">
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/products") && activeLinkClass} `}
+            href="/dashboard/products"
           >
-            <span>$</span>
-
-            <h3>Accounting</h3>
-          </div>
-        </Link>
-
-        <Link href="/dashboard/suppliers" className="mt-5">
-          <div
-            className={`flex space-x-2
-              ${
-                pathname?.includes("/dashboard/suppliers")
-                  ? "text-dark"
-                  : "text-gray-500"
-              }
-          `}
+            <PackageIcon className="h-4 w-4" />
+            Products
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/sales") && activeLinkClass} `}
+            href="/dashboard/sales"
           >
-            <PersonIcon width={20} height={20} />
-
-            <h3>Suppliers</h3>
-          </div>
-        </Link>
-
-        <Link href="/dashboard/products" className="mt-5">
-          <div
-            className={`flex space-x-2
-              ${pathname?.includes("/dashboard/products") ? "text-dark" : "text-gray-500"}
-          `}
+            <LineChartIcon className="h-4 w-4" />
+            Sales
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/expenses") && activeLinkClass} `}
+            href="/dashboard/expenses"
           >
-            <Container width={20} height={20} />
-
-            <h3>Products</h3>
-          </div>
-        </Link>
-
-        <Link href="/dashboard/sales" className="mt-5">
-          <div
-            className={`flex space-x-2
-              ${pathname?.includes("/dashboard/sales") ? "text-dark" : "text-gray-500"}
-          `}
+            <WalletIcon className="h-4 w-4" />
+            Expenses
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/suppliers") && activeLinkClass} `}
+            href="/dashboard/suppliers"
           >
-            <Activity width={20} height={20} />
-            <h3>Sales</h3>
-          </div>
-        </Link>
-
-        <Link href="/dashboard/expenses" className="mt-5">
-          <div
-            className={`flex space-x-2
-              ${pathname?.includes("/dashboard/expenses") ? "text-dark" : "text-gray-500"}
-          `}
+            <UsersIcon className="h-4 w-4" />
+            Suppliers
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/debts") && activeLinkClass} `}
+            href="/dashboard/debts"
           >
-            <Banknote width={20} height={20} />
-            <h3>Expenses</h3>
-          </div>
-        </Link>
-
-        <Link href="/dashboard/debts" className="mt-5">
-          <div
-            className={`flex space-x-2
-              ${pathname?.includes("/dashboard/debts") ? "text-dark" : "text-gray-500"}
-          `}
+            <CoinsIcon className="h-4 w-4" />
+            Debts
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/invoices") && activeLinkClass} `}
+            href="/dashboard/invoices"
           >
-            <PiggyBank width={20} height={20} />
-            <h3>Debts</h3>
-          </div>
-        </Link>
-
-        <form action={signOut}>
-          <Button
-            className="fixed bottom-10  w-[150px] space-x-2"
-            variant="destructive"
+            <ReceiptIcon className="h-4 w-4" />
+            Invoices
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/settings") && activeLinkClass} `}
+            href="#"
           >
-            {isPending ? (
-              <Spinner />
-            ) : (
-              <>
-                <LogOutIcon />
-                <span>Log out</span>
-              </>
-            )}
-          </Button>
-        </form>
+            <SettingsIcon className="h-4 w-4" />
+            Settings
+          </Link>
+          <Link
+            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/billing") && activeLinkClass} `}
+            href="/dashboard/billing"
+          >
+            <CreditCardIcon className="h-4 w-4" />
+            Billing
+          </Link>
+        </nav>
       </div>
     </section>
   );

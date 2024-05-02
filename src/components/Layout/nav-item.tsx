@@ -1,42 +1,27 @@
 "use client";
-import { Text, clx } from "@medusajs/ui"
-import { useEffect, useState } from "react"
-import Link from "next/link"
+import { Text, clx } from "@medusajs/ui";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type ItemType = "core" | "extension";
 
-
 type NestedItemProps = {
-  label: string
-  to: string
-}
+  label: string;
+  to: string;
+};
 
 export type NavItemProps = {
-  icon?: React.ReactNode
-  name: string
-  to: string
-}
+  icon?: React.ReactNode;
+  name: string;
+  to: string;
+};
 
-export const NavItem = ({
-  icon,
-  name,
-  to,
- 
-}: NavItemProps) => {
-
-
+export const NavItem = ({ icon, name, to }: NavItemProps) => {
   return (
     <div className="px-3">
       <Link
         href={to}
-        className={clx(
-          "text-ui-fg-subtle hover:text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover flex items-center gap-x-2 rounded-md px-2 py-2.5 outline-none md:py-1.5",
-        //   {
-        //     "bg-ui-bg-base hover:bg-ui-bg-base-hover shadow-elevation-card-rest":
-        //       location.pathname.startsWith(to),
-        //     "max-md:hidden": items && items.length > 0,
-        //   }
-        )}
+        className="text-ui-fg-subtle hover:text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover flex items-center gap-x-2 rounded-md px-2 py-2.5 outline-none md:py-1.5"
       >
         <Icon icon={icon} type="core" />
         <Text size="small" weight="plus" leading="compact">
@@ -44,12 +29,12 @@ export const NavItem = ({
         </Text>
       </Link>
     </div>
-  )
-}
+  );
+};
 
 const Icon = ({ icon, type }: { icon?: React.ReactNode; type: ItemType }) => {
   if (!icon) {
-    return null
+    return null;
   }
 
   return type === "extension" ? (
@@ -58,5 +43,5 @@ const Icon = ({ icon, type }: { icon?: React.ReactNode; type: ItemType }) => {
     </div>
   ) : (
     icon
-  )
-}
+  );
+};

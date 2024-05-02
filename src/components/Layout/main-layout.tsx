@@ -30,7 +30,7 @@ export const MainSidebar = () => {
 const CoreRouteSection = () => {
 
   return (
-    <nav className="flex flex-col gap-y-1 py-2">
+    <nav className="flex flex-col gap-y-4 py-2">
       {coreRoutes.map((route) => {
         return <NavItem key={route.to} {...route} />
       })}
