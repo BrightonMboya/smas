@@ -13,7 +13,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        montserrat: ["var(--font-montserrat)"],
+        inter: ["var(--font-inter)"],
       },
       colors: {
         primary: "#a87133",

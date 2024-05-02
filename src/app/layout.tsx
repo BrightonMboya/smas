@@ -1,14 +1,14 @@
 import "~/styles/globals.css";
 
-import { Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { headers } from "next/headers";
 
 
-const monsterrat = Montserrat({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-inter",
 });
 
 // export const metadata = {
@@ -22,23 +22,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const supabase = createClient();
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
-  // console.log(user, ">>>>>>>");
-  // if (!user) {
-  //   return redirect("/auth/login");
-  // }
-
+ 
  
   return (
     <html lang="en">
-      <body className={`${monsterrat.className}`}>
+      <body className={`${inter.className} font-inter` }>
         <TRPCReactProvider headers={headers()}>
-         
           {children}
-         
           </TRPCReactProvider>
       </body>
     </html>
