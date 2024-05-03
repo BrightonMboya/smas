@@ -34,7 +34,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <div className="flex items-center gap-2 font-semibold text-gray-900 ">
           <span>Fintech SaaS</span>
         </div>
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-[15px]">
           <Link
             className={`${baseLinkClass} ${pathname.startsWith("/dashboard/products") && activeLinkClass} `}
             href="/dashboard/products"

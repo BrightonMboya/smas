@@ -19,7 +19,7 @@ export default {
         montserrat: ["var(--font-montserrat)", ...fontFamily.sans],
       },
       colors: {
-        primary: "#a87133",
+        primary: "#6366f1",
         dark: "#764f24",
         darker: "#54391a",
         lighter: "#dcc6ad",

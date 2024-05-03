@@ -26,7 +26,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="">
-        <Layout>{children}</Layout>
+        <Layout>
+          <main className="bg-[#F5F6FA]/40 min-h-screen">{children}</main>
+        </Layout>
       </body>
     </html>
   );
