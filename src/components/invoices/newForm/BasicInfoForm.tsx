@@ -1,7 +1,7 @@
 import { AssetLabel, ItemLayout } from "~/components/Assets/NoAsset";
 import Input from "~/components/ui/Input";
 import { UseFormRegister } from "react-hook-form";
-import { type InvoiceSchema } from "../newForm/newInvoiceForm";
+import { type InvoiceSchema } from "./schema";
 
 interface Props {
   register: UseFormRegister<InvoiceSchema>;

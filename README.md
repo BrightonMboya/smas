@@ -113,4 +113,5 @@ using (
 - [x] debug why fonts are not loading
 - [x] chnage the font to inter
 - [] add user profile widget on the layout screen
-- [] try to change the full ui inspired by medusa ui
+- [x] try to change the full ui inspired by medusa ui
+- 
