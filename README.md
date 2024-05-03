@@ -53,7 +53,7 @@ create policy "Enable crud ops on debts"
 on "public"."Debts"
 to authenticated
 using (
-  (( SELECT (auth.uid())::text AS uid) = organizations_id)
+  (select auth.uid())::text = organizations_id
 );
 
 alter table "public"."Expenses" enable row level security;
@@ -61,7 +61,7 @@ create policy "crud ops on expenses"
 on "public"."Expenses"
 to authenticated
 using (
-  (( SELECT (auth.uid())::text AS uid) = organization_id)
+    ((( SELECT auth.uid() AS uid))::text = organizations_id)
 );
 
 alter table "public"."Products" enable row level security;
@@ -69,7 +69,7 @@ create policy "crud ops on products table"
 on "public"."Products"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+    ((( SELECT auth.uid() AS uid))::text = organization_id)
 );
 
 
@@ -78,7 +78,7 @@ create policy "crud ops on sales table"
 on "public"."Sales"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+    ((( SELECT auth.uid() AS uid))::text = organization_id)
 );
 
 
@@ -87,7 +87,7 @@ create policy "crud ops on suppliers"
 on "public"."Suppliers"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+    ((( SELECT auth.uid() AS uid))::text = organization_id)
 );
 
 alter table "public"."Invoices" enable row level security;
@@ -95,7 +95,7 @@ create policy "crud ops on invoices"
 on "public"."Invoices"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = organization_id)
+     ((( SELECT auth.uid() AS uid))::text = organization_id)
 );
 
 alter table "public"."Organizations" enable row level security;
@@ -103,15 +103,18 @@ create policy "organizations can view their own data"
 on "public"."Organizations"
 to authenticated
 using (
-  ((select (auth.uid())::text as uid) = id)
+     ((( SELECT auth.uid() AS uid))::text = organization_id)
 );
 ```
 
 
 # Todo
 
-- [x] Add supabase auth
-- [] We will use Google and Email Providers
-- [x] Add RLS to supabase dashboard
-- [x] Remove clerk and its dependencies
-- [x] Test out the RLS if it works
+- [x] debug why fonts are not loading
+- [x] chnage the font to inter
+- [] add user profile widget on the layout screen
+- [x] try to change the full ui inspired by medusa ui
+- [] Add a feature of admin to add more teams
+- [] Add email confirmation feature when signing up
+- [] integrate payment system in the application with DPO
+- [] if the user hasnt paid for subscription they shouldnt see the app

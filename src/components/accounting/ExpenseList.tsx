@@ -106,15 +106,16 @@ export const columns: ColumnDef<Expenses>[] = [
       const sale = row.original;
       const utils = api.useUtils();
 
-      const { mutateAsync, isLoading } = api.accounting.deleteExpense.useMutation({
-        onSuccess: () => {
-          toast({
-            description: "Expense Deleted Succesfully",
-          });
+      const { mutateAsync, isLoading } =
+        api.accounting.deleteExpense.useMutation({
+          onSuccess: () => {
+            toast({
+              description: "Expense Deleted Succesfully",
+            });
 
-          utils.products.all.invalidate();
-        },
-      });
+            utils.accounting.allExpenses.invalidate();
+          },
+        });
       const { toast } = useToast();
 
       return (
@@ -125,7 +126,7 @@ export const columns: ColumnDef<Expenses>[] = [
               <DotsHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white font-montserrat">
+          <DropdownMenuContent align="end" className="font-montserrat bg-white">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
             <DropdownMenuItem className="cursor-pointer">

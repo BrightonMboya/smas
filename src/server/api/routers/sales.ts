@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { NOT_FOUND } from "~/utils/constants";
 import { salesSchema } from "~/app/dashboard/sales/_components/schema";
+import { TRPCClientError } from "@trpc/client";
 
 export const sales = createTRPCRouter({
   allSales: protectedProcedure
@@ -68,7 +69,12 @@ export const sales = createTRPCRouter({
         }
 
         if (product.stockAvailable < input.quantity) {
-          throw new Error("Insufficient stock");
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Insufficient Stock"
+          })
+          
+          // throw new Error("Insufficient stock");
         }
 
         await ctx.db.products.update({
@@ -98,6 +104,7 @@ export const sales = createTRPCRouter({
         return newSales;
       } catch (cause) {
         console.log(cause);
+        throw cause;
       }
     }),
 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   CardTitle,
   CardDescription,
@@ -11,7 +11,7 @@ import Input from "~/components/ui/Input";
 import Button from "~/components/ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/Tabs";
 import Expenses from "./Expenses";
-import Sales from "./Sales";
+import Sales from "../../app/dashboard/sales/_components/Sales";
 
 export default function ExpenseAndSales() {
   return (
@@ -25,7 +25,7 @@ export default function ExpenseAndSales() {
         <Expenses />
       </TabsContent>
       <TabsContent value="sales">
-        <Sales/>
+        <Sales />
       </TabsContent>
     </Tabs>
   );

@@ -1,13 +1,9 @@
-"use client"
-import Sales from "~/components/accounting/Sales";
-import Layout from "~/components/Layout/Layout";
-
+// "use client";
+import Sales from "~/app/dashboard/sales/_components/Sales";
 export default function Page() {
   return (
-    <Layout>
-      <main className="ml-5 mt-10  md:ml-10 md:w-[600px]">
-        <Sales />
-      </main>
-    </Layout>
+    <main className="ml-5 pt-10  md:ml-[70px] md:w-[600px]">
+      <Sales />
+    </main>
   );
 }

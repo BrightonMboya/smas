@@ -1,5 +1,5 @@
 import { Control, useWatch } from "react-hook-form";
-import { InvoiceSchema } from "./newInvoiceForm";
+import { InvoiceSchema } from "./schema";
 
 
 

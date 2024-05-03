@@ -12,7 +12,7 @@ export const supplier = createTRPCRouter({
         return await ctx.db.suppliers.create({
           data: {
             // @ts-ignore
-            organization_Id: ctx.user?.id,
+            organization_id: ctx.user?.id,
             fullName: input.fullName,
             phoneNumber: input.phoneNumber,
             product: input.product,

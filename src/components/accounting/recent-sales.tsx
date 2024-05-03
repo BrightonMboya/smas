@@ -4,9 +4,7 @@ import { format } from "date-fns";
 import { Spinner } from "../ui/LoadingSkeleton";
 
 export function RecentSales() {
-  const { data, isLoading } = api.accounting.recentSales.useQuery({
-    organizationEmail: ""
-  });
+  const { data, isLoading } = api.accounting.recentSales.useQuery();
 
   return (
     <div className="space-y-8">

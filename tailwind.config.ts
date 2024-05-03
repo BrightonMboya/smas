@@ -2,7 +2,10 @@ import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
-  content: ["./src/**/*.tsx"],
+  content: [
+    "./src/**/*.tsx",
+    "./app/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -13,10 +16,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        montserrat: ["var(--font-montserrat)"],
+        montserrat: ["var(--font-montserrat)", ...fontFamily.sans],
       },
       colors: {
-        primary: "#a87133",
+        primary: "#6366f1",
         dark: "#764f24",
         darker: "#54391a",
         lighter: "#dcc6ad",

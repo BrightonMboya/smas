@@ -131,7 +131,7 @@ export const columns: ColumnDef<Sales>[] = [
             description: "Sale Deleted Succesfully",
           });
 
-          utils.products.all.invalidate();
+          utils.sales.allSales.invalidate();
         },
       });
       const { toast } = useToast();
@@ -144,7 +144,7 @@ export const columns: ColumnDef<Sales>[] = [
               <DotsHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white font-montserrat">
+          <DropdownMenuContent align="end" className="font-montserrat bg-white">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
@@ -162,9 +162,9 @@ export const columns: ColumnDef<Sales>[] = [
                 variant="destructive"
                 type="button"
                 disabled={isLoading}
-                onClick={() =>
-                  mutateAsync({ saleId: sale.id as unknown as string })
-                }
+                onClick={() => {
+                  mutateAsync({ saleId: sale.id as unknown as string });
+                }}
               >
                 Delete Sale
               </Button>

@@ -1,15 +1,9 @@
 import "~/styles/globals.css";
 
-import { Montserrat } from "next/font/google";
-
 import { TRPCReactProvider } from "~/trpc/react";
 import { headers } from "next/headers";
-
-
-const monsterrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
-});
+import localFont from "next/font/local";
+import { Inter, Montserrat } from "next/font/google";
 
 // export const metadata = {
 //   title: "Create T3 App",
@@ -17,29 +11,21 @@ const monsterrat = Montserrat({
 //   icons: [{ rel: "icon", url: "/favicon.ico" }],
 // };
 
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const supabase = createClient();
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
-  // console.log(user, ">>>>>>>");
-  // if (!user) {
-  //   return redirect("/auth/login");
-  // }
-
- 
   return (
-    <html lang="en">
-      <body className={`${monsterrat.className}`}>
-        <TRPCReactProvider headers={headers()}>
-         
-          {children}
-         
-          </TRPCReactProvider>
+    // <html lang="en" className={`${geist.variable} font-geist`}>
+    <html lang="en" className={montserrat.className}>
+      <body>
+        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
       </body>
     </html>
   );

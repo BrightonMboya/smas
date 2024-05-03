@@ -1,9 +1,8 @@
-"use client"
+"use client";
 import React from "react";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import Button from "~/components/ui/Button";
-import Layout from "~/components/Layout/Layout";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +11,8 @@ import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
 import { supplierSchema, ISupplierSchema } from "../_components/schema";
-
+import { Spinner } from "~/components/ui/LoadingSkeleton";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const {
@@ -25,10 +25,15 @@ export default function Page() {
   });
 
   const { toast } = useToast();
+  const utils = api.useUtils();
+  const router = useRouter();
+
   const { isLoading, mutateAsync } = api.supplier.add.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({ description: "Supplier Added Succesfully" });
       reset();
+      await utils.supplier.all.invalidate();
+      router.push("/dashboard/suppliers");
     },
     onError: () => {
       toast({
@@ -42,30 +47,33 @@ export default function Page() {
     try {
       mutateAsync({
         ...data,
-        
       });
     } catch (cause) {
       console.log(cause);
     }
   };
   return (
-    <Layout>
+    <section className="pt-10">
       <Toaster />
-      <main className="mt-[40px] pl-[30px]">
-        <div className="flex items-center space-x-10 pt-[30px] md:w-[1000px] md:justify-between  ">
+      <main className="pl-[40px] border-[1px] py-10 md:w-[1000px] bg-white rounded-md shadow-sm ml-[70px]  ">
+        <div className="flex items-center space-x-10 pt-[20px] md:w-[1000px] md:justify-between  ">
           <h3 className="text-3xl font-medium ">New Supplier </h3>
           <div className="flex items-center gap-2">
-            <Link href="/suppliers/">
+            {/* <Link href="/dashboard/suppliers/">
               <Button>View Suppliers</Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
+          <section className="relative mt-[20px] flex flex-col space-y-[30px] ">
             <ItemLayout>
-              <AssetLabel label="Full Name" />
+              <AssetLabel label="Supplier Full Name" />
               <div>
-                <Input placeholder="John Doe" {...register("fullName")} />
+                <Input
+                  placeholder="John Doe"
+                  {...register("fullName")}
+                  className="md:w-[400px]"
+                />
                 {errors.fullName && (
                   <p className="text-sm text-red-500">Full Name is required</p>
                 )}
@@ -73,9 +81,29 @@ export default function Page() {
             </ItemLayout>
 
             <ItemLayout>
+              <AssetLabel label="Company Name" />
+              <div>
+                <Input
+                  placeholder="Inyange Inc"
+                  {...register("company")}
+                  className="md:w-[400px]"
+                />
+                {errors.company && (
+                  <p className="text-sm text-red-500">
+                    Company Name is required
+                  </p>
+                )}
+              </div>
+            </ItemLayout>
+
+            <ItemLayout>
               <AssetLabel label="Product Name" />
               <div>
-                <Input placeholder="Inyange Waters" {...register("product")} />
+                <Input
+                  placeholder="Inyange Waters"
+                  {...register("product")}
+                  className="md:w-[400px]"
+                />
                 {errors.product && (
                   <p className="text-sm text-red-500">
                     Product Name is required
@@ -90,6 +118,7 @@ export default function Page() {
                 <Input
                   placeholder="+91 780348912"
                   {...register("phoneNumber")}
+                  className="md:w-[400px]"
                 />
                 {errors.phoneNumber && (
                   <p className="text-sm text-red-500">
@@ -100,34 +129,31 @@ export default function Page() {
             </ItemLayout>
 
             <ItemLayout>
-              <AssetLabel label="Company" />
-              <div>
-                <Input placeholder="Inyange Inc" {...register("company")} />
-                {errors.company && (
-                  <p className="text-sm text-red-500">
-                    Company Name is required
-                  </p>
-                )}
-              </div>
-            </ItemLayout>
-
-            <ItemLayout>
               <AssetLabel
                 label="Notes"
-                caption="Enter additional details about this contact"
+                caption="Enter additional details about this supplier"
               />
 
               <Textarea
-                placeholder="Add short notes about this contact"
+                placeholder="Add short notes about this supplier"
                 {...register("notes")}
+                className="md:w-[400px]"
               />
             </ItemLayout>
           </section>
-          <Button className="md:mt-[50px] mt-[20px] w-[100px]" disabled={isLoading}>
+          <Button
+            className="mt-[20px] w-[200px] text-lg md:mt-[50px]"
+            disabled={isLoading}
+          >
+            {isLoading && (
+              <span className="pr-5">
+                <Spinner />
+              </span>
+            )}
             Save
           </Button>
         </form>
       </main>
-    </Layout>
+    </section>
   );
 }
