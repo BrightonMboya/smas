@@ -1,5 +1,4 @@
 "use client";
-import Layout from "~/components/Layout/Layout";
 import { useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
@@ -13,6 +12,7 @@ import { useEffect } from "react";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "~/components/ui/toaster";
 import { Suspense } from "react";
+import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -60,63 +60,59 @@ export default function Page() {
     }
   };
   return (
-    <Suspense>
-      <Layout>
-        <Toaster />
-        {isError || (!data && <h3>This product doesnt exist</h3>)}
-        {data && (
-          <form
-            className="mt-[40px] pl-[30px]"
-            onSubmit={handleSubmit(onSubmit)}
+    <>
+      <Toaster />
+      {isError || (!data && !isLoading && <h3>This product doesnt exist</h3>)}
+      {isLoading && <LoadingSkeleton />}
+      {data && (
+        <form className="mt-[40px] pl-[30px]" onSubmit={handleSubmit(onSubmit)}>
+          <h3 className="text-2xl font-medium ">Editing Product</h3>
+          <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
+            <ItemLayout>
+              <AssetLabel label="Product Name" />
+              <Input placeholder="Cement bags" {...register("name")} />
+            </ItemLayout>
+
+            <ItemLayout>
+              <AssetLabel label="Stock Available" />
+              <Input
+                placeholder="20"
+                {...register("stockAvailable", { valueAsNumber: true })}
+                type="number"
+              />
+            </ItemLayout>
+
+            <ItemLayout>
+              <AssetLabel label="Buying Price" />
+              <Input placeholder="200,000" {...register("buyingPrice")} />
+            </ItemLayout>
+
+            <ItemLayout>
+              <AssetLabel label="Selling Price" />
+              <Input placeholder="300,000" {...register("sellingPrice")} />
+            </ItemLayout>
+
+            <ItemLayout>
+              <AssetLabel
+                label="Notes"
+                caption="Enter additional details about this product"
+              />
+
+              <Textarea
+                placeholder="Add short notes about this product"
+                {...register("description")}
+              />
+            </ItemLayout>
+          </section>
+          <Button
+            className="mt-[50px] w-[100px]"
+            type="submit"
+            disabled={productsRouter.isLoading}
           >
-            <h3 className="text-2xl font-medium ">Editing Product</h3>
-            <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
-              <ItemLayout>
-                <AssetLabel label="Product Name" />
-                <Input placeholder="Cement bags" {...register("name")} />
-              </ItemLayout>
-
-              <ItemLayout>
-                <AssetLabel label="Stock Available" />
-                <Input
-                  placeholder="20"
-                  {...register("stockAvailable", { valueAsNumber: true })}
-                  type="number"
-                />
-              </ItemLayout>
-
-              <ItemLayout>
-                <AssetLabel label="Buying Price" />
-                <Input placeholder="200,000" {...register("buyingPrice")} />
-              </ItemLayout>
-
-              <ItemLayout>
-                <AssetLabel label="Selling Price" />
-                <Input placeholder="300,000" {...register("sellingPrice")} />
-              </ItemLayout>
-
-              <ItemLayout>
-                <AssetLabel
-                  label="Notes"
-                  caption="Enter additional details about this product"
-                />
-
-                <Textarea
-                  placeholder="Add short notes about this product"
-                  {...register("description")}
-                />
-              </ItemLayout>
-            </section>
-            <Button
-              className="mt-[50px] w-[100px]"
-              type="submit"
-              disabled={productsRouter.isLoading}
-            >
-              Save
-            </Button>
-          </form>
-        )}
-      </Layout>
-    </Suspense>
+            Save
+          </Button>
+        </form>
+      )}
+    </>
   );
 }

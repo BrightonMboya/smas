@@ -1,20 +1,15 @@
 "use client";
 
 import Button from "~/components/ui/Button";
-import Layout from "~/components/Layout/Layout";
-
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";
-
 import AddDebtForm from "../_components/AddDebtForm";
 
 // import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export default function Page() {
-
-
   return (
-    <Layout>
+    <>
       <Toaster />
       <main className="mt-[40px] pl-[30px]">
         <div className="flex items-center space-x-10 pt-[30px] md:w-[1000px] md:justify-between  ">
@@ -25,8 +20,8 @@ export default function Page() {
             </Link>
           </div>
         </div>
-        <AddDebtForm  />
+        <AddDebtForm />
       </main>
-    </Layout>
+    </>
   );
 }

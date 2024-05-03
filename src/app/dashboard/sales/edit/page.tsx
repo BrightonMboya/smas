@@ -1,5 +1,5 @@
 "use client";
-import Layout from "~/components/Layout/Layout";
+
 import { useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
@@ -67,7 +67,7 @@ export default function Page() {
     }
   };
   return (
-    <Layout>
+    <>
       <Toaster />
       {isLoading && <LoadingSkeleton />}
       {isError || (!data && !isLoading && <h3>This Sale doesnt exist</h3>)}
@@ -132,6 +132,6 @@ export default function Page() {
           </Button>
         </form>
       )}
-    </Layout>
+    </>
   );
 }

@@ -3,7 +3,6 @@ import React from "react";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import Button from "~/components/ui/Button";
-import Layout from "~/components/Layout/Layout";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,13 +48,13 @@ export default function Page() {
     }
   };
   return (
-    <Layout>
+    <>
       <Toaster />
       <main className="mt-[40px] pl-[30px]">
         <div className="flex items-center space-x-10 pt-[30px] md:w-[1000px] md:justify-between  ">
           <h3 className="text-3xl font-medium ">New Supplier </h3>
           <div className="flex items-center gap-2">
-            <Link href="/suppliers/">
+            <Link href="/dashboard/suppliers/">
               <Button>View Suppliers</Button>
             </Link>
           </div>
@@ -128,6 +127,6 @@ export default function Page() {
           </Button>
         </form>
       </main>
-    </Layout>
+    </>
   );
 }

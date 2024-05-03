@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { createClient } from "~/utils/supabase/server";
 import { redirect } from "next/navigation";
+import Layout from "~/components/Layout/Layout";
 
 // export const metadata = {
 //   title: "Create T3 App",
@@ -24,7 +25,9 @@ export default async function RootLayout({
   }
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="">
+        <Layout>{children}</Layout>
+      </body>
     </html>
   );
 }

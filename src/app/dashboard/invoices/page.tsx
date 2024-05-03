@@ -1,19 +1,14 @@
-"use client"
-
-import Layout from "~/components/Layout/Layout";
+"use client";
 import { Header, NoAsset } from "~/components/Assets";
-import { ReactElement } from "react";
 import { api } from "~/utils/api";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import InvoiceList from "~/components/invoices/invoiceTables/InvoiceList";
 import { Toaster } from "~/components/ui/toaster";
 
-
 export default function Page() {
   const { data, isLoading } = api.invoices.all.useQuery();
 
   return (
-    <Layout>
     <main className="pl-5">
       <Header title="Your Invoices" href="/dashboard/invoices/new" />
       <Toaster />
@@ -29,9 +24,5 @@ export default function Page() {
       {data?.length !== 0 && !isLoading && <InvoiceList invoices={data!} />}
       {isLoading && <LoadingSkeleton />}
     </main>
-    </Layout>
   );
 }
-
-
-

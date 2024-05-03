@@ -3,9 +3,7 @@ import React from "react";
 import Input from "~/components/ui/Input";
 import { Textarea } from "~/components/ui/TextArea";
 import Button from "~/components/ui/Button";
-import Layout from "~/components/Layout/Layout";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
-import z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
@@ -15,7 +13,6 @@ import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import { ToastAction } from "~/components/ui/Toast";
 import { ProductSchema, productSchema } from "../_components/schema";
-
 
 export default function Page() {
   const {
@@ -53,7 +50,6 @@ export default function Page() {
       sellingPrice: data.sellingPrice,
       description: data.description,
       stockAvailable: data.stockAvailable,
-     
     };
     try {
       mutateAsync(productData);
@@ -63,7 +59,7 @@ export default function Page() {
   };
 
   return (
-    <Layout>
+    <>
       <Toaster />
       <form className="mt-[40px] pl-[30px]" onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-2xl font-medium ">New Product</h3>
@@ -134,6 +130,6 @@ export default function Page() {
           Save
         </Button>
       </form>
-    </Layout>
+    </>
   );
 }
