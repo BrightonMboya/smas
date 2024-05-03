@@ -16,10 +16,18 @@ import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "../ui/toaster";
 
-import { expensesSchema, ExpensesSchema } from "~/app/dashboard/expenses/_components/_schema/expensesSchema";
+import {
+  expensesSchema,
+  ExpensesSchema,
+} from "~/app/dashboard/expenses/_components/_schema/expensesSchema";
 import { Spinner } from "../ui/LoadingSkeleton";
+import { Dispatch, SetStateAction } from "react";
 
-export default function Expenses() {
+interface Props {
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Expenses(props: Props) {
   const {
     register,
     handleSubmit,
@@ -29,10 +37,13 @@ export default function Expenses() {
     resolver: zodResolver(expensesSchema),
   });
   const { toast } = useToast();
+  const utils = api.useUtils();
   const { isLoading, mutateAsync } = api.accounting.addExpense.useMutation({
     onSuccess: () => {
       toast({ description: "Expense Added Succesfully" });
       reset();
+      utils.accounting.allExpenses.invalidate();
+      props.setDialogOpen(false);
     },
     onError: () => {
       toast({
@@ -59,7 +70,7 @@ export default function Expenses() {
     <>
       <Toaster />
 
-      <Card className="w-[400px] md:max-w-xl">
+      <Card className="w-[400px] border-none shadow-none md:max-w-xl">
         <CardHeader>
           <CardTitle>Record Expenses</CardTitle>
           <CardDescription>Input your expenses details here</CardDescription>
@@ -112,7 +123,7 @@ export default function Expenses() {
               {...register("description")}
             />
             <Button className="w-full" type="submit" disabled={isLoading}>
-              {isLoading && <Spinner/>}
+              {isLoading && <Spinner />}
               Submit Expense
             </Button>
           </form>
