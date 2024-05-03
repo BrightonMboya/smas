@@ -1,11 +1,11 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
-import { SubmitHandler, useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form";
 import { type SalesSchema, salesSchema } from "../_components/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -40,14 +40,18 @@ export default function Page() {
         setValue("date", data?.date),
         setValue("quantity", data?.quantity),
         setValue("productsId", data?.productsId);
-        setValue("status", data?.status)
+      setValue("status", data?.status);
     }
   }, [data, setValue]);
   const { toast } = useToast();
+  const utils = api.useUtils();
+  const router = useRouter();
 
   const salesRouter = api.sales.editSales.useMutation({
     onSuccess: () => {
       toast({ description: "Sale Edited Succesfully" });
+      utils.sales.allSales.invalidate();
+      router.push("/dashboard/sales")
     },
     onError: (cause) => {
       toast({
@@ -72,19 +76,26 @@ export default function Page() {
       {isLoading && <LoadingSkeleton />}
       {isError || (!data && !isLoading && <h3>This Sale doesnt exist</h3>)}
       {data && (
-        <form className="mt-[40px] pl-[30px]" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="pl-[70px] pt-[50px] md:max-w-[90%]"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <h3 className="text-2xl font-medium ">Editing a Sale</h3>
           <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
             <ItemLayout>
               <AssetLabel label="Customer Name" />
-              <Input placeholder="Inyange Inc" {...register("customerName")} />
+              <Input
+                placeholder="Inyange Inc"
+                {...register("customerName")}
+                className="md:w-[400px]"
+              />
             </ItemLayout>
 
             <ItemLayout>
               <AssetLabel label="Amount" />
               <Input
                 placeholder="20"
-                className="placeholder:text-gray-400"
+                className="placeholder:text-gray-400 md:w-[400px]"
                 {...register("amount", { valueAsNumber: true })}
                 type="number"
               />
@@ -94,7 +105,7 @@ export default function Page() {
               <AssetLabel label="Quantity" />
               <Input
                 placeholder="20"
-                className="placeholder:text-gray-400"
+                className="placeholder:text-gray-400 md:w-[400px]"
                 {...register("quantity", { valueAsNumber: true })}
                 type="number"
               />
@@ -102,16 +113,20 @@ export default function Page() {
 
             <ItemLayout>
               <AssetLabel label="Status" />
-              <Input placeholder="Cash" {...register("status")} />
+              <Input
+                placeholder="Cash"
+                {...register("status")}
+                className="md:w-[400px]"
+              />
             </ItemLayout>
 
             <ItemLayout>
-              {/* <AssetLabel label="Date" /> */}
+              <AssetLabel label="Date" />
               <Input
                 placeholder=""
                 type="date"
-                className="hidden"
-                // defaultValue={data?.date as unknown as string}
+                className="md:w-[400px]"
+                defaultValue={data?.date as unknown as string}
                 {...register("date", { valueAsDate: true })}
               />
             </ItemLayout>
@@ -127,7 +142,7 @@ export default function Page() {
             type="submit"
             disabled={salesRouter.isLoading}
           >
-            {salesRouter.isLoading && <Spinner/>}
+            {salesRouter.isLoading && <Spinner />}
             Save
           </Button>
         </form>

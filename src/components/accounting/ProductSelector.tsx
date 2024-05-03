@@ -21,7 +21,7 @@ import { api } from "~/utils/api";
 import Link from "next/link";
 import { Spinner } from "../ui/LoadingSkeleton";
 import { ControllerRenderProps } from "react-hook-form";
-import { SalesSchema } from "./Sales";
+import { SalesSchema } from "~/app/dashboard/sales/_components/schema";
 
 interface Props {
   field: ControllerRenderProps<SalesSchema, "productsId">;
@@ -33,9 +33,7 @@ export default function ProductSelector({ field }: Props) {
   const [remaingProduct, setRemainingProducts] = React.useState(0);
   const [showRemainingProducts, setShowRemainingProducts] =
     React.useState(false);
-  const { data, isLoading } = api.products.all.useQuery({
-    organizationEmail: ""
-  });
+  const { data, isLoading } = api.products.all.useQuery();
 
   return (
     <>
@@ -45,7 +43,7 @@ export default function ProductSelector({ field }: Props) {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className=" justify-between"
+            className=" justify-between md:w-[400px]"
           >
             {value
               ? data?.find(
@@ -57,7 +55,7 @@ export default function ProductSelector({ field }: Props) {
             <CaretSortIcon className=" h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className=" p-0">
+        <PopoverContent className="p-0 md:w-[400px]">
           <Command>
             <CommandInput placeholder="Select Product..." className="h-9" />
             {isLoading && <Spinner />}
@@ -72,7 +70,7 @@ export default function ProductSelector({ field }: Props) {
                     setValue(currentValue === value ? "" : currentValue);
                     field.onChange(product.id);
                     setShowRemainingProducts(true);
-                    setRemainingProducts(product.stockAvailable)
+                    setRemainingProducts(product.stockAvailable);
                     setOpen(false);
                   }}
                 >

@@ -9,12 +9,13 @@ import Button from "~/components/ui/Button";
 
 export default function Page() {
   const { isLoading, data } = api.sales.allSales.useQuery();
+  console.log(data)
 
   return (
-    <main className="pl-5">
+    <main className="pl-[70px] md:max-w-[90%]">
       <Toaster />
-      <div className="flex w-[90vw] items-center justify-between  pt-[40px] md:w-[1000px]">
-        <h3 className="text-2xl font-medium md:text-3xl ">Your Company </h3>
+      <div className="flex items-center justify-between  pt-[40px]">
+        <h3 className="text-2xl font-medium md:text-3xl ">All Sales </h3>
         <div className="flex items-center gap-2">
           <Link href="/dashboard/sales/new">
             <Button>Make a Sale</Button>
