@@ -10,14 +10,12 @@ import Button from "~/components/ui/Button";
 export default function Page() {
   const { data, isLoading } = api.products.all.useQuery();
   return (
-    <main className="pl-5">
+    <main className="pl-[70px] md:max-w-[90%]">
       <Toaster />
-      <div className="flex items-center justify-between pt-[40px] md:w-[1000px] ">
-        <h3 className="text-3xl font-medium ">Your Company </h3>
+      <div className="flex items-center justify-between pt-[40px] ">
+        <h3 className="text-3xl font-medium ">All Products</h3>
         <div className="flex items-center gap-2">
-          <Link href="/products">
-            <Button variant="ghost">View Products</Button>
-          </Link>
+          
           <Link href="/dashboard/products/new">
             <Button>New Products</Button>
           </Link>

@@ -13,6 +13,8 @@ import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
 import { ToastAction } from "~/components/ui/Toast";
 import { ProductSchema, productSchema } from "../_components/schema";
+import { Spinner } from "~/components/ui/LoadingSkeleton";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const {
@@ -24,12 +26,17 @@ export default function Page() {
     resolver: zodResolver(productSchema),
   });
   const { toast } = useToast();
+  const utils = api.useUtils();
+  const router = useRouter();
+
   const { isLoading, mutateAsync } = api.products.add.useMutation({
     onSuccess: () => {
       toast({
         description: "Product added successfully",
       });
       reset();
+      utils.products.all.invalidate();
+      router.push("/dashboard/products");
     },
     onError: (error) => {
       toast({
@@ -59,15 +66,22 @@ export default function Page() {
   };
 
   return (
-    <>
+    <section className="pt-10">
       <Toaster />
-      <form className="mt-[40px] pl-[30px]" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="ml-[70px]  rounded-md border-[1px] bg-white py-10 pl-[30px] shadow-sm md:w-[1000px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h3 className="text-2xl font-medium ">New Product</h3>
         <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
           <ItemLayout>
             <AssetLabel label="Product Name" />
             <div>
-              <Input placeholder="Cement bags" {...register("name")} />
+              <Input
+                placeholder="Cement bags"
+                {...register("name")}
+                className="md:w-[400px]"
+              />
               {errors.name && (
                 <p className="text-sm text-red-500">Product Name is required</p>
               )}
@@ -81,6 +95,7 @@ export default function Page() {
                 placeholder="20"
                 {...register("stockAvailable", { valueAsNumber: true })}
                 type="number"
+                className="md:w-[400px]"
               />
               {errors.stockAvailable && (
                 <p className="text-sm text-red-500">Stock is required</p>
@@ -91,7 +106,11 @@ export default function Page() {
           <ItemLayout>
             <AssetLabel label="Buying Price" />
             <div>
-              <Input placeholder="200,000" {...register("buyingPrice")} />
+              <Input
+                placeholder="200,000"
+                {...register("buyingPrice")}
+                className="md:w-[400px]"
+              />
               {errors.buyingPrice && (
                 <p className="text-sm text-red-500">Buying Price is required</p>
               )}
@@ -101,7 +120,11 @@ export default function Page() {
           <ItemLayout>
             <AssetLabel label="Selling Price" />
             <div>
-              <Input placeholder="300,000" {...register("sellingPrice")} />
+              <Input
+                placeholder="300,000"
+                {...register("sellingPrice")}
+                className="md:w-[400px]"
+              />
               {errors.sellingPrice && (
                 <p className="text-sm text-red-500">
                   Selling Price is required
@@ -119,17 +142,23 @@ export default function Page() {
             <Textarea
               placeholder="Add short notes about this product"
               {...register("description")}
+              className="md:w-[400px]"
             />
           </ItemLayout>
         </section>
         <Button
-          className="mt-[20px] w-[100px] md:mt-[50px]"
+          className="mt-[20px] w-[200px] md:mt-[50px]"
           type="submit"
           disabled={isLoading}
         >
+          {isLoading && (
+            <span className="pr-5">
+              <Spinner />
+            </span>
+          )}
           Save
         </Button>
       </form>
-    </>
+    </section>
   );
 }

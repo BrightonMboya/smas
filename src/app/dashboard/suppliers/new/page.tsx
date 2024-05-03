@@ -53,15 +53,15 @@ export default function Page() {
     }
   };
   return (
-    <>
+    <section className="pt-10">
       <Toaster />
-      <main className="pl-[30px]">
-        <div className="flex items-center space-x-10 pt-[30px] md:w-[1000px] md:justify-between  ">
+      <main className="pl-[40px] border-[1px] py-10 md:w-[1000px] bg-white rounded-md shadow-sm ml-[70px]  ">
+        <div className="flex items-center space-x-10 pt-[20px] md:w-[1000px] md:justify-between  ">
           <h3 className="text-3xl font-medium ">New Supplier </h3>
           <div className="flex items-center gap-2">
-            <Link href="/dashboard/suppliers/">
+            {/* <Link href="/dashboard/suppliers/">
               <Button>View Suppliers</Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -154,6 +154,6 @@ export default function Page() {
           </Button>
         </form>
       </main>
-    </>
+    </section>
   );
 }
