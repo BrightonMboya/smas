@@ -114,4 +114,7 @@ using (
 - [x] chnage the font to inter
 - [] add user profile widget on the layout screen
 - [x] try to change the full ui inspired by medusa ui
-- 
+- [] Add a feature of admin to add more teams
+- [] Add email confirmation feature when signing up
+- [] integrate payment system in the application with DPO
+- [] if the user hasnt paid for subscription they shouldnt see the app
