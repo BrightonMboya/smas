@@ -110,7 +110,7 @@ using (
 
 # Todo
 
-- [] debug why fonts are not loading
-- [] chnage the font to inter
+- [x] debug why fonts are not loading
+- [x] chnage the font to inter
 - [] add user profile widget on the layout screen
 - [] try to change the full ui inspired by medusa ui

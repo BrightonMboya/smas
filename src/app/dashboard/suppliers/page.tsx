@@ -1,6 +1,6 @@
 "use client";
 import { NoAsset } from "~/components/Assets";
-import SupplierList from "~/components/suppliers/SupplierList";
+import SupplierList from "~/app/dashboard/suppliers/_components/SupplierList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/utils/api";
 import Button from "~/components/ui/Button";

@@ -14,6 +14,7 @@ import {
   UsersIcon,
   WalletIcon,
 } from "./icons";
+import { Separator } from "../ui/seperator";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -32,8 +33,9 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
     <section className="fixed z-[1000]  min-h-screen ">
       <div className="flex h-screen max-h-screen w-[200px] flex-col gap-4 border-r-[1px] border-r-gray-300 bg-white p-4 ">
         <div className="flex items-center gap-2 font-semibold text-gray-900 ">
-          <span>Fintech SaaS</span>
+          <span>SMAS</span>
         </div>
+        <Separator className=""/>
         <nav className="flex flex-col gap-[15px]">
           <Link
             className={`${baseLinkClass} ${pathname.startsWith("/dashboard/products") && activeLinkClass} `}

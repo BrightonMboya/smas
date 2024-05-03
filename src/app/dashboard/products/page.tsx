@@ -1,7 +1,7 @@
 "use client";
 import { NoAsset } from "~/components/Assets";
 import { api } from "~/trpc/react";
-import ProudctList from "~/components/products/ProductsList";
+import ProudctList from "~/app/dashboard/products/_components/ProductsList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 import Link from "next/link";

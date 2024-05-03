@@ -77,7 +77,7 @@ export default function NewInvoiceForm() {
   };
   console.log(errors);
   return (
-    <section className="mt-5 flex items-center justify-center">
+    <section className=" flex items-center justify-center">
       <Card className="">
         <CardHeader className="">
           <CardTitle className="text-sm font-medium">Invoice Details</CardTitle>
