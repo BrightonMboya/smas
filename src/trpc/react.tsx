@@ -22,9 +22,9 @@ export const api = createTRPCReact<AppRouter>({
          * having a flash of content change whilst redirecting.
          **/
         // Calls the `onSuccess` defined in the `useQuery()`-options:
-        await opts.originalFn();
-        // Invalidate all queries in the react-query cache:
-        await opts.queryClient.invalidateQueries();
+        // await opts.originalFn();
+        // // Invalidate all queries in the react-query cache:
+        // await opts.queryClient.invalidateQueries();
       },
     },
   },

@@ -6,6 +6,7 @@ import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
+import AddDebtButton from "./_components/AddDebtButton";
 
 export default function Page() {
   const { data, isLoading } = api.debts.getAllDebts.useQuery();
@@ -13,13 +14,14 @@ export default function Page() {
   return (
     <>
       <Toaster />
-      <main className="pl-5">
-        <div className="flex items-center justify-between pt-[40px] md:w-[1000px] ">
+      <main className="pl-[70px] md:max-w-[90%]">
+        <div className="flex items-center justify-between pt-[40px]">
           <h3 className="text-3xl font-medium ">Your Debts</h3>
           <div className="flex items-center gap-2">
-            <Link href="/dashboard/debts/new">
+              <AddDebtButton/>
+            {/* <Link href="/dashboard/debts/new">
               <Button>New Debt</Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
         {data?.length === 0 && (

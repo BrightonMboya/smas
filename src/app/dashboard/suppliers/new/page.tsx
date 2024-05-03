@@ -12,6 +12,7 @@ import { useToast } from "~/utils/hooks/useToast";
 import Link from "next/link";
 import { supplierSchema, ISupplierSchema } from "../_components/schema";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const {
@@ -24,10 +25,15 @@ export default function Page() {
   });
 
   const { toast } = useToast();
+  const utils = api.useUtils();
+  const router = useRouter();
+
   const { isLoading, mutateAsync } = api.supplier.add.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({ description: "Supplier Added Succesfully" });
       reset();
+      await utils.supplier.all.invalidate();
+      router.push("/dashboard/suppliers");
     },
     onError: () => {
       toast({
@@ -141,7 +147,7 @@ export default function Page() {
           >
             {isLoading && (
               <span className="pr-5">
-                <Spinner  />
+                <Spinner />
               </span>
             )}
             Save

@@ -10,9 +10,9 @@ export default function Page() {
   const { isLoading, data, isError } = api.supplier.all.useQuery();
 
   return (
-    <main className="pl-5">
+    <main className="pl-[70px] md:max-w-[90%]">
       {isError && <h3>We have an error</h3>}
-      <div className="flex items-center justify-between pt-[40px] md:w-[1000px] ">
+      <div className="flex items-center justify-between pt-[40px]  ">
         <h3 className="text-3xl font-medium ">All Suppliers</h3>
         <div className="flex items-center gap-2">
           <Link href="/dashboard/suppliers/">

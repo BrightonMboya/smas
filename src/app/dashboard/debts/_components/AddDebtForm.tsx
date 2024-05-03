@@ -10,10 +10,15 @@ import Button from "~/components/ui/Button";
 import { api } from "~/utils/api";
 import { debtsSchema } from "./newDebtSchema";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
+import { Dispatch, SetStateAction } from "react";
 
 export type IDebtsSchema = z.infer<typeof debtsSchema>;
 
-export default function AddDebtForm() {
+interface Props {
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function AddDebtForm(props: Props) {
   const {
     register,
     handleSubmit,
@@ -24,10 +29,14 @@ export default function AddDebtForm() {
   });
 
   const { toast } = useToast();
+  const utils = api.useUtils();
+
   const { isLoading, mutateAsync } = api.debts.createNewDebt.useMutation({
     onSuccess: () => {
       toast({ description: "Debt Added Succesfully" });
       reset();
+      utils.debts.getAllDebts.invalidate();
+      props.setDialogOpen(false)
     },
     onError: () => {
       toast({
@@ -41,7 +50,6 @@ export default function AddDebtForm() {
     try {
       mutateAsync({
         ...data,
-        
       });
     } catch (cause) {
       console.log(cause);
@@ -53,43 +61,52 @@ export default function AddDebtForm() {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
-        <ItemLayout>
+      <section className="relative mt-5 flex flex-col space-y-[30px] ">
+        <div className="space-y-3">
           <AssetLabel label="Debtor Name" />
           <div>
-            <Input placeholder="John Doe" {...register("debtorName")} />
+            <Input
+              placeholder="John Doe"
+              {...register("debtorName")}
+              className="md:w-[400px]"
+            />
             {errors.debtorName && (
               <p className="text-sm text-red-500">Debtor Name is required</p>
             )}
           </div>
-        </ItemLayout>
+        </div>
 
-        <ItemLayout>
+        <div className="space-y-3">
           <AssetLabel label="Amount" />
           <div>
             <Input
               placeholder="500,000"
               {...register("amount", { valueAsNumber: true })}
               type="number"
+              className="md:w-[400px]"
             />
             {errors.amount && (
               <p className="text-sm text-red-500">Amount is required</p>
             )}
           </div>
-        </ItemLayout>
+        </div>
 
-        <ItemLayout>
+        <div className="space-y-3">
           <AssetLabel label="Date" />
           <div>
-            <Input {...register("date", { valueAsDate: true })} type="date" />
+            <Input
+              {...register("date", { valueAsDate: true })}
+              type="date"
+              className="md:w-[400px]"
+            />
             {errors.date && (
               <p className="text-sm text-red-500">Date is required</p>
             )}
           </div>
-        </ItemLayout>
+        </div>
       </section>
-      <Button className="mt-[20px] w-[100px] md:mt-[50px]" disabled={isLoading}>
-        {isLoading && <Spinner/>}
+      <Button className="mt-[20px] w-[200px] md:mt-[50px]" disabled={isLoading}>
+        {isLoading && <Spinner />}
         Save
       </Button>
     </form>
