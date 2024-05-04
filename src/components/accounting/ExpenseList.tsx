@@ -112,8 +112,36 @@ export const columns: ColumnDef<Expenses>[] = [
             toast({
               description: "Expense Deleted Succesfully",
             });
-
+          },
+          onSettled: () => {
+            // sync with the server once the mutation is settled
             utils.accounting.allExpenses.invalidate();
+          },
+          onMutate: (newExpense) => {
+            // cancel outgoing fetches so that they dont overide the optimistic update
+            utils.accounting.allExpenses.cancel();
+
+            // get the data from the query cache
+            const prevData = utils.accounting.allExpenses.getData();
+
+            // optimistic update the data with our new expense
+            const updatedData = prevData?.filter(
+              (expense) => expense.id !== newExpense.expenseId,
+            );
+            utils.accounting.allExpenses.setData(undefined, (old) => [
+              // @ts-ignore
+              ...updatedData,
+            ]);
+            //  return the prev data so that we can revert once anything goes wrong
+            return { prevData };
+          },
+          onError: (error, newExpense, ctx) => {
+            // if the mutation fails, use the context-value from on-mutate
+            utils.accounting.allExpenses.setData(undefined, ctx?.prevData);
+            toast({
+              variant: "destructive",
+              description: `Failed to record the new expense: ${error.message}`,
+            });
           },
         });
       const { toast } = useToast();
@@ -126,7 +154,7 @@ export const columns: ColumnDef<Expenses>[] = [
               <DotsHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="font-montserrat bg-white">
+          <DropdownMenuContent align="end" className="bg-white font-montserrat">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
             <DropdownMenuItem className="cursor-pointer">
