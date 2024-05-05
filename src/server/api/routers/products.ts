@@ -2,6 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import z from "zod";
 import { productSchema } from "~/app/dashboard/products/_components/schema";
 import { FAILED_TO_CREATE, NOT_FOUND } from "~/utils/constants";
+import { TRPCError } from "@trpc/server";
 
 export const products = createTRPCRouter({
   add: protectedProcedure
@@ -22,7 +23,10 @@ export const products = createTRPCRouter({
         return newProduct;
       } catch (cause) {
         console.log(cause);
-        throw FAILED_TO_CREATE;
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to create product",
+        });
       }
     }),
 

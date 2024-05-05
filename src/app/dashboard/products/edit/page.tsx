@@ -13,6 +13,7 @@ import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "~/components/ui/toaster";
 import { Suspense } from "react";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -42,14 +43,44 @@ export default function Page() {
     }
   }, [data, setValue]);
   const { toast } = useToast();
+  const utils = api.useUtils();
+  const router = useRouter();
 
   const productsRouter = api.products.edit.useMutation({
     onSuccess: () => {
       toast({ description: "Product Edited Succesfully" });
     },
+    onSettled: () => {
+      utils.products.all.invalidate();
+    },
+    onMutate: (product) => {
+      utils.products.all.cancel();
+      const prevData = utils.products.all.getData();
+
+      const updatedData = prevData?.map((item) => {
+        if (item.id === product.productsId) {
+          return {
+            ...item,
+            ...product,
+          };
+        }
+        return item;
+      });
+
+      utils.products.all.setData(undefined, updatedData);
+      return { prevData };
+    },
+    onError: (error, data, ctx) => {
+      utils.products.all.setData(undefined, ctx?.prevData);
+      toast({
+        variant: "destructive",
+        description: `Failed to edit product: ${error.message}`,
+      });
+    },
   });
 
   const onSubmit: SubmitHandler<ProductSchema> = (data) => {
+    router.push("/dashboard/products");
     try {
       productsRouter.mutateAsync({
         ...data,
@@ -65,7 +96,7 @@ export default function Page() {
       {isError || (!data && !isLoading && <h3>This product doesnt exist</h3>)}
       {isLoading && <LoadingSkeleton />}
       {data && (
-        <form className="mt-[40px] pl-[30px]" onSubmit={handleSubmit(onSubmit)}>
+        <form className="pt-[40px] pl-[70px]" onSubmit={handleSubmit(onSubmit)}>
           <h3 className="text-2xl font-medium ">Editing Product</h3>
           <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
             <ItemLayout>

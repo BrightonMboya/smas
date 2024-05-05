@@ -119,8 +119,29 @@ export const columns: ColumnDef<Products>[] = [
           toast({
             description: "Product Deleted Succesfully",
           });
-
+        },
+        onSettled: () => {
           utils.products.all.invalidate();
+        },
+        onMutate: (product) => {
+          utils.products.all.cancel();
+
+          const prevData = utils.products.all.getData();
+          const updatedData = prevData?.filter(
+            (p) => p.id !== product.productId,
+          );
+          utils.products.all.setData(undefined, updatedData);
+          return { prevData };
+        },
+        onError: (error, data, ctx) => {
+          utils.products.all.setData(undefined, ctx?.prevData);
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: `${error.message}`,
+            // action: <ToastAction altText="Try again">Try again</ToastAction>,
+            duration: 1500,
+          });
         },
       });
       const { toast } = useToast();
