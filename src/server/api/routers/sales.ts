@@ -71,9 +71,9 @@ export const sales = createTRPCRouter({
         if (product.stockAvailable < input.quantity) {
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
-            message: "Insufficient Stock"
-          })
-          
+            message: "Insufficient Stock",
+          });
+
           // throw new Error("Insufficient stock");
         }
 
@@ -104,7 +104,10 @@ export const sales = createTRPCRouter({
         return newSales;
       } catch (cause) {
         console.log(cause);
-        throw cause;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to add the new sale",
+        });
       }
     }),
 

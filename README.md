@@ -119,3 +119,4 @@ using (
 - [] integrate payment system in the application with DPO
 - [] if the user hasnt paid for subscription they shouldnt see the app
 - [] check webdev cody implementation of optimistic updates
+- [] editing a sale logic is wrong

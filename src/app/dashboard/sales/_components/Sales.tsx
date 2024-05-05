@@ -43,8 +43,7 @@ export default function Sales() {
       toast({ description: "New Sale Added Succesfully" });
       reset();
     },
-    onMutate: (newSale) => {
-             
+    onMutate: (newSale) => {   
       // cancel outgoing fetches so that they dont overide the optimistic update
       utils.sales.allSales.cancel();
 
