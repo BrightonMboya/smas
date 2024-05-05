@@ -119,6 +119,8 @@ using (
 - [] integrate payment system in the application with DPO
 - [] if the user hasnt paid for subscription they shouldnt see the app
 - [x] check webdev cody implementation of optimistic updates
+- [x] add settings page for the project
+- [] implement logic in the settings page
 - [] editing a sale logic is wrong
 - [] the invoices logic is also wrong
 - [] the products are associated with sales as well, so if we delete a product, should we also delete all the sales associated with it?

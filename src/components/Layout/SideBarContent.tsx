@@ -81,7 +81,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           </Link>
           <Link
             className={`${baseLinkClass} ${pathname.startsWith("/dashboard/settings") && activeLinkClass} `}
-            href="#"
+            href="/dashboard/settings"
           >
             <SettingsIcon className="h-4 w-4" />
             Settings
