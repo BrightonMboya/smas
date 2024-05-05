@@ -1,8 +1,6 @@
 "use client";
-import Link from "next/link";
 import NoAsset from "~/components/Assets/NoAsset";
 import DebtList from "~/components/accounting/DebtsList";
-import Button from "~/components/ui/Button";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { api } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
@@ -18,10 +16,7 @@ export default function Page() {
         <div className="flex items-center justify-between pt-[40px]">
           <h3 className="text-3xl font-medium ">Your Debts</h3>
           <div className="flex items-center gap-2">
-              <AddDebtButton/>
-            {/* <Link href="/dashboard/debts/new">
-              <Button>New Debt</Button>
-            </Link> */}
+            <AddDebtButton />
           </div>
         </div>
         {data?.length === 0 && (

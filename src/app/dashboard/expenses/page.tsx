@@ -4,8 +4,6 @@ import { api } from "~/utils/api";
 import ExpenseList from "~/components/accounting/ExpenseList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
-import Link from "next/link";
-import Button from "~/components/ui/Button";
 import AddExpenseButton from "./_components/AddExpenseButton";
 
 export default function Page() {

@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/utils/hooks/useToast";
-import Link from "next/link";
 import { supplierSchema, ISupplierSchema } from "../_components/schema";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
 import { useRouter } from "next/navigation";
@@ -29,21 +28,33 @@ export default function Page() {
   const router = useRouter();
 
   const { isLoading, mutateAsync } = api.supplier.add.useMutation({
-    onSuccess: async () => {
+    onSuccess: () => {
       toast({ description: "Supplier Added Succesfully" });
       reset();
-      await utils.supplier.all.invalidate();
-      router.push("/dashboard/suppliers");
     },
-    onError: () => {
+    onMutate: (newSupplier) => {
+      utils.supplier.all.cancel();
+
+      const prevData = utils.supplier.all.getData();
+      utils.supplier.all.setData(undefined, (old) => [
+        // @ts-ignore
+        ...old, newSupplier]);
+      return { prevData };
+    },
+    onSettled: () => {
+      utils.supplier.all.invalidate();
+    },
+    onError: (error, newSale, ctx) => {
+      utils.supplier.all.setData(undefined, ctx?.prevData);
       toast({
         variant: "destructive",
-        description: "Failed to add the new supplier",
+        description: `Failed to add the new supplier ${error.message}`,
       });
     },
   });
 
   const onSubmit: SubmitHandler<ISupplierSchema> = (data) => {
+    router.push("/dashboard/suppliers");
     try {
       mutateAsync({
         ...data,
@@ -55,7 +66,7 @@ export default function Page() {
   return (
     <section className="pt-10">
       <Toaster />
-      <main className="pl-[40px] border-[1px] py-10 md:w-[1000px] bg-white rounded-md shadow-sm ml-[70px]  ">
+      <main className="ml-[70px] rounded-md border-[1px] bg-white py-10 pl-[40px] shadow-sm md:w-[1000px]  ">
         <div className="flex items-center space-x-10 pt-[20px] md:w-[1000px] md:justify-between  ">
           <h3 className="text-3xl font-medium ">New Supplier </h3>
           <div className="flex items-center gap-2">

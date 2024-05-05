@@ -47,17 +47,22 @@ export const supplier = createTRPCRouter({
     }),
 
   delete: protectedProcedure
-    .input(z.object({ productId: z.string() }))
+    .input(z.object({ supplierId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       try {
         return await ctx.db.suppliers.delete({
           where: {
-            id: input.productId,
+            id: input.supplierId,
           },
         });
       } catch (cause) {
         console.log(cause);
-        throw FAILED_TO_DELETE;
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to delete a supplier",
+          cause: cause,
+        });
+        // throw FAILED_TO_DELETE;
       }
     }),
 

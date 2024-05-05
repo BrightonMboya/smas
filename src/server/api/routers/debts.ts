@@ -20,17 +20,25 @@ export const debts = createTRPCRouter({
   createNewDebt: protectedProcedure
     .input(debtsSchema)
     .mutation(async ({ ctx, input }) => {
-      const newDebt = await ctx.db.debts.create({
-        data: {
-          debtorName: input.debtorName,
-          date: input.date,
-          amount: input.amount,
-          // @ts-ignore
-          organizations_id: ctx.user.id,
-        },
-      });
+      try {
+        const newDebt = await ctx.db.debts.create({
+          data: {
+            debtorName: input.debtorName,
+            date: input.date,
+            amount: input.amount,
+            // @ts-ignore
+            organizations_id: ctx.user.id,
+          },
+        });
 
-      return newDebt;
+        return newDebt;
+      } catch (cause) {
+        // console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to create new debt",
+        });
+      }
     }),
 
   markAsPaid: protectedProcedure
@@ -58,7 +66,7 @@ export const debts = createTRPCRouter({
       }
     }),
 
-    deleteDebt: protectedProcedure
+  deleteDebt: protectedProcedure
     .input(
       z.object({
         debtId: z.string(),

@@ -42,10 +42,28 @@ export default function Sales() {
     onSuccess: () => {
       toast({ description: "New Sale Added Succesfully" });
       reset();
-      utils.sales.allSales.invalidate();
-      router.push("/dashboard/sales");
     },
-    onError: (cause) => {
+    onMutate: (newSale) => {   
+      // cancel outgoing fetches so that they dont overide the optimistic update
+      utils.sales.allSales.cancel();
+
+      // get the data from the query cache
+      const prevData = utils.sales.allSales.getData();
+
+      // optimistic update the data with our new sale
+      utils.sales.allSales.setData(undefined, (old) => [
+        // @ts-ignore
+        ...old,
+        newSale,
+      ]);
+      //  return the prev data so that we can revert once anything goes wrong
+      return { prevData };
+    },
+    onSettled: () => {
+      utils.sales.allSales.invalidate();
+    },
+    onError: (cause, newSale, ctx) => {
+      utils.sales.allSales.setData(undefined, ctx?.prevData);
       toast({
         variant: "destructive",
         description: `Failed to create a sale ${cause.message}`,
@@ -53,6 +71,7 @@ export default function Sales() {
     },
   });
   const onSubmit: SubmitHandler<SalesSchema> = (data) => {
+    router.push("/dashboard/sales");
     mutateAsync({
       ...data,
     });

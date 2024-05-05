@@ -112,7 +112,7 @@ export const columns: ColumnDef<Suppliers>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const product = row.original;
+      const supplier = row.original;
       const utils = api.useUtils();
 
       const { mutateAsync, isLoading } = api.supplier.delete.useMutation({
@@ -120,8 +120,26 @@ export const columns: ColumnDef<Suppliers>[] = [
           toast({
             description: "Supplier Deleted Succesfully",
           });
-
+        },
+        onSettled: () => {
           utils.supplier.all.invalidate();
+        },
+        onMutate: (supplier) => {
+          utils.supplier.all.fetch();
+
+          const prevData = utils.supplier.all.getData();
+          const updatedData = prevData?.filter(
+            (item) => item.id !== supplier.supplierId,
+          );
+          utils.supplier.all.setData(undefined, updatedData);
+          return { prevData };
+        },
+
+        onError: (error, supplier, ctx) => {
+          utils.supplier.all.setData(undefined, ctx?.prevData);
+          toast({
+            description: `Error deleting supplier ${error.message}`,
+          });
         },
       });
       const { toast } = useToast();
@@ -143,7 +161,7 @@ export const columns: ColumnDef<Suppliers>[] = [
                 type="button"
                 disabled={isLoading}
                 onClick={() =>
-                  mutateAsync({ productId: product.id as unknown as string })
+                  mutateAsync({ supplierId: supplier.id as unknown as string })
                 }
               >
                 Delete Supplier

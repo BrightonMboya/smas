@@ -35,19 +35,33 @@ export default function AddDebtForm(props: Props) {
     onSuccess: () => {
       toast({ description: "Debt Added Succesfully" });
       reset();
-      utils.debts.getAllDebts.invalidate();
-      props.setDialogOpen(false)
     },
-    onError: () => {
+    onMutate: (newDebt) => {
+      utils.debts.getAllDebts.cancel();
+      const prevData = utils.debts.getAllDebts.getData();
+
+      utils.debts.getAllDebts.setData(undefined, (old) => [
+        // @ts-ignore
+        ...old,
+        newDebt,
+      ]);
+      return { prevData };
+    },
+    onSettled: () => {
+      utils.debts.getAllDebts.invalidate();
+    },
+    onError: (error, newDebt, ctx) => {
+      utils.debts.getAllDebts.setData(undefined, ctx?.prevData);
       toast({
         variant: "destructive",
-        description: "Failed to add new debt",
+        description: `Failed to add new debt: ${error.message}`,
       });
     },
   });
 
   const onSubmit: SubmitHandler<IDebtsSchema> = async (data) => {
     try {
+      props.setDialogOpen(false);
       mutateAsync({
         ...data,
       });

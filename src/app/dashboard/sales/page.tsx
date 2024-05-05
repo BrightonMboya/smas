@@ -9,7 +9,6 @@ import Button from "~/components/ui/Button";
 
 export default function Page() {
   const { isLoading, data } = api.sales.allSales.useQuery();
-  console.log(data)
 
   return (
     <main className="pl-[70px] md:max-w-[90%]">

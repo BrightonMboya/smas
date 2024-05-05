@@ -9,7 +9,6 @@ import {
   CardContent,
 } from "../ui/Card";
 import Input from "../ui/Input";
-import z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
@@ -38,23 +37,45 @@ export default function Expenses(props: Props) {
   });
   const { toast } = useToast();
   const utils = api.useUtils();
+
   const { isLoading, mutateAsync } = api.accounting.addExpense.useMutation({
     onSuccess: () => {
       toast({ description: "Expense Added Succesfully" });
       reset();
-      utils.accounting.allExpenses.invalidate();
-      props.setDialogOpen(false);
     },
-    onError: () => {
+    onSettled: () => {
+      // sync with the server once the mutation is settled
+      utils.accounting.allExpenses.invalidate();
+    },
+    onMutate: (newExpense) => {
+      // cancel outgoing fetches so that they dont overide the optimistic update
+      utils.accounting.allExpenses.cancel();
+
+      // get the data from the query cache
+      const prevData = utils.accounting.allExpenses.getData();
+
+      // optimistic update the data with our new expense
+      utils.accounting.allExpenses.setData(undefined, (old) => [
+        // @ts-ignore
+        ...old,
+        newExpense,
+      ]);
+      //  return the prev data so that we can revert once anything goes wrong
+      return { prevData };
+    },
+    onError: (error, newExpense, ctx) => {
+      // if the mutation fails, use the context-value from on-mutate
+      utils.accounting.allExpenses.setData(undefined, ctx?.prevData);
       toast({
         variant: "destructive",
-        description: "Failed to record the new expense",
+        description: `Failed to record the new expense: ${error.message}`,
       });
     },
   });
 
   const onSubmit: SubmitHandler<ExpensesSchema> = (data) => {
     try {
+      props.setDialogOpen(false);
       mutateAsync({
         ...data,
       });
@@ -62,7 +83,7 @@ export default function Expenses(props: Props) {
       console.log(cause);
       toast({
         variant: "destructive",
-        description: "Failed to record the new expense",
+        description: `Failed to record the new expense`,
       });
     }
   };

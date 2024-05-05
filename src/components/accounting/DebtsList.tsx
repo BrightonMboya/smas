@@ -125,8 +125,34 @@ export const columns: ColumnDef<Debts>[] = [
           toast({
             description: "Debt marked as Paid",
           });
-
+        },
+        onSettled: () => {
           utils.debts.getAllDebts.invalidate();
+        },
+        onMutate: (debt) => {
+          utils.debts.getAllDebts.cancel();
+          const prevData = utils.debts.getAllDebts.getData();
+          const updatedData = prevData?.map((expense) => {
+            if (expense.id === debt.debtId) {
+              // If the expense ID matches, create a new object with the expense marked as paid
+              return {
+                ...expense,
+                paid: true, 
+              };
+            } else {
+              // If the expense ID doesn't match, return the expense unchanged
+              return expense;
+            }
+          });
+          utils.debts.getAllDebts.setData(undefined, updatedData);
+          return { prevData };
+        },
+        onError: (error, debt, ctx) => {
+          utils.debts.getAllDebts.setData(undefined, ctx?.prevData);
+          toast({
+            variant: "destructive",
+            description: `Failed to mark debt as paid: ${error.message}`,
+          });
         },
       });
       const { mutateAsync, isLoading } = api.debts.deleteDebt.useMutation({
@@ -134,8 +160,27 @@ export const columns: ColumnDef<Debts>[] = [
           toast({
             description: "Debt Deleted Succesfully",
           });
-
+        },
+        onSettled: () => {
           utils.debts.getAllDebts.invalidate();
+        },
+        onMutate: (newDebt) => {
+          utils.debts.getAllDebts.cancel();
+          const prevData = utils.debts.getAllDebts.getData();
+
+          const updatedDebts = prevData?.filter(
+            (debt) => debt.id !== newDebt.debtId,
+          );
+
+          utils.debts.getAllDebts.setData(undefined, updatedDebts);
+          return { prevData };
+        },
+        onError: (error, newDebt, ctx) => {
+          utils.debts.getAllDebts.setData(undefined, ctx?.prevData);
+          toast({
+            variant: "destructive",
+            description: `Failed to delete debt: ${error.message}`,
+          });
         },
       });
       const { toast } = useToast();
@@ -154,7 +199,6 @@ export const columns: ColumnDef<Debts>[] = [
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => {
-                
                 debtRouter.mutateAsync({
                   debtId: debt.id,
                 });

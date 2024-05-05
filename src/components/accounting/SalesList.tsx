@@ -38,6 +38,7 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
 import { format } from "date-fns";
+import { Spinner } from "../ui/LoadingSkeleton";
 
 export type Sales = {
   id: number;
@@ -86,7 +87,9 @@ export const columns: ColumnDef<Sales>[] = [
     accessorKey: "productName",
     header: "product Name",
     cell: ({ row }) => (
-      <div className="capitalize">{row.original.Products.name}</div>
+      <div className="capitalize">
+        {row.original.Products?.name ? row.original.Products.name : <Spinner/>}
+      </div>
     ),
   },
   {
@@ -115,7 +118,15 @@ export const columns: ColumnDef<Sales>[] = [
   {
     accessorKey: "date",
     header: "Date",
-    cell: ({ row }) => <div>{format(row.getValue("date"), "PPP")}</div>,
+    cell: ({ row }) => (
+      <div>
+        {row.getValue("date") ? (
+          format(row.getValue("date"), "PPP")
+        ) : (
+          <Spinner />
+        )}
+      </div>
+    ),
   },
 
   {
@@ -124,17 +135,34 @@ export const columns: ColumnDef<Sales>[] = [
     cell: ({ row }) => {
       const sale = row.original;
       const utils = api.useUtils();
+      const { toast } = useToast();
 
       const { mutateAsync, isLoading } = api.accounting.deleteSale.useMutation({
         onSuccess: () => {
           toast({
             description: "Sale Deleted Succesfully",
           });
-
+        },
+        onSettled: () => {
           utils.sales.allSales.invalidate();
         },
+        onMutate: (sale) => {
+          utils.sales.allSales.cancel();
+
+          const prevData = utils.sales.allSales.getData();
+          const updatedData = prevData?.filter(
+            (data) => data.id !== sale.saleId,
+          );
+          utils.sales.allSales.setData(undefined, updatedData);
+          return { prevData };
+        },
+        onError: (error, sale, ctx) => {
+          utils.sales.allSales.setData(undefined, ctx?.prevData);
+          toast({
+            description: `Error deleting sale: ${error.message}`,
+          });
+        },
       });
-      const { toast } = useToast();
 
       return (
         <DropdownMenu>
@@ -144,7 +172,7 @@ export const columns: ColumnDef<Sales>[] = [
               <DotsHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="font-montserrat bg-white">
+          <DropdownMenuContent align="end" className="bg-white font-montserrat">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
