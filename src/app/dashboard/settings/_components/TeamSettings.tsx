@@ -1,9 +1,13 @@
+"use client";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import { Label } from "~/components/ui/label";
 import TeamMembers from "./TeamMembers";
+import { api } from "~/trpc/react";
 
 export default function TeamSettings() {
+  const { data } = api.organization.getAllUsers.useQuery();
+  console.log(data);
   return (
     <>
       <div className="rounded-md border bg-white">

@@ -112,15 +112,15 @@ using (
 
 - [x] debug why fonts are not loading
 - [x] chnage the font to inter
-- [] add user profile widget on the layout screen
+- [x] add user profile widget on the layout screen
 - [x] try to change the full ui inspired by medusa ui
-- [] Add a feature of admin to add more teams
+- [] add a feature of uploading img to the settings page 
 - [] Add email confirmation feature when signing up
 - [] integrate payment system in the application with DPO
 - [] if the user hasnt paid for subscription they shouldnt see the app
 - [x] check webdev cody implementation of optimistic updates
 - [x] add settings page for the project
-- [] implement logic in the settings page
+- [x] implement logic in the settings page
 - [] editing a sale logic is wrong
 - [] the invoices logic is also wrong
 - [] the products are associated with sales as well, so if we delete a product, should we also delete all the sales associated with it?

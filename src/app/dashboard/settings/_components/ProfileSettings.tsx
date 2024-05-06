@@ -9,6 +9,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
 import { useToast } from "~/utils/hooks/useToast";
+import { Skeleton } from "~/components/ui/Skeleton";
+
+function ProfileSkeleton() {
+  return (
+    <div className="space-y-5">
+      <Skeleton className="h-6 w-[200px]" />
+      <Skeleton className="h-6 w-full" />
+
+      <Skeleton className="h-6 w-[200px]" />
+      <Skeleton className="h-6 w-full" />
+    </div>
+  );
+}
 
 const organizationSchema = z.object({
   organization_name: z.string(),
@@ -64,13 +77,13 @@ export default function ProfileSettings() {
 
   return (
     <div className="rounded-md border bg-white">
-      
       <div className="rounded-t-md border-b bg-neutral-50 px-4 py-2 sm:px-6 md:py-3">
         <span className="mb-4 text-base font-medium sm:text-lg">
           Profile Information
         </span>
       </div>
       <div className="space-y-5 p-4 sm:px-6 lg:w-[60%]">
+       {isLoading && <ProfileSkeleton/>}
         {data && !isLoading && (
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-2">

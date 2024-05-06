@@ -6,7 +6,7 @@ export const organizationRouter = createTRPCRouter({
   editOrganization: protectedProcedure
     .input(z.object({
       organization_name: z.string(),
-    //   email: z.string().email(),
+      //   email: z.string().email(),
     }))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -32,11 +32,25 @@ export const organizationRouter = createTRPCRouter({
           message: "Failed to edit organization",
         });
       }
-      // return await ctx.prisma.organization.update({
-      //     where: {
-      //         id: ctx.user.organization_id,
-      //     },
-      //     data: input,
-      // });
     }),
+
+  getAllUsers: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.supabase.auth.admin.listUsers();
+  }),
+
+  deleteOrganization: protectedProcedure.mutation(async ({ ctx }) => {
+    try {
+      return await ctx.db.organizations.delete({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+    } catch (cause) {
+      console.log(cause);
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Failed to delete organization",
+      });
+    }
+  }),
 });

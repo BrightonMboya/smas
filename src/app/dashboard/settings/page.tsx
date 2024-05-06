@@ -13,22 +13,21 @@ export default function Page() {
     <div className="container mx-auto py-12">
       <Toaster />
       <h1 className="mb-8 text-4xl">Account Settings</h1>
-      <Tabs defaultValue="general">
+      {/* <Tabs defaultValue="general">
         <TabsList className="border-b">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
           <TabsTrigger value="danger">Danger Zone</TabsTrigger>
         </TabsList>
-        <TabsContent value="general">
-          <GeneralSettings />
-        </TabsContent>
+        <TabsContent value="general"><GeneralSettings /></TabsContent>
         <TabsContent value="danger">
           <DangerZone />
         </TabsContent>
         <TabsContent value="team">
           <TeamSettings />
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
+      <GeneralSettings />
     </div>
   );
 }
