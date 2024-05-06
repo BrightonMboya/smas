@@ -37,6 +37,7 @@ import {
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { useToast } from "~/utils/hooks/useToast";
+import { DeleteProductButton } from "./DeleteProductButton";
 
 export type Products = {
   id: number;
@@ -167,9 +168,9 @@ export const columns: ColumnDef<Products>[] = [
                 Edit Product
               </Link>
             </DropdownMenuItem>
-
+            <DeleteProductButton productId={product.id as unknown as string} />
             <DropdownMenuItem className="cursor-pointer">
-              <Button
+              {/* <Button
                 variant="destructive"
                 type="button"
                 disabled={isLoading}
@@ -178,7 +179,7 @@ export const columns: ColumnDef<Products>[] = [
                 }
               >
                 Delete Product
-              </Button>
+              </Button> */}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

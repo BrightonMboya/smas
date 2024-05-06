@@ -51,6 +51,7 @@ model Products {
     Organizations   Organizations @relation(fields: [organization_id], references: [id])
     organization_id String
 
+
     // @@schema("auth")
 }
 
@@ -60,7 +61,7 @@ model Sales {
     amount          Int
     quantity        Int
     status          String
-    Products        Products      @relation(fields: [productsId], references: [id])
+    Products        Products      @relation(fields: [productsId], references: [id], onDelete: Cascade)
     productsId      String
     date            DateTime
     Organizations   Organizations @relation(fields: [organization_id], references: [id])

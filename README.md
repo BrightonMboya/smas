@@ -123,4 +123,4 @@ using (
 - [x] implement logic in the settings page
 - [] editing a sale logic is wrong
 - [] the invoices logic is also wrong
-- [] the products are associated with sales as well, so if we delete a product, should we also delete all the sales associated with it?
+- [x] the products are associated with sales as well, so if we delete a product, should we also delete all the sales associated with it?
