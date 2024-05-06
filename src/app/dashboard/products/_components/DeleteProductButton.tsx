@@ -1,6 +1,5 @@
 "use client";
-
-import { LoaderButton } from "../_components/loaderButton";
+import { LoaderButton } from "~/app/dashboard/settings/_components/loaderButton";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -22,22 +21,51 @@ import {
 } from "~/components/ui/form";
 import Input from "~/components/ui/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
+import { useToast } from "~/utils/hooks/useToast";
 
 export const deleteSchema = z.object({
-  confirm: z.string().refine((v) => v === "Please delete", {
-    message: "Please type 'Please delete' to confirm",
+  confirm: z.string().refine((v) => v === "delete", {
+    message: "Please type 'delete' to confirm",
   }),
 });
 
-export function DeleteAccountButton() {
+export function DeleteProductButton({ productId }: { productId: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { data, isLoading, mutateAsync } =
-    api.organization.deleteOrganization.useMutation();
+  const { toast } = useToast();
+  const utils = api.useUtils();
+  const { mutateAsync, isLoading } = api.products.delete.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Product deleted",
+        duration: 5000,
+      });
+    },
+    onSettled: () => {
+      setIsOpen(false);
+      utils.products.all.invalidate();
+    },
+    onMutate: (product) => {
+      utils.products.all.cancel();
+      const prevData = utils.products.all.getData();
+      const newData = prevData?.filter((p) => p.id !== product.productId);
+      utils.products.all.setData(undefined, newData);
+      return { prevData };
+    },
+    onError: (err, data, ctx) => {
+      toast({
+        title: "Error",
+        description: `${err.message}`,
+        variant: "destructive",
+        duration: 5000,
+      });
+      utils.products.all.setData(undefined, ctx?.prevData);
+    },
+  });
 
   const form = useForm<z.infer<typeof deleteSchema>>({
     resolver: zodResolver(deleteSchema),
@@ -45,27 +73,26 @@ export function DeleteAccountButton() {
       confirm: "",
     },
   });
-  const router = useRouter();
 
   function onSubmit() {
-    router.push("/auth/sign-in");
-    mutateAsync();
+    mutateAsync({
+      productId,
+    });
   }
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button className="w-fit" variant="destructive">
-          Delete Account
+        <Button className="w-fit" variant="destructive" type="button">
+          Delete Product
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            Deleting your account means you will not be able to recover your
-            data in the future. Please type <strong>Please delete</strong> to
-            confirm.
+            By deleting this product, you will also delete all of the sales
+            associated with it. Please type <strong>delete</strong> to confirm.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

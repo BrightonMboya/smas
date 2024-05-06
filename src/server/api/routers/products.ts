@@ -63,6 +63,10 @@ export const products = createTRPCRouter({
         });
       } catch (cause) {
         console.log(cause);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Failed to delete product`,
+        });
       }
     }),
 

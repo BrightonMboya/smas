@@ -11,7 +11,6 @@ export const debts = createTRPCRouter({
   getAllDebts: protectedProcedure.query(({ ctx }) => {
     return ctx.db.debts.findMany({
       where: {
-        // @ts-ignore
         organizations_id: ctx.user.id,
       },
     });
@@ -26,7 +25,6 @@ export const debts = createTRPCRouter({
             debtorName: input.debtorName,
             date: input.date,
             amount: input.amount,
-            // @ts-ignore
             organizations_id: ctx.user.id,
           },
         });

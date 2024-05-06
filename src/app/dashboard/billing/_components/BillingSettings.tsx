@@ -30,7 +30,7 @@ export default function BillingDSettings() {
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="payment-method">Payment Method</Label>
-            <Select id="payment-method">
+            <Select>
               <SelectTrigger>
                 <SelectValue placeholder="Select payment method" />
               </SelectTrigger>
