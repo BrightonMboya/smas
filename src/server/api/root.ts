@@ -7,6 +7,7 @@ import { debts } from "./routers/debts";
 import { dashboard } from "./routers/dashboard";
 import { auth } from "./routers/auth";
 import { accounting } from "./routers/expenses";
+import { organizationRouter } from "./routers/organization";
 
 /**
  * This is the primary router for your server.
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   invoices,
   sales,
   debts,
+  organization: organizationRouter,
   // dashboard,
   auth,
 });

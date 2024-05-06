@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useToast } from "~/utils/hooks/useToast";
 import { Toaster } from "~/components/ui/toaster";
-import { Suspense } from "react";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { useRouter } from "next/navigation";
 

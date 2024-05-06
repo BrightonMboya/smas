@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { signOut } from "~/app/auth/actions";
 
 interface ProfileProps {
   user: User;
@@ -98,7 +99,9 @@ export function ProfileIcon({ user }: ProfileProps) {
           </div>
         </div>
 
-        <Button className="fixed bottom-10  space-x-2" variant="destructive">
+        <Button className="fixed bottom-10  space-x-2" variant="destructive" 
+        onClick={() => signOut()}
+        >
           <>
             <LogOutIcon />
             <span>Log out</span>
