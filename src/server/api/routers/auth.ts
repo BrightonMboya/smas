@@ -1,8 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const auth = createTRPCRouter({
-  getProfile: protectedProcedure
-    .query(async ({ ctx }) => {
-      return ctx.user.id;
-    }),
+  getProfileData: protectedProcedure.query(({ ctx }) => {
+    return ctx.user;
+  }),
 });

@@ -9,15 +9,16 @@ import { createClient } from "~/utils/supabase/server";
 import { cache } from "react";
 
 
+
 export const getUser = cache(async () => {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
-  if (error || data.user?.id === null) {
-    return {
-      user: null,
-      session: null,
-    };
-  }
+  // if (error || data.user?.id === null) {
+  //   return {
+  //     user: null,
+  //     session: null,
+  //   };
+  // }
 
   return data.user;
 });

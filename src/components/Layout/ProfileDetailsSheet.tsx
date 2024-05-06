@@ -1,4 +1,5 @@
 "use client";
+import { User } from "@supabase/supabase-js";
 import { LogOutIcon, Mail, MessageSquare, UserRound } from "lucide-react";
 import Button from "~/components/ui/Button";
 import { Separator } from "~/components/ui/seperator";
@@ -10,22 +11,39 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export function ProfileIcon() {
+interface ProfileProps {
+  user: User;
+}
+
+function getAvatarFallback(text: string) {
+  // Split the text into words
+  const words = text.trim().split(/\s+/);
+
+  // Extract the characters of the first two words or just the first word if there's only one
+  let fallback = "";
+  for (let i = 0; i < Math.min(words.length, 2); i++) {
+    fallback += words?.[i]?.[0];
+  }
+
+  return fallback.toUpperCase(); // Convert to uppercase for consistency
+}
+
+export function ProfileIcon({ user }: ProfileProps) {
+  const avatarFallback = getAvatarFallback(
+    user?.user_metadata?.organization_name,
+  );
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <img
-          alt="Avatar"
-          className="cursor-pointer rounded-full"
-          height="32"
-          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D"
-          style={{
-            aspectRatio: "32/32",
-            objectFit: "cover",
-          }}
-          width="32"
-        />
+        <Avatar className="cursor-pointer">
+          <AvatarImage
+            src={user?.user_metadata?.avatar_url}
+            alt="user_profile"
+          />
+          <AvatarFallback>{avatarFallback}</AvatarFallback>
+        </Avatar>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -38,21 +56,16 @@ export function ProfileIcon() {
         <Separator className="mt-5" />
         <div className="grid gap-4 py-4">
           <div className="flex items-center space-x-3 text-sm">
-            <img
-              alt="Avatar"
-              className="rounded-full"
-              height="32"
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D"
-              style={{
-                aspectRatio: "32/32",
-                objectFit: "cover",
-              }}
-              width="32"
-            />
-
+            <Avatar>
+              <AvatarImage
+                src={user?.user_metadata?.avatar_url}
+                alt="user_profile"
+              />
+              <AvatarFallback>{avatarFallback}</AvatarFallback>
+            </Avatar>
             <div>
-              <p>Tazama Africa Safaris</p>
-              <p>brighton.mboya.io@gmail.com</p>
+              <p>{user?.user_metadata?.organization_name}</p>
+              <p>{user?.email}</p>
             </div>
           </div>
 
