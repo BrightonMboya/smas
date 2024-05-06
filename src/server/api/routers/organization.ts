@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { supabase } from "~/utils/supabase/admin";
 
 export const organizationRouter = createTRPCRouter({
   editOrganization: protectedProcedure
@@ -40,11 +41,42 @@ export const organizationRouter = createTRPCRouter({
 
   deleteOrganization: protectedProcedure.mutation(async ({ ctx }) => {
     try {
-      return await ctx.db.organizations.delete({
+      await ctx.db.expenses.deleteMany({
         where: {
           id: ctx.user.id,
         },
       });
+      await ctx.db.products.deleteMany({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+      await ctx.db.sales.deleteMany({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+      await ctx.db.invoices.deleteMany({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+      await ctx.db.suppliers.deleteMany({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+      await ctx.db.debts.deleteMany({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+      await ctx.db.organizations.delete({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+      return supabase.auth.admin.deleteUser(ctx.user.id);
     } catch (cause) {
       console.log(cause);
       throw new TRPCError({

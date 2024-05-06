@@ -22,9 +22,11 @@ import {
 } from "~/components/ui/form";
 import Input from "~/components/ui/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { api } from "~/trpc/react";
 
 export const deleteSchema = z.object({
   confirm: z.string().refine((v) => v === "Please delete", {
@@ -34,7 +36,8 @@ export const deleteSchema = z.object({
 
 export function DeleteAccountButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [pending, startTransition] = useTransition();
+  const { data, isLoading, mutateAsync } =
+    api.organization.deleteOrganization.useMutation();
 
   const form = useForm<z.infer<typeof deleteSchema>>({
     resolver: zodResolver(deleteSchema),
@@ -42,16 +45,11 @@ export function DeleteAccountButton() {
       confirm: "",
     },
   });
+  const router = useRouter();
 
   function onSubmit() {
-    // trackEvent("user deleted account");
-    startTransition(() => {
-      //   deleteAccountAction().then(() =>
-      //     signOut({
-      //       callbackUrl: "/",
-      //     }),
-      //   );
-    });
+    router.push("/auth/sign-in");
+    mutateAsync();
   }
 
   return (
@@ -89,7 +87,7 @@ export function DeleteAccountButton() {
 
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <LoaderButton isLoading={pending} variant="destructive">
+              <LoaderButton isLoading={isLoading} variant="destructive">
                 Delete
               </LoaderButton>
             </AlertDialogFooter>

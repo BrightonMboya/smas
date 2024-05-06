@@ -33,7 +33,7 @@ model Expenses {
     date            DateTime
     amount          Int
     description     String?
-    Organizations   Organizations @relation(fields: [organization_id], references: [id])
+    Organizations   Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
     organization_id String
 
     // @@schema("auth")
@@ -48,9 +48,8 @@ model Products {
     stockAvailable  Int
     description     String?
     sales           Sales[]
-    Organizations   Organizations @relation(fields: [organization_id], references: [id])
+    Organizations   Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
     organization_id String
-
 
     // @@schema("auth")
 }
@@ -64,7 +63,7 @@ model Sales {
     Products        Products      @relation(fields: [productsId], references: [id], onDelete: Cascade)
     productsId      String
     date            DateTime
-    Organizations   Organizations @relation(fields: [organization_id], references: [id])
+    Organizations   Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
     organization_id String
 
     // @@schema("auth")
@@ -80,7 +79,7 @@ model Invoices {
     clientName      String
     companyName     String
     invoiceItems    InvoiceItems[]
-    Organizations   Organizations  @relation(fields: [organization_id], references: [id])
+    Organizations   Organizations  @relation(fields: [organization_id], references: [id], onDelete: Cascade)
     organization_id String
 
     // @@schema("public")
@@ -92,7 +91,7 @@ model InvoiceItems {
     quantity   Int
     amount     Int
     rate       Int
-    Invoices   Invoices @relation(fields: [invoicesId], references: [id])
+    Invoices   Invoices @relation(fields: [invoicesId], references: [id], onDelete: Cascade)
     invoicesId String
 
     // @@schema("auth")
@@ -105,7 +104,7 @@ model Suppliers {
     product         String
     company         String
     notes           String?
-    Organizations   Organizations @relation(fields: [organization_id], references: [id])
+    Organizations   Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
     organization_id String
 
     // @@schema("auth")
@@ -117,7 +116,7 @@ model Debts {
     amount           Int
     date             DateTime
     paid             Boolean       @default(false)
-    Organizations    Organizations @relation(fields: [organizations_id], references: [id])
+    Organizations    Organizations @relation(fields: [organizations_id], references: [id], onDelete: Cascade)
     organizations_id String
 
     // @@schema("auth")
