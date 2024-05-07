@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { CTAButtons } from "./CTAButtons";
 import { SparklesIcon } from "lucide-react";
+import Button from "../ui/Button";
 
 export function HeroText(props: { children: React.ReactNode }) {
   return (
@@ -28,8 +29,6 @@ export default function Hero(props: {
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
       <div className="pt-24 sm:pb-12 sm:pt-32">
         <div className="mx-auto max-w-7xl items-center px-6 lg:px-8">
-          {/* <HeroTag /> */}
-
           <div className="mx-auto flex max-w-3xl flex-col items-center justify-center text-center">
             <div className="gradient-box font-cal z-10 mb-8 rounded-full px-6 py-2.5 text-sm font-medium">
               <span className="relative z-30">

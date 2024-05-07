@@ -8,8 +8,6 @@ import { createClient } from "~/utils/supabase/server";
 
 import { cache } from "react";
 
-
-
 export const getUser = cache(async () => {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
@@ -22,8 +20,6 @@ export const getUser = cache(async () => {
 
   return data.user;
 });
-
-
 
 export const signIn = async (formData: FormData) => {
   "use server";
@@ -40,7 +36,7 @@ export const signIn = async (formData: FormData) => {
     return redirect("/auth/sign-in?message=Could not authenticate user");
   }
 
-  return redirect("/dashboard/accounting");
+  return redirect("/dashboard/products");
 };
 
 export const signOut = async () => {
