@@ -3,7 +3,6 @@ import * as convert from "xml-js";
 
 class Payments {
   companyToken: string;
-  // constructor
   constructor(companyToken: string) {
     this.companyToken = companyToken;
   }
@@ -73,7 +72,7 @@ class Payments {
     transactionToken: string,
     phoneNumber: string,
     mno: string,
-    mnoCountry: string
+    mnoCountry: string,
   ) {
     const payLoad = `
     <?xml version="1.0" encoding="UTF-8"?>
@@ -186,7 +185,7 @@ class Payments {
     cardNumber: string,
     creditCardExpiry: string,
     cvv: string,
-    cardHolderName: string
+    cardHolderName: string,
   ) {
     const payLoad = `
     <?xml version="1.0" encoding="utf-8"?>
@@ -200,20 +199,20 @@ class Payments {
     <CardHolderName>${cardHolderName}</CardHolderName>
     <ChargeType></ChargeType>
     </API3G>`;
-     let config = {
-       method: "post",
-       maxBodyLength: Infinity,
-       url: "https://secure.3gdirectpay.com/API/v6/",
-       headers: {
-         "Content-Type": "application/xml",
-       },
-       data: payLoad,
-     };
-     const xmlResponse = await axios.request(config);
-     const jsonResponse = convert.xml2js(xmlResponse.data, {
-       compact: true,
-       alwaysChildren: true,
-     });
-     return jsonResponse;
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://secure.3gdirectpay.com/API/v6/",
+      headers: {
+        "Content-Type": "application/xml",
+      },
+      data: payLoad,
+    };
+    const xmlResponse = await axios.request(config);
+    const jsonResponse = convert.xml2js(xmlResponse.data, {
+      compact: true,
+      alwaysChildren: true,
+    });
+    return jsonResponse;
   }
 }
