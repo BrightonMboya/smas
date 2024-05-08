@@ -23,8 +23,9 @@ model Organizations {
     invoices     Invoices[]
     suppliers    Suppliers[]
     debts        Debts[]
-
-    // @@schema("auth")
+    Payments     Payments[]
+    isSubscribed Boolean     @default(false)
+    nextPayment  DateTime?
 }
 
 model Expenses {
@@ -120,4 +121,15 @@ model Debts {
     organizations_id String
 
     // @@schema("auth")
+}
+
+model Payments {
+    id                Int           @id @default(autoincrement())
+    amount            String
+    date              DateTime
+    transaction_token String
+    currency          String
+    name              String
+    Organizations     Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+    organization_id   String
 }
