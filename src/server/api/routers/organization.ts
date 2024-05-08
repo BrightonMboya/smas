@@ -7,6 +7,7 @@ export const organizationRouter = createTRPCRouter({
   editOrganization: protectedProcedure
     .input(z.object({
       organization_name: z.string(),
+      avatar_url: z.string(),
       //   email: z.string().email(),
     }))
     .mutation(async ({ ctx, input }) => {
@@ -15,8 +16,10 @@ export const organizationRouter = createTRPCRouter({
         await ctx.supabase.auth.updateUser({
           data: {
             organization_name: input.organization_name,
+            avatar_url: input.avatar_url,
           },
         });
+
         return await ctx.db.organizations.update({
           where: {
             id: ctx.user.id,
