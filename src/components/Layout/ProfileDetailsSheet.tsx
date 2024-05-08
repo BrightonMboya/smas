@@ -18,10 +18,9 @@ interface ProfileProps {
   user: User;
 }
 
-function getAvatarFallback(text: string) {
+export function getAvatarFallback(text: string) {
   // Split the text into words
   const words = text.trim().split(/\s+/);
-
   // Extract the characters of the first two words or just the first word if there's only one
   let fallback = "";
   for (let i = 0; i < Math.min(words.length, 2); i++) {
@@ -35,12 +34,13 @@ export function ProfileIcon({ user }: ProfileProps) {
   const avatarFallback = getAvatarFallback(
     user?.user_metadata?.organization_name,
   );
+
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Avatar className="cursor-pointer">
           <AvatarImage
-            src={user?.user_metadata?.avatar_url}
+            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile_pics/${user?.user_metadata?.avatar_url}`}
             alt="user_profile"
           />
           <AvatarFallback>{avatarFallback}</AvatarFallback>
@@ -99,8 +99,10 @@ export function ProfileIcon({ user }: ProfileProps) {
           </div>
         </div>
 
-        <Button className="fixed bottom-10  space-x-2" variant="destructive" 
-        onClick={() => signOut()}
+        <Button
+          className="fixed bottom-10  space-x-2"
+          variant="destructive"
+          onClick={() => signOut()}
         >
           <>
             <LogOutIcon />

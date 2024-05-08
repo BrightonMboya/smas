@@ -10,13 +10,19 @@ import { useEffect } from "react";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
 import { useToast } from "~/utils/hooks/useToast";
 import { Skeleton } from "~/components/ui/Skeleton";
+import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
+import { getAvatarFallback } from "~/components/Layout/ProfileDetailsSheet";
+import type { User } from "@supabase/supabase-js";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { createClient } from "~/utils/supabase/client";
+import { env } from "~/env";
 
 function ProfileSkeleton() {
   return (
     <div className="space-y-5">
       <Skeleton className="h-6 w-[200px]" />
       <Skeleton className="h-6 w-full" />
-
       <Skeleton className="h-6 w-[200px]" />
       <Skeleton className="h-6 w-full" />
     </div>
@@ -33,6 +39,8 @@ type OrganizationSchema = z.infer<typeof organizationSchema>;
 export default function ProfileSettings() {
   const utils = api.useUtils();
   const { data, isLoading } = api.auth.getProfileData.useQuery();
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   const { toast } = useToast();
 
   const orgRouter = api.organization.editOrganization.useMutation({
@@ -71,8 +79,44 @@ export default function ProfileSettings() {
     }
   }, [data, setValue]);
 
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // @ts-ignore
+    const selectedFile = e.target?.files[0]!;
+
+    setFile(selectedFile);
+  };
+
   const onSubmit: SubmitHandler<OrganizationSchema> = async (data) => {
-    orgRouter.mutate({ organization_name: data.organization_name });
+    utils.organization.invalidate();
+    // uploading the file to supabase
+    setUploadingImage(true);
+    const extensionType = file?.name.split(".")[1];
+    const supabase = createClient();
+    const userId = (await supabase.auth.getUser()).data.user?.id;
+
+    const res = await supabase.storage
+      .from("profile_pics")
+      .upload(`${userId}/profilePic.${extensionType}`, file!, {
+        upsert: true,
+      });
+    if (res.error) {
+      toast({
+        title: "Failed to save profile picture",
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
+    orgRouter.mutate({
+      organization_name: data.organization_name,
+      avatar_url: res.data?.path!,
+    });
+    setUploadingImage(false);
+    // update the data on the auth.metadata
+
+    // const fileLink = res.data?.path;
+    // console.log(fileLink);
   };
 
   return (
@@ -83,9 +127,35 @@ export default function ProfileSettings() {
         </span>
       </div>
       <div className="space-y-5 p-4 sm:px-6 lg:w-[60%]">
-       {isLoading && <ProfileSkeleton/>}
+        {isLoading && <ProfileSkeleton />}
         {data && !isLoading && (
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <Avatar className="relative h-32 w-32">
+              <AvatarImage
+                alt="user profile"
+                className="object-cover"
+                // src={
+                //   data?.user_metadata?.avatar_url
+                //     ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile_pics/${data?.user_metadata?.avatar_url}`
+                //     : file
+                //       ? URL.createObjectURL(file)
+                //       : undefined
+                // }
+                src={
+                  file
+                    ? URL.createObjectURL(file)
+                    : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile_pics/${data?.user_metadata?.avatar_url}`
+                }
+              />
+              <AvatarFallback>
+                {getAvatarFallback(data?.user_metadata?.organization_name)}
+              </AvatarFallback>
+              <input
+                className="absolute top-[50%] border-2 border-red-500 opacity-0"
+                type="file"
+                onChange={handleFileChange}
+              />
+            </Avatar>
             <div className="space-y-2">
               <Label htmlFor="name">Organization Name</Label>
               <Input
@@ -108,7 +178,7 @@ export default function ProfileSettings() {
 
             <Button
               className="mt-5 w-[200px] disabled:cursor-not-allowed"
-              disabled={orgRouter.isLoading}
+              disabled={orgRouter.isLoading || uploadingImage}
             >
               {orgRouter.isLoading && <Spinner />}
               Save
