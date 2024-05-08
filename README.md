@@ -114,7 +114,7 @@ using (
 - [x] chnage the font to inter
 - [x] add user profile widget on the layout screen
 - [x] try to change the full ui inspired by medusa ui
-- [] add a feature of uploading img to the settings page 
+- [x] add a feature of uploading img to the settings page 
 - [] Add email confirmation feature when signing up
 - [] integrate payment system in the application with DPO
 - [] if the user hasnt paid for subscription they shouldnt see the app
