@@ -92,5 +92,5 @@ export const signUp = async (formData: FormData) => {
     return redirect(`/auth/sign-up?message=${error.message}`);
   }
 
-  return redirect("/dashboard/accounting");
+  return redirect("/dashboard/products");
 };
