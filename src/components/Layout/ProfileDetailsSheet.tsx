@@ -13,6 +13,8 @@ import {
 } from "~/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { signOut } from "~/app/auth/actions";
+import { useState } from "react";
+import { Spinner } from "../ui/LoadingSkeleton";
 
 interface ProfileProps {
   user: User;
@@ -34,6 +36,8 @@ export function ProfileIcon({ user }: ProfileProps) {
   const avatarFallback = getAvatarFallback(
     user?.user_metadata?.organization_name,
   );
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   return (
     <Sheet>
@@ -102,10 +106,16 @@ export function ProfileIcon({ user }: ProfileProps) {
         <Button
           className="fixed bottom-10  space-x-2"
           variant="destructive"
-          onClick={() => signOut()}
+          onClick={() => {
+            setIsLoggingOut(true);
+            signOut();
+            setIsLoggingOut(false);
+          }}
+          disabled={isLoggingOut}
         >
           <>
-            <LogOutIcon />
+            {isLoggingOut ? <Spinner /> : <LogOutIcon />}
+
             <span>Log out</span>
           </>
         </Button>
