@@ -33,10 +33,10 @@ export const signIn = async (formData: FormData) => {
   });
 
   if (error) {
-    return redirect("/auth/sign-in?message=Could not authenticate user");
+    redirect("/auth/sign-in?message=Could not authenticate user");
   }
 
-  return redirect("/dashboard/products");
+  redirect("/dashboard/products");
 };
 
 export const signOut = async () => {
@@ -89,8 +89,8 @@ export const signUp = async (formData: FormData) => {
 
   if (error) {
     console.log(error.message);
-    return redirect(`/auth/sign-up?message=${error.message}`);
+    redirect(`/auth/sign-up?message=${error.message}`);
   }
 
-  return redirect("/dashboard/accounting");
+  redirect("/dashboard/products");
 };
