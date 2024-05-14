@@ -70,9 +70,9 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
               </AccordionContent>
               <AccordionContent>
                 <Link
-                  href="/dashboard/products/stockTacking/new"
+                  href="/dashboard/products/stockTaking/new"
                   prefetch
-                  className={`${baseClass} ${pathname === "/dashboard/products/stockTacking/new" && activeClass} `}
+                  className={`${baseClass} ${pathname === "/dashboard/products/stockTaking/new" && activeClass} `}
                 >
                   <span className="pr-3">{` > `}</span>
                   Stock Taking
