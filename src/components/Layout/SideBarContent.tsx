@@ -125,7 +125,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger
-                className={`${baseLinkClass} ${pathname === "/dashboard/sales" && activeLinkClass} text-base `}
+                className={`${baseLinkClass} ${pathname.startsWith("/dashboard/sales") && activeLinkClass} text-base `}
               >
                 <span>
                   <LineChartIcon className="h-4 w-4" />
@@ -133,32 +133,60 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
                 Sales
               </AccordionTrigger>
               <AccordionContent className="pt-4">
-                <Link href="/dashboard/sales/new" prefetch>
+                <Link
+                  href="/dashboard/sales/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/sales/new" && activeClass} `}
+                >
                   New Sale
                 </Link>
               </AccordionContent>
               <AccordionContent>
-                <Link href="/dashboard/sales/orders/new" prefetch>
+                <Link
+                  href="/dashboard/sales/orders/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/sales/orders/new" && activeClass} `}
+                >
                   New Order
                 </Link>
               </AccordionContent>
 
               <AccordionContent>
-                <Link href="/dashboard/sales">List Sales</Link>
+                <Link
+                  href="/dashboard/sales"
+                  prefetch={true}
+                  className={`${baseClass} ${pathname === "/dashboard/sales" && activeClass} `}
+                >
+                  List Sales
+                </Link>
               </AccordionContent>
 
               <AccordionContent>
-                <Link href="/dashboard/sales/orders">List Orders</Link>
+                <Link
+                  href="/dashboard/sales/orders"
+                  prefetch={true}
+                  className={`${baseClass} ${pathname === "/dashboard/sales/orders" && activeClass} `}
+                >
+                  List Orders
+                </Link>
               </AccordionContent>
 
               <AccordionContent>
-                <Link href="/dashboard/sales/invoices/new">
+                <Link
+                  href="dashboard/sales/perfomaInvoice/new"
+                  prefetch={true}
+                  className={`${baseClass} ${pathname === "/dashboard/sales/perfomaInvoice/new" && activeClass} `}
+                >
                   New Perfoma Invoice
                 </Link>
               </AccordionContent>
 
               <AccordionContent>
-                <Link href="/dashboard/sales/invoices" prefetch>
+                <Link
+                  href="dashboard/sales/perfomaInvoice/"
+                  prefetch={true}
+                  className={`${baseClass} ${pathname === "/dashboard/sales/perfomaInvoice" && activeClass} `}
+                >
                   List Perfoma Invoices
                 </Link>
               </AccordionContent>
