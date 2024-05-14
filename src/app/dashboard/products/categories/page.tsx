@@ -15,10 +15,10 @@ export default function Page() {
       </div>
       {data?.length === 0 && (
         <NoAsset
-          bigTitle="You haven't added any products"
-          smallTitle="It's easier to manage. Go ahead and add new products to manage now"
-          c2a="Add Products"
-          c2aUrl="/dashboard/products/new"
+          bigTitle="You haven't added any product Categories"
+          smallTitle="It's easier to manage. Go ahead and add new categories now"
+          c2a="Add Product Category"
+          c2aUrl="/dashboard/products/categories/new"
         />
       )}
       {data === null && (

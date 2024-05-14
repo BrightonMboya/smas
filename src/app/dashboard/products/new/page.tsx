@@ -74,7 +74,7 @@ export default function Page() {
   };
 
   return (
-    <section className="pt-10">
+    <section className="pt-10 flex flex-col items-center">
       <Toaster />
       <AddProductForm
         isLoading={isLoading}

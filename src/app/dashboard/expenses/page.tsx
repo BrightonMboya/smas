@@ -10,7 +10,7 @@ export default function Page() {
   const { isLoading, data } = api.accounting.allExpenses.useQuery();
   return (
     <>
-      <main className="pl-[70px] md:max-w-[90%]">
+      <main className="pl-[100px] md:max-w-[90%]">
         <Toaster />
         <div className="flex items-center justify-between pt-[40px]">
           <h3 className="text-3xl font-medium ">Your Expenses</h3>

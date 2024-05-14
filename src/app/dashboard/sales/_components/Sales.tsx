@@ -79,12 +79,12 @@ export default function Sales() {
   return (
     <>
       <Toaster />
-      <Card id="#sales" className="md:w-[1000px]">
+      <Card id="#sales" className="w-[500px]">
         <CardHeader>
-          <CardTitle>Record Sales</CardTitle>
-          <CardDescription>Input your sales details here</CardDescription>
+          <CardTitle className="text-center">New Sale</CardTitle>
+          {/* <CardDescription>Input your sales details here</CardDescription> */}
         </CardHeader>
-        <CardContent className=" md:w-[1000px]">
+        <CardContent className="w-[500px]">
           <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
             <ItemLayout>
               <Label htmlFor="saleName">Customer Name</Label>
