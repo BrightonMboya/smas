@@ -6,7 +6,7 @@ export function AssetLabel({
   caption?: string;
 }) {
   return (
-    <div className="max-w-[400px]">
+    <div className="">
       <h3 className="text-base font-medium">{label}</h3>
       <h3 className="text-sm">{caption}</h3>
     </div>
@@ -15,7 +15,7 @@ export function AssetLabel({
 
 export function ItemLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-lg items-center md:gap-[80px] space-y-[10px] md:grid md:grid-cols-2  ">
+    <div className="space-y-3 w-[400px]">
       {children}
     </div>
   );

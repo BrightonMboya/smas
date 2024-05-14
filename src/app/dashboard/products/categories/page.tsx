@@ -5,15 +5,13 @@ import ProudctList from "~/app/dashboard/products/_components/ProductsList";
 import LoadingSkeleton from "~/components/ui/LoadingSkeleton";
 import { Toaster } from "~/components/ui/toaster";
 
-
 export default function Page() {
   const { data, isLoading } = api.products.all.useQuery();
   return (
     <main className="pl-[70px] md:max-w-[90%] ">
       <Toaster />
       <div className="flex items-center justify-between pt-[40px] ">
-        <h3 className="text-3xl font-medium ">All Products</h3>
-       
+        <h3 className="text-3xl font-medium ">All Product Categories</h3>
       </div>
       {data?.length === 0 && (
         <NoAsset

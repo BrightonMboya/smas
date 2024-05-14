@@ -217,7 +217,7 @@ export default function ProudctList({ products }: any) {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter Products..."
@@ -254,7 +254,7 @@ export default function ProudctList({ products }: any) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

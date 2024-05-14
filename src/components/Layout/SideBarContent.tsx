@@ -15,6 +15,12 @@ import {
   WalletIcon,
 } from "./icons";
 import { Separator } from "../ui/seperator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -35,16 +41,45 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
         <div className="flex items-center gap-2 font-semibold text-gray-900 ">
           <span>SMAS</span>
         </div>
-        <Separator className=""/>
+        <Separator className="" />
         <nav className="flex flex-col gap-[15px]">
-          <Link
-            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/products") && activeLinkClass} `}
-            href="/dashboard/products"
-          >
-            <PackageIcon className="h-4 w-4" />
-            Products
-          </Link>
-          <Link
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                className={`${baseLinkClass} ${pathname.startsWith("/dashboard/products") && activeLinkClass} text-base `}
+              >
+                <span>
+                  <PackageIcon className="h-4 w-4" />
+                </span>
+                Products
+              </AccordionTrigger>
+              <AccordionContent className="pt-4">
+                <Link href="/dashboard/products/new" prefetch>
+                  New Product
+                </Link>
+              </AccordionContent>
+              <AccordionContent>Stock Taking</AccordionContent>
+              <AccordionContent>
+                <Link href="/dashboard/products/categories/new" prefetch>
+                  {" "}
+                  New Category
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link href="/dashboard/products" prefetch>
+                  List Products
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link href="/dashboard/products/categories" prefetch>
+                  List Categories
+                </Link>
+              </AccordionContent>
+              <AccordionContent>List Adjustments</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/* <Link
             className={`${baseLinkClass} ${pathname.startsWith("/dashboard/sales") && activeLinkClass} `}
             href="/dashboard/sales"
           >
@@ -92,7 +127,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           >
             <CreditCardIcon className="h-4 w-4" />
             Billing
-          </Link>
+          </Link> */}
         </nav>
       </div>
     </section>

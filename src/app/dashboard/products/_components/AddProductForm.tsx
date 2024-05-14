@@ -1,7 +1,11 @@
 import Button from "~/components/ui/Button";
 import { ItemLayout, AssetLabel } from "~/components/ui/ItemLayout";
 import Input from "~/components/ui/Input";
-import { FieldErrors, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from "react-hook-form";
 import { ProductSchema } from "./schema";
 import { Spinner } from "~/components/ui/LoadingSkeleton";
 import { Textarea } from "~/components/ui/TextArea";
@@ -19,37 +23,43 @@ export default function AddProductForm({
   handleSubmit,
   onSubmit,
   errors,
-  isLoading
+  isLoading,
 }: AddProductFormProps) {
   return (
     <form
-      className="ml-[70px]  rounded-md border-[1px] bg-white py-10 pl-[30px] shadow-sm md:w-[1000px]"
+      className="ml-[70px]  rounded-lg border-[1px] bg-white py-10 pl-[30px] shadow-sm md:w-[1000px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h3 className="text-2xl font-medium ">New Product</h3>
-      <section className="relative mt-[50px] flex flex-col space-y-[30px] ">
+      <h3 className="text-center text-2xl font-medium">New Product</h3>
+
+      <section className="mt-10 grid grid-cols-2 gap-y-5">
+        <div className="col-span-2 ">
+          <ItemLayout>
+            <AssetLabel label="Category" />
+            <div>
+              <Input className="h-[45px] w-[930px] bg-[#F0F0F9]" />
+            </div>
+          </ItemLayout>
+        </div>
         <ItemLayout>
           <AssetLabel label="Product Name" />
           <div>
             <Input
-              placeholder="Cement bags"
               {...register("name")}
-              className="md:w-[400px]"
+              className="h-[45px] bg-[#F0F0F9] md:w-[450px]"
             />
             {errors.name && (
               <p className="text-sm text-red-500">Product Name is required</p>
             )}
           </div>
         </ItemLayout>
-
         <ItemLayout>
           <AssetLabel label="Stock Available" />
           <div>
             <Input
-              placeholder="20"
               {...register("stockAvailable", { valueAsNumber: true })}
               type="number"
-              className="md:w-[400px]"
+              className="h-[45px] bg-[#F0F0F9] md:w-[450px]"
             />
             {errors.stockAvailable && (
               <p className="text-sm text-red-500">Stock is required</p>
@@ -61,9 +71,8 @@ export default function AddProductForm({
           <AssetLabel label="Buying Price" />
           <div>
             <Input
-              placeholder="200,000"
               {...register("buyingPrice")}
-              className="md:w-[400px]"
+              className="h-[45px] bg-[#F0F0F9] md:w-[450px]"
             />
             {errors.buyingPrice && (
               <p className="text-sm text-red-500">Buying Price is required</p>
@@ -75,9 +84,8 @@ export default function AddProductForm({
           <AssetLabel label="Selling Price" />
           <div>
             <Input
-              placeholder="300,000"
               {...register("sellingPrice")}
-              className="md:w-[400px]"
+              className="h-[45px] bg-[#F0F0F9] md:w-[450px] "
             />
             {errors.sellingPrice && (
               <p className="text-sm text-red-500">Selling Price is required</p>
@@ -86,30 +94,32 @@ export default function AddProductForm({
         </ItemLayout>
 
         <ItemLayout>
-          <AssetLabel
-            label="Notes"
-            caption="Enter additional details about this product"
-          />
-
-          <Textarea
-            placeholder="Add short notes about this product"
-            {...register("description")}
-            className="md:w-[400px]"
-          />
+          <AssetLabel label="Stock" />
+          <div>
+            <Input className="h-[45px] bg-[#F0F0F9] md:w-[450px]" />
+          </div>
+        </ItemLayout>
+        <ItemLayout>
+          <AssetLabel label="Reorder stock level" />
+          <div>
+            <Input className="h-[45px] bg-[#F0F0F9] md:w-[450px] " />
+          </div>
         </ItemLayout>
       </section>
-      <Button
-        className="mt-[20px] w-[200px] md:mt-[50px]"
-        type="submit"
-        disabled={isLoading}
-      >
-        {isLoading && (
-          <span className="pr-5">
-            <Spinner />
-          </span>
-        )}
-        Save
-      </Button>
+      <div className="flex items-center justify-center">
+        <Button
+          className="mt-[20px] w-[200px] md:mt-[50px] "
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading && (
+            <span className="pr-5">
+              <Spinner />
+            </span>
+          )}
+          Create
+        </Button>
+      </div>
     </form>
   );
 }

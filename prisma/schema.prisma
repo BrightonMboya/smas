@@ -41,18 +41,26 @@ model Expenses {
 }
 
 model Products {
-    id              String        @id @default(cuid())
-    createdAt       DateTime      @default(now())
-    name            String
-    buyingPrice     String
-    sellingPrice    String
-    stockAvailable  Int
-    description     String?
-    sales           Sales[]
-    Organizations   Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-    organization_id String
+    id                Int           @id @default(autoincrement())
+    createdAt         DateTime      @default(now())
+    name              String
+    buyingPrice       String
+    sellingPrice      String
+    stockAvailable    Int
+    reStockOrderlevel Int
+    sales             Sales[]
+    categories        Categories[]
+    Organizations     Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+    organization_id   String
 
     // @@schema("auth")
+}
+
+model Categories {
+    id         Int      @id @default(autoincrement())
+    name       String
+    Products   Products @relation(fields: [productsId], references: [id])
+    productsId Int
 }
 
 model Sales {
@@ -62,7 +70,7 @@ model Sales {
     quantity        Int
     status          String
     Products        Products      @relation(fields: [productsId], references: [id], onDelete: Cascade)
-    productsId      String
+    productsId      Int
     date            DateTime
     Organizations   Organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
     organization_id String
