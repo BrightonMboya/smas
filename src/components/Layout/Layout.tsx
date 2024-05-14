@@ -12,7 +12,7 @@ export default function Layout({ children }: Props) {
         <aside>
           <SideBar />
         </aside>
-        <div className="ml-[200px] w-full">
+        <div className=" w-full">
           <Header />
           <main className="mt-10 md:mt-0">{children}</main>
         </div>

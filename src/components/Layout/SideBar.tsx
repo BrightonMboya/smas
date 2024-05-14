@@ -15,7 +15,7 @@ export default function SideBar() {
       >
         {<Menu size={40} color="#46783E" />}
       </div>
-      <div className="hidden md:block ">
+      <div className="hidden md:block  ">
         <SideBarContent showNav={showNav} setShowNav={setShowNav} />
       </div>
       {showNav && <SideBarContent showNav={showNav} setShowNav={setShowNav} />}

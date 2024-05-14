@@ -21,7 +21,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { Truck, Users } from "lucide-react";
+import { DollarSign, Truck, Users, Warehouse } from "lucide-react";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -39,13 +39,13 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
   const activeClass = `text-primary font-medium`;
 
   return (
-    <section className="fixed z-[1000]  min-h-screen ">
-      <div className="flex h-screen max-h-screen w-[250px] flex-col gap-4 border-r-[1px] border-r-gray-300 bg-white p-4 ">
+    <section className="min-h-screen  w-[250px]">
+      <div className="flex min-h-screen w-[250px] flex-col gap-4 border-r-[1px] border-r-gray-300 bg-white p-4 ">
         <div className="flex items-center gap-2 font-semibold text-gray-900 ">
           <span>SMAS</span>
         </div>
         <Separator className="" />
-        <nav className="flex flex-col gap-[15px]">
+        <nav className="flex flex-col gap-[28px]">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger
@@ -316,41 +316,142 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
             </AccordionItem>
           </Accordion>
 
-          {/* <Link
-            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/sales") && activeLinkClass} `}
-            href="/dashboard/sales"
-          >
-            <LineChartIcon className="h-4 w-4" />
-            Sales
-          </Link>
-          <Link
-            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/expenses") && activeLinkClass} `}
-            href="/dashboard/expenses"
-          >
-            <WalletIcon className="h-4 w-4" />
-            Expenses
-          </Link>
-          <Link
-            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/suppliers") && activeLinkClass} `}
-            href="/dashboard/suppliers"
-          >
-            <UsersIcon className="h-4 w-4" />
-            Suppliers
-          </Link>
-          <Link
-            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/debts") && activeLinkClass} `}
-            href="/dashboard/debts"
-          >
-            <CoinsIcon className="h-4 w-4" />
-            Debts
-          </Link>
-          <Link
-            className={`${baseLinkClass} ${pathname.startsWith("/dashboard/invoices") && activeLinkClass} `}
-            href="/dashboard/invoices"
-          >
-            <ReceiptIcon className="h-4 w-4" />
-            Invoices
-          </Link>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                className={`${baseLinkClass} ${pathname.startsWith("/dashboard/debts") && activeLinkClass} text-base `}
+              >
+                <span>
+                  <DollarSign className="h-4 w-4" />
+                </span>
+                Debts
+              </AccordionTrigger>
+              <AccordionContent className="pt-4">
+                <Link
+                  href="/dashboard/debts/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/debts/new" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  New Debt
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/debts"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/debts" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  List Debts
+                </Link>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                className={`${baseLinkClass} ${pathname.startsWith("/dashboard/store") && activeLinkClass} text-base `}
+              >
+                <span>
+                  <Warehouse className="h-4 w-4" />
+                </span>
+                Stores
+              </AccordionTrigger>
+              <AccordionContent className="pt-4">
+                <Link
+                  href="/dashboard/store/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/new" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  New Store
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  List Stores
+                </Link>
+              </AccordionContent>
+
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/product/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/product/new" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  New Product
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/purchase/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/purchase/new" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  New Purchase
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/product/"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/product" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  List Product
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/bulkPurchase"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/bulkPurchase" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  Bulk Purchase
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/purchase"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/purchase" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  List Purchases
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/adjustment/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/adjustment/new" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  New Adjustment
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/store/adjustment"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/store/adjustment" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  List Adjustment
+                </Link>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
           <Link
             className={`${baseLinkClass} ${pathname.startsWith("/dashboard/settings") && activeLinkClass} `}
             href="/dashboard/settings"
@@ -364,7 +465,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
           >
             <CreditCardIcon className="h-4 w-4" />
             Billing
-          </Link> */}
+          </Link>
         </nav>
       </div>
     </section>

@@ -81,7 +81,7 @@ export default function Sales() {
       <Toaster />
       <Card id="#sales" className="w-[500px]">
         <CardHeader>
-          <CardTitle className="text-center">New Sale</CardTitle>
+          <CardTitle className="text-center">New Order</CardTitle>
           {/* <CardDescription>Input your sales details here</CardDescription> */}
         </CardHeader>
         <CardContent className="w-[500px]">
@@ -91,6 +91,7 @@ export default function Sales() {
               <div>
                 <Input
                   id="saleName"
+                  placeholder="Customer Name"
                   {...register("customerName")}
                   className="md:w-[400px]"
                 />
@@ -103,7 +104,7 @@ export default function Sales() {
             </ItemLayout>
 
             <ItemLayout>
-              <Label htmlFor="saleName">Product </Label>
+              <Label htmlFor="saleName">Product Name</Label>
               <div>
                 <Controller
                   control={control}
@@ -117,17 +118,20 @@ export default function Sales() {
                 )}
               </div>
             </ItemLayout>
+
             <ItemLayout>
-              <Label htmlFor="saleAmount">Stock Available</Label>
+              <Label htmlFor="saleDate">Date</Label>
               <div>
                 <Input
-                  type="number"
-                  {...register("amount", { valueAsNumber: true })}
+                  id="saleDate"
+                  placeholder="Date"
+                  type="date"
+                  {...register("date", { valueAsDate: true })}
                   className="md:w-[400px]"
                 />
-                {errors?.amount && (
+                {errors?.date && (
                   <p className="text-sm text-red-500">
-                    How much are you selling this product for?
+                    A date of sale is required
                   </p>
                 )}
               </div>
@@ -138,22 +142,7 @@ export default function Sales() {
               <div>
                 <Input
                   id="saleAmount"
-                  type="number"
-                  {...register("amount", { valueAsNumber: true })}
-                  className="md:w-[400px]"
-                />
-                {errors?.amount && (
-                  <p className="text-sm text-red-500">
-                    How much are you selling this product for?
-                  </p>
-                )}
-              </div>
-            </ItemLayout>
-            <ItemLayout>
-              <Label htmlFor="saleAmount">Quantity</Label>
-              <div>
-                <Input
-                  id="saleAmount"
+                  placeholder="450,000"
                   type="number"
                   {...register("amount", { valueAsNumber: true })}
                   className="md:w-[400px]"
@@ -196,24 +185,6 @@ export default function Sales() {
                 {errors?.status && (
                   <p className="text-sm text-red-500">
                     Is this sale cash or a loan?
-                  </p>
-                )}
-              </div>
-            </ItemLayout>
-
-            <ItemLayout>
-              <Label htmlFor="saleDate">Date</Label>
-              <div>
-                <Input
-                  id="saleDate"
-                  placeholder="Date"
-                  type="date"
-                  {...register("date", { valueAsDate: true })}
-                  className="md:w-[400px]"
-                />
-                {errors?.date && (
-                  <p className="text-sm text-red-500">
-                    A date of sale is required
                   </p>
                 )}
               </div>
