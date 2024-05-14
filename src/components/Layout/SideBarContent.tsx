@@ -21,7 +21,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { Truck } from "lucide-react";
+import { Truck, Users } from "lucide-react";
 
 interface Props {
   setShowNav: Dispatch<SetStateAction<boolean>>;
@@ -241,7 +241,7 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
               </AccordionContent>
               <AccordionContent className="">
                 <Link
-                  href="/dashboard/suppliers/new"
+                  href="/dashboard/purchases/suppliers/new"
                   prefetch
                   className={`${baseClass} ${pathname === "/dashboard/purchases/suppliers/new" && activeClass} `}
                 >
@@ -251,9 +251,9 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
               </AccordionContent>
               <AccordionContent>
                 <Link
-                  href="/dashboard/purchases"
+                  href="/dashboard/purchases/bulkPurchase/"
                   prefetch
-                  className={`${baseClass} ${pathname === "/dashboard/purchases" && activeClass} `}
+                  className={`${baseClass} ${pathname === "/dashboard/purchases/bulkPurchase" && activeClass} `}
                 >
                   <span className="pr-3">{` > `}</span>
                   Bulk Purchase
@@ -272,12 +272,45 @@ export default function SideBarContent({ showNav, setShowNav }: Props) {
 
               <AccordionContent>
                 <Link
-                  href="/dashboard/suppliers"
+                  href="/dashboard/purchases/suppliers"
                   prefetch
-                  className={`${baseClass} ${pathname === "/dashboard/suppliers" && activeClass} `}
+                  className={`${baseClass} ${pathname === "/dashboard/purchases/suppliers" && activeClass} `}
                 >
                   <span className="pr-3">{` > `}</span>
                   List Suppliers
+                </Link>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                className={`${baseLinkClass} ${pathname.startsWith("/dashboard/customers") && activeLinkClass} text-base `}
+              >
+                <span>
+                  <Users className="h-4 w-4" />
+                </span>
+                Customers
+              </AccordionTrigger>
+              <AccordionContent className="pt-4">
+                <Link
+                  href="/dashboard/customers/new"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/customers/new" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  New Customer
+                </Link>
+              </AccordionContent>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/customers"
+                  prefetch
+                  className={`${baseClass} ${pathname === "/dashboard/customers" && activeClass} `}
+                >
+                  <span className="pr-3">{` > `}</span>
+                  List Customers
                 </Link>
               </AccordionContent>
             </AccordionItem>

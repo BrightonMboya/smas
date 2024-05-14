@@ -37,6 +37,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
-  ],
+, "src/app/dashboard/purchases/bulkPurchase"  ],
   "exclude": ["node_modules"]
 }
